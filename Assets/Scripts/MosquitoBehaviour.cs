@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Splines;
+using Unity.Mathematics;
 
 public class MosquitoBehaviour : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class MosquitoBehaviour : MonoBehaviour
 
     [Header("Patrol Settings")]
     public float patrolSpeed = 3f;
-    public float splineMoveSpeed = 0.2f; // avance sobre spline (0–1 por segundo)
+    public float splineMoveSpeed = 0.2f;
+    public float arrivalDistance = 0.5f;
 
     [Header("Chase Settings")]
     public float chaseSpeed = 5f;
@@ -18,10 +20,9 @@ public class MosquitoBehaviour : MonoBehaviour
 
     private Transform currentTarget;
     private bool hasTarget = false;
+    private float splineT = 0f;
 
-    private float splineT = 0f; // posición normalizada en spline (0–1)
-
-    private enum State { Patrol, Chase }
+    private enum State { Patrol, Chase, Returning }
     private State currentState = State.Patrol;
 
     void Start()
@@ -38,9 +39,11 @@ public class MosquitoBehaviour : MonoBehaviour
             case State.Patrol:
                 Patrol();
                 break;
-
             case State.Chase:
                 Chase();
+                break;
+            case State.Returning:
+                Returning();
                 break;
         }
     }
@@ -49,13 +52,10 @@ public class MosquitoBehaviour : MonoBehaviour
     {
         if (splineContainer == null) return;
 
-        // avanzar por spline
         splineT += splineMoveSpeed * Time.deltaTime;
         if (splineT > 1f) splineT -= 1f;
 
-        // obtener posición en spline
-        Vector3 splinePos = splineContainer.EvaluatePosition(splineT);
-
+        Vector3 splinePos = (Vector3)splineContainer.EvaluatePosition(splineT);
         agent.SetDestination(splinePos);
     }
 
@@ -63,7 +63,7 @@ public class MosquitoBehaviour : MonoBehaviour
     {
         if (currentTarget == null)
         {
-            ReturnToSpline();
+            StartReturn();
             return;
         }
 
@@ -74,51 +74,56 @@ public class MosquitoBehaviour : MonoBehaviour
         if (dist <= attackDistance)
         {
             Attack();
-            ReturnToSpline();
+            StartReturn();
+        }
+    }
+
+    void Returning()
+    {
+        Vector3 targetSplinePos = (Vector3)splineContainer.EvaluatePosition(splineT);
+        agent.SetDestination(targetSplinePos);
+
+        if (!agent.pathPending && agent.remainingDistance <= arrivalDistance)
+        {
+            agent.ResetPath();
+            currentState = State.Patrol;
         }
     }
 
     void Attack()
     {
-        // Placeholder para futura implementación
         Debug.Log("Mosquito attacks target");
     }
 
-    void ReturnToSpline()
+    void StartReturn()
     {
         hasTarget = false;
         currentTarget = null;
-
-        currentState = State.Patrol;
         agent.speed = patrolSpeed;
 
-        // encontrar punto más cercano en spline
+        // ahora sí: punto REAL más cercano en la curva
         splineT = FindClosestPointOnSpline(transform.position);
+
+        currentState = State.Returning;
     }
 
-    float FindClosestPointOnSpline(Vector3 position)
-    {
-        int resolution = 50; // más alto = más preciso
-        float closestT = 0f;
-        float minDist = float.MaxValue;
+    float FindClosestPointOnSpline(Vector3 worldPosition)
+{
+    // Convertimos la posición del mundo al espacio local del SplineContainer
+    float3 localPos = splineContainer.transform.InverseTransformPoint(worldPosition);
 
-        for (int i = 0; i <= resolution; i++)
-        {
-            float t = i / (float)resolution;
-            Vector3 point = splineContainer.EvaluatePosition(t);
+    // Buscamos el punto más cercano en el espacio local
+    // El tercer parámetro es el 't' (0 a 1) que devuelve la función
+    SplineUtility.GetNearestPoint(
+        splineContainer.Spline, 
+        localPos, 
+        out float3 nearestLocalPos, 
+        out float t
+    );
 
-            float dist = Vector3.Distance(position, point);
-            if (dist < minDist)
-            {
-                minDist = dist;
-                closestT = t;
-            }
-        }
+    return t;
+}
 
-        return closestT;
-    }
-
-    // --- TRIGGER DETECTION (desde hijo collider) ---
     private void OnTriggerEnter(Collider other)
     {
         if (hasTarget) return;

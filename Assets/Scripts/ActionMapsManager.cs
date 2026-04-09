@@ -10,11 +10,12 @@ namespace CMF
         [Header("Referencias")]
         [SerializeField] private PlayerInput playerInput;
 
-        private const string MAP_PLAYER = "Player";
+        private const string MAP_PLAYER = "Gameplay";
         private const string MAP_RESTRICTED = "RestrictedInput";
         
         // Variable para recordar el mapa antes de pausar
         private string mapBeforePause;
+        public string currentControls;
 
         private void Awake()
         {

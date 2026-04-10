@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace CMF
 {
@@ -23,10 +24,80 @@ namespace CMF
 		//The general rate at which the camera turns toward the movement direction;
 		public float cameraTurnSpeed = 120f;
 
+		private PlayerInputs playerInputs;
+		private bool isGamepadActive = false;
+		private InputDevice lastInputDevice = null;
+
 		protected override void Setup()
 		{
 			if(controller == null)
 				Debug.LogWarning("No controller reference has been assigned to this script.", this.gameObject);
+
+			//Initialize PlayerInputs for device detection
+			playerInputs = new PlayerInputs();
+			playerInputs.Gameplay.Enable();
+
+			//Subscribe to RotateCamera action to detect which device is providing input
+			playerInputs.Gameplay.RotateCamera.performed += OnRotateCameraInput;
+			playerInputs.Gameplay.RotateCamera.canceled += OnRotateCameraInput;
+
+			//Subscribe to device change events
+			InputSystem.onDeviceChange += OnDeviceChange;
+
+			//Initial device state check
+			UpdateInputDeviceState();
+		}
+
+		private void OnDestroy()
+		{
+			//Unsubscribe from events
+			if(playerInputs != null)
+			{
+				playerInputs.Gameplay.RotateCamera.performed -= OnRotateCameraInput;
+				playerInputs.Gameplay.RotateCamera.canceled -= OnRotateCameraInput;
+				playerInputs.Dispose();
+			}
+
+			InputSystem.onDeviceChange -= OnDeviceChange;
+		}
+
+		private void OnRotateCameraInput(InputAction.CallbackContext context)
+		{
+			//Detect which device generated the input
+			if(context.control != null)
+			{
+				lastInputDevice = context.control.device;
+				UpdateInputDeviceState();
+			}
+		}
+
+		private void OnDeviceChange(InputDevice device, InputDeviceChange change)
+		{
+			//Update device state when devices are added/removed/reconnected
+			if(change == InputDeviceChange.Added || change == InputDeviceChange.Removed || change == InputDeviceChange.Reconnected)
+			{
+				UpdateInputDeviceState();
+			}
+		}
+
+		private void UpdateInputDeviceState()
+		{
+			//Check if gamepad is active based on last input device
+			isGamepadActive = CheckIfGamepadIsActive();
+		}
+
+		private bool CheckIfGamepadIsActive()
+		{
+			//If we have tracked the last input device and it's a gamepad, gamepad is active
+			if(lastInputDevice is Gamepad)
+				return true;
+
+			//Check if a gamepad is currently connected
+			if(Gamepad.current == null)
+				return false;
+
+			//If no input device has been tracked yet but gamepad exists, default to gamepad mode
+			return lastInputDevice == null;
 		}
 
 		protected override void HandleCameraRotation ()
@@ -37,7 +108,8 @@ namespace CMF
 			if(controller == null)
 				return;
 
-			if(turnCameraTowardMovementDirection && controller != null)
+			//Only apply automatic camera rotation toward movement direction if gamepad is active
+			if(turnCameraTowardMovementDirection && controller != null && isGamepadActive)
 			{
 				//Get controller velocity;
 				Vector3 _controllerVelocity = controller.GetVelocity();

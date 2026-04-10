@@ -3,71 +3,41 @@ using UnityEngine.InputSystem;
 
 namespace CMF
 {
+    public enum DefaultActionMap { Gameplay, Notebook, PauseMenu, RestrictedInput }
+
     public class ActionMapsManager : MonoBehaviour
     {
         public static ActionMapsManager Instance { get; private set; }
 
-        [Header("Referencias")]
-        [SerializeField] private PlayerInput playerInput;
+        [SerializeField] private DefaultActionMap defaultActionMap = DefaultActionMap.Gameplay;
 
-        private const string MAP_PLAYER = "Gameplay";
-        private const string MAP_RESTRICTED = "RestrictedInput";
-        
-        // Variable para recordar el mapa antes de pausar
+        private PlayerInput playerInput;
         private string mapBeforePause;
-        public string currentControls;
 
         private void Awake()
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
+            if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
+            playerInput = GetComponent<PlayerInput>() ?? FindFirstObjectByType<PlayerInput>();
         }
 
-        // Esta es la función que te faltaba o tenía el nombre cambiado
+        private void Start() => SwapActionMap(defaultActionMap);
+
+        public void SwapActionMap(DefaultActionMap map) => SwapActionMap(map.ToString());
+
         public void SwapActionMap(string mapName)
         {
             if (playerInput == null) return;
-            
             playerInput.SwitchCurrentActionMap(mapName);
             Debug.Log($"Cambiado a mapa: {mapName}");
         }
 
-        // --- FUNCIONES PARA TIMELINE Y TRIGGERS ---
-        public void SetRestrictedInput()
-        {
-            SwapActionMap(MAP_RESTRICTED);
-        }
+        public void SetRestrictedInput() => SwapActionMap(DefaultActionMap.RestrictedInput);
+        public void SetPlayerInput()     => SwapActionMap(DefaultActionMap.Gameplay);
 
-        public void SetPlayerInput()
-        {
-            SwapActionMap(MAP_PLAYER);
-        }
+        public void StoreCurrentMap()    => mapBeforePause = playerInput?.currentActionMap?.name;
 
-        // --- FUNCIONES PARA EL PAUSE MANAGER ---
-        
-        public void StoreCurrentMap()
-        {
-            if (playerInput != null && playerInput.currentActionMap != null)
-            {
-                mapBeforePause = playerInput.currentActionMap.name;
-            }
-        }
-
-        public void RestoreLastMap()
-        {
-            if (!string.IsNullOrEmpty(mapBeforePause))
-            {
-                SwapActionMap(mapBeforePause);
-            }
-            else
-            {
-                // Por si acaso fallara algo, volvemos al modo normal
-                SetPlayerInput();
-            }
-        }
+        public void RestoreLastMap()     => SwapActionMap(
+            string.IsNullOrEmpty(mapBeforePause) ? DefaultActionMap.Gameplay.ToString() : mapBeforePause);
     }
 }

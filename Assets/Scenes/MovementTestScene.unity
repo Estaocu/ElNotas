@@ -1563,7 +1563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ea1b35c7b22e164d9e5b21126275de4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseMenuUI: {fileID: 0}
+  pauseMenuUI: {fileID: 1247839266}
 --- !u!114 &1215121237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1577,6 +1577,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 1896670659}
+  defaultActionMap: 0
+  currentControls: 
 --- !u!1 &1247839266
 GameObject:
   m_ObjectHideFlags: 0
@@ -2325,6 +2327,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4c58c952b0682d4ab6316a1a6f0e4c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInput: {fileID: 0}
+  controlsManager: {fileID: 0}
+  noteSequence: 00000000000000000000000000000000
 --- !u!1 &2081185413 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3784440848247412113, guid: 7e6a99c273440494e874c89853fe5483,

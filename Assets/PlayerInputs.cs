@@ -102,6 +102,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""RotateCamera"",
+                    ""type"": ""Value"",
+                    ""id"": ""2b51105c-cdd7-477d-b64a-7f95fc8f8b10"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""CrouchToggle"",
                     ""type"": ""Button"",
                     ""id"": ""9260608d-08cf-4aac-93b9-662426f1575b"",
@@ -181,6 +190,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DebugSpawnSoundwave"",
+                    ""type"": ""Button"",
+                    ""id"": ""2a4a74fa-8971-4700-9a01-fccba25e4a69"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -247,6 +265,72 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3d23b54f-f83d-4fe1-a194-72830bce4b69"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""565df4a6-ccc5-40b5-b160-5816e91087aa"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateCamera"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""2d445967-84c9-42c4-9145-10458ccadcca"",
+                    ""path"": ""<Mouse>/delta/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""63a6fffc-9908-415f-aaf4-38d2d4b2c740"",
+                    ""path"": ""<Mouse>/delta/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""0e36a885-50d2-4efe-beb8-f9d992e1262b"",
+                    ""path"": ""<Mouse>/delta/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""7260bac9-fc3f-45cf-9426-7275ff7c5c60"",
+                    ""path"": ""<Mouse>/delta/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -434,6 +518,28 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Map"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""363dbd68-c45d-4b35-a821-49812a7d946d"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DebugSpawnSoundwave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c59e54b6-05a0-4bab-8397-de93b835dd32"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DebugSpawnSoundwave"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -920,6 +1026,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         // Gameplay
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Move = m_Gameplay.FindAction("Move", throwIfNotFound: true);
+        m_Gameplay_RotateCamera = m_Gameplay.FindAction("RotateCamera", throwIfNotFound: true);
         m_Gameplay_CrouchToggle = m_Gameplay.FindAction("CrouchToggle", throwIfNotFound: true);
         m_Gameplay_CrouchHold = m_Gameplay.FindAction("CrouchHold", throwIfNotFound: true);
         m_Gameplay_Notebook = m_Gameplay.FindAction("Notebook", throwIfNotFound: true);
@@ -929,6 +1036,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Gameplay_Note4 = m_Gameplay.FindAction("Note4", throwIfNotFound: true);
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
         m_Gameplay_Map = m_Gameplay.FindAction("Map", throwIfNotFound: true);
+        m_Gameplay_DebugSpawnSoundwave = m_Gameplay.FindAction("DebugSpawnSoundwave", throwIfNotFound: true);
         // Notebook
         m_Notebook = asset.FindActionMap("Notebook", throwIfNotFound: true);
         m_Notebook_PreviousPage = m_Notebook.FindAction("Previous Page", throwIfNotFound: true);
@@ -1030,6 +1138,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Gameplay;
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
     private readonly InputAction m_Gameplay_Move;
+    private readonly InputAction m_Gameplay_RotateCamera;
     private readonly InputAction m_Gameplay_CrouchToggle;
     private readonly InputAction m_Gameplay_CrouchHold;
     private readonly InputAction m_Gameplay_Notebook;
@@ -1039,6 +1148,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Note4;
     private readonly InputAction m_Gameplay_Pause;
     private readonly InputAction m_Gameplay_Map;
+    private readonly InputAction m_Gameplay_DebugSpawnSoundwave;
     /// <summary>
     /// Provides access to input actions defined in input action map "Gameplay".
     /// </summary>
@@ -1054,6 +1164,10 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Gameplay/Move".
         /// </summary>
         public InputAction @Move => m_Wrapper.m_Gameplay_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/RotateCamera".
+        /// </summary>
+        public InputAction @RotateCamera => m_Wrapper.m_Gameplay_RotateCamera;
         /// <summary>
         /// Provides access to the underlying input action "Gameplay/CrouchToggle".
         /// </summary>
@@ -1091,6 +1205,10 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Map => m_Wrapper.m_Gameplay_Map;
         /// <summary>
+        /// Provides access to the underlying input action "Gameplay/DebugSpawnSoundwave".
+        /// </summary>
+        public InputAction @DebugSpawnSoundwave => m_Wrapper.m_Gameplay_DebugSpawnSoundwave;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
@@ -1119,6 +1237,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @RotateCamera.started += instance.OnRotateCamera;
+            @RotateCamera.performed += instance.OnRotateCamera;
+            @RotateCamera.canceled += instance.OnRotateCamera;
             @CrouchToggle.started += instance.OnCrouchToggle;
             @CrouchToggle.performed += instance.OnCrouchToggle;
             @CrouchToggle.canceled += instance.OnCrouchToggle;
@@ -1146,6 +1267,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Map.started += instance.OnMap;
             @Map.performed += instance.OnMap;
             @Map.canceled += instance.OnMap;
+            @DebugSpawnSoundwave.started += instance.OnDebugSpawnSoundwave;
+            @DebugSpawnSoundwave.performed += instance.OnDebugSpawnSoundwave;
+            @DebugSpawnSoundwave.canceled += instance.OnDebugSpawnSoundwave;
         }
 
         /// <summary>
@@ -1160,6 +1284,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @RotateCamera.started -= instance.OnRotateCamera;
+            @RotateCamera.performed -= instance.OnRotateCamera;
+            @RotateCamera.canceled -= instance.OnRotateCamera;
             @CrouchToggle.started -= instance.OnCrouchToggle;
             @CrouchToggle.performed -= instance.OnCrouchToggle;
             @CrouchToggle.canceled -= instance.OnCrouchToggle;
@@ -1187,6 +1314,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Map.started -= instance.OnMap;
             @Map.performed -= instance.OnMap;
             @Map.canceled -= instance.OnMap;
+            @DebugSpawnSoundwave.started -= instance.OnDebugSpawnSoundwave;
+            @DebugSpawnSoundwave.performed -= instance.OnDebugSpawnSoundwave;
+            @DebugSpawnSoundwave.canceled -= instance.OnDebugSpawnSoundwave;
         }
 
         /// <summary>
@@ -1611,6 +1741,13 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
         /// <summary>
+        /// Method invoked when associated input action "RotateCamera" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRotateCamera(InputAction.CallbackContext context);
+        /// <summary>
         /// Method invoked when associated input action "CrouchToggle" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -1673,6 +1810,13 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMap(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "DebugSpawnSoundwave" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDebugSpawnSoundwave(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Notebook" which allows adding and removing callbacks.

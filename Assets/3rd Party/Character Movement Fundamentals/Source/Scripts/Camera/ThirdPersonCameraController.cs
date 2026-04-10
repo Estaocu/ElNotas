@@ -24,6 +24,19 @@ namespace CMF
 		//The general rate at which the camera turns toward the movement direction;
 		public float cameraTurnSpeed = 120f;
 
+		[Header("Camera Sensitivity")]
+		[Range(0.1f, 5f)]
+		public float mouseHorizontalSensitivity = 1f;
+
+		[Range(0.1f, 5f)]
+		public float mouseVerticalSensitivity = 1f;
+
+		[Range(0.1f, 5f)]
+		public float gamepadHorizontalSensitivity = 1f;
+
+		[Range(0.1f, 5f)]
+		public float gamepadVerticalSensitivity = 1f;
+
 		private UnifiedCameraInput unifiedCameraInput;
 		private PlayerInputs playerInputs;
 		private bool isGamepadActive = false;
@@ -126,8 +139,23 @@ namespace CMF
 
 		protected override void HandleCameraRotation ()
 		{
-			//Execute normal camera rotation code;
-			base.HandleCameraRotation ();
+			//Get input from camera input handler
+			if(cameraInput == null)
+				return;
+
+			//Get raw input values
+			float _inputHorizontal = cameraInput.GetHorizontalCameraInput();
+			float _inputVertical = cameraInput.GetVerticalCameraInput();
+
+			//Apply sensitivity based on current input device
+			float horizontalSensitivity = isGamepadActive ? gamepadHorizontalSensitivity : mouseHorizontalSensitivity;
+			float verticalSensitivity = isGamepadActive ? gamepadVerticalSensitivity : mouseVerticalSensitivity;
+
+			_inputHorizontal *= horizontalSensitivity;
+			_inputVertical *= verticalSensitivity;
+
+			//Apply camera rotation with sensitivity-adjusted input
+			RotateCamera(_inputHorizontal, _inputVertical);
 
 			if(controller == null)
 				return;

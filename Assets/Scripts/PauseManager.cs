@@ -18,7 +18,8 @@ public class PauseManager : MonoBehaviour
         
         Time.timeScale = 0f;
         if (pauseMenuUI != null) pauseMenuUI.SetActive(true);
-        
+        RhythmManager.Instance?.Pause();
+
         // Forzamos el mapa de pausa/restricción
         ActionMapsManager.Instance.SetRestrictedInput();
     }
@@ -26,6 +27,7 @@ public class PauseManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         if (pauseMenuUI != null) pauseMenuUI.SetActive(false);
+        RhythmManager.Instance?.Resume();
 
         // En lugar de SetPlayerInput, usamos RESTAURAR
         ActionMapsManager.Instance.RestoreLastMap();

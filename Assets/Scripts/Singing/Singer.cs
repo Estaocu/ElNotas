@@ -9,6 +9,9 @@ public class Singer : MonoBehaviour
     // Opcional: solo el jugador lo necesita. NPCs dejan este campo vacío.
     [SerializeField] private Instrument instrument;
 
+    // Opcional: si tiene voz, suena al cantar cada nota.
+    [SerializeField] private SingerVoice voice;
+
     [SerializeField] private float cooldown = 0.5f;
 
     private float lastSingTime = -999f;
@@ -36,6 +39,10 @@ public class Singer : MonoBehaviour
 
     private void OnNoteAdded(notesEnum[] sequence, int notesPlayed)
     {
+        // Reproducir el sonido de la nota individual.
+        if (voice != null)
+            voice.PlayNote(sequence[3]);
+
         if (database == null || soundwavePrefab == null) return;
 
         foreach (var melody in database.melodies)
@@ -68,8 +75,11 @@ public class Singer : MonoBehaviour
     }
 
     // Llamar directamente desde lógica NPC con la melodía ya decidida.
-    public void SpawnSoundwave(Melody melody)
+    public void SpawnSoundwave(Melody melody, notesEnum? note = null)
     {
+        if (note.HasValue && voice != null)
+            voice.PlayNote(note.Value);
+
         TrySpawnSoundwave(melody);
     }
 

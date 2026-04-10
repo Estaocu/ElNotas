@@ -34,6 +34,10 @@ namespace CMF
 			if(controller == null)
 				Debug.LogWarning("No controller reference has been assigned to this script.", this.gameObject);
 
+			//Hide and lock cursor on game start
+			Cursor.visible = false;
+			Cursor.lockState = CursorLockMode.Locked;
+
 			//Check if old CameraMouseInput or CameraJoystickInput exists and replace with UnifiedCameraInput
 			CameraInput oldCameraInput = GetComponent<CameraInput>();
 			if(oldCameraInput != null && !(oldCameraInput is UnifiedCameraInput))

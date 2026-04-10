@@ -37,7 +37,7 @@ public class UnifiedCameraInput : CameraInput
         Vector2 rotateCameraInput = playerInputs.Gameplay.RotateCamera.ReadValue<Vector2>();
 
         horizontalInput = rotateCameraInput.x;
-        verticalInput = rotateCameraInput.y;
+        verticalInput = -rotateCameraInput.y; // Invert vertical input (mouse and gamepad)
     }
 
     public override float GetHorizontalCameraInput()

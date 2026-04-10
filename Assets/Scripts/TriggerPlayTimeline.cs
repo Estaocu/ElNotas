@@ -17,6 +17,7 @@ public class TriggerPlayTimeline : MonoBehaviour
             if (onlyOnce && alreadyPlayed) return;
             if (tlDirector != null)
             {
+                CMF.ActionMapsManager.Instance.SetRestrictedInput();
                 tlDirector.Play();
                 alreadyPlayed = true;
                 gameObject.SetActive(false);

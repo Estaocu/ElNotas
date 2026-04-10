@@ -24,6 +24,7 @@ namespace CMF
 		//The general rate at which the camera turns toward the movement direction;
 		public float cameraTurnSpeed = 120f;
 
+		private UnifiedCameraInput unifiedCameraInput;
 		private PlayerInputs playerInputs;
 		private bool isGamepadActive = false;
 		private InputDevice lastInputDevice = null;
@@ -33,13 +34,33 @@ namespace CMF
 			if(controller == null)
 				Debug.LogWarning("No controller reference has been assigned to this script.", this.gameObject);
 
-			//Initialize PlayerInputs for device detection
-			playerInputs = new PlayerInputs();
-			playerInputs.Gameplay.Enable();
+			//Check if old CameraMouseInput or CameraJoystickInput exists and replace with UnifiedCameraInput
+			CameraInput oldCameraInput = GetComponent<CameraInput>();
+			if(oldCameraInput != null && !(oldCameraInput is UnifiedCameraInput))
+			{
+				Debug.Log("Replacing legacy camera input (" + oldCameraInput.GetType().Name + ") with UnifiedCameraInput.");
+				//Remove old input handler
+				DestroyImmediate(oldCameraInput);
+				//Add new unified input handler
+				unifiedCameraInput = gameObject.AddComponent<UnifiedCameraInput>();
+			}
+			else if(oldCameraInput is UnifiedCameraInput)
+			{
+				unifiedCameraInput = (UnifiedCameraInput)oldCameraInput;
+			}
 
-			//Subscribe to RotateCamera action to detect which device is providing input
-			playerInputs.Gameplay.RotateCamera.performed += OnRotateCameraInput;
-			playerInputs.Gameplay.RotateCamera.canceled += OnRotateCameraInput;
+			if(unifiedCameraInput != null)
+			{
+				playerInputs = unifiedCameraInput.PlayerInputsInstance;
+
+				//Subscribe to RotateCamera action to detect which device is providing input
+				playerInputs.Gameplay.RotateCamera.performed += OnRotateCameraInput;
+				playerInputs.Gameplay.RotateCamera.canceled += OnRotateCameraInput;
+			}
+			else
+			{
+				Debug.LogWarning("Could not set up UnifiedCameraInput component. Device detection will not work properly.", this.gameObject);
+			}
 
 			//Subscribe to device change events
 			InputSystem.onDeviceChange += OnDeviceChange;
@@ -55,7 +76,6 @@ namespace CMF
 			{
 				playerInputs.Gameplay.RotateCamera.performed -= OnRotateCameraInput;
 				playerInputs.Gameplay.RotateCamera.canceled -= OnRotateCameraInput;
-				playerInputs.Dispose();
 			}
 
 			InputSystem.onDeviceChange -= OnDeviceChange;

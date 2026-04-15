@@ -19,6 +19,11 @@ public class EntityRhythmPattern : MonoBehaviour
     private double nextAttackDspTime;
     private bool isActive;
 
+    // Melody execution tracking
+    private Melody currentMelodyBeingSung;
+    private bool isExecutingMelody;
+    private int notesPlayedInMelody;
+
     private void OnEnable()
     {
         if (RhythmManager.Instance != null)
@@ -50,7 +55,31 @@ public class EntityRhythmPattern : MonoBehaviour
 
         if (!entry.isRest && singer != null)
         {
-            singer.SpawnSoundwave(melody, entry.note);
+            if (isExecutingMelody)
+            {
+                // Durante ejecución de melodía personalizada: solo tocar la nota
+                singer.PlayNoteSound(entry.note);
+            }
+            else
+            {
+                // Patrón regular: spawnea soundwave con la nota
+                singer.SpawnSoundwave(melody, entry.note);
+            }
+        }
+
+        // Si estamos ejecutando una melodía, rastrear el progreso
+        if (isExecutingMelody)
+        {
+            notesPlayedInMelody++;
+
+            // Si es la última nota de la melodía, spawneara soundwave
+            if (notesPlayedInMelody >= currentMelodyBeingSung.notes.Length)
+            {
+                Debug.Log($"[EntityRhythmPattern] Melodía completada: {currentMelodyBeingSung.melodyName}. Spawnweando soundwave.");
+                singer.SpawnSoundwave(currentMelodyBeingSung);
+                isExecutingMelody = false;
+                currentMelodyBeingSung = null;
+            }
         }
 
         // Programar el siguiente ataque
@@ -65,11 +94,47 @@ public class EntityRhythmPattern : MonoBehaviour
         currentEntryIndex++;
         if (currentEntryIndex >= pattern.Length)
         {
-            if (looping)
+            if (looping && !isExecutingMelody)
                 currentEntryIndex = 0;
-            else
+            else if (!isExecutingMelody)
                 isActive = false;
+            else if (isExecutingMelody)
+                isActive = false; // Stop after melody completes
         }
+    }
+
+    /// <summary>
+    /// Inicia la ejecución de una melodía. Convierte las notas en un patrón rítmico y comienza a cantar.
+    /// </summary>
+    public void StartSingingMelody(Melody melody)
+    {
+        if (melody == null || melody.notes == null || melody.notes.Length == 0)
+        {
+            Debug.LogWarning("[EntityRhythmPattern] Se intentó cantar una melodía nula o vacía.", this);
+            return;
+        }
+
+        currentMelodyBeingSung = melody;
+        isExecutingMelody = true;
+        notesPlayedInMelody = 0;
+
+        // Convertir la melodía en un patrón temporal: una nota por beat
+        PatternEntry[] tempPattern = new PatternEntry[melody.notes.Length];
+        for (int i = 0; i < melody.notes.Length; i++)
+        {
+            tempPattern[i] = new PatternEntry
+            {
+                spacing = SubdivisionType.Quarter, // 1 beat per note
+                isRest = false,
+                note = melody.notes[i]
+            };
+        }
+
+        // Reemplazar patrón temporalmente
+        pattern = tempPattern;
+        StartPattern();
+
+        Debug.Log($"[EntityRhythmPattern] Iniciando melodía: {melody.melodyName} ({melody.notes.Length} notas)");
     }
 
     /// <summary>

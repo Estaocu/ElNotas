@@ -74,6 +74,13 @@ public class Singer : MonoBehaviour
         return true;
     }
 
+    // Tocar una nota sin generar soundwave (para melodías personalizadas)
+    public void PlayNoteSound(notesEnum note)
+    {
+        if (voice != null)
+            voice.PlayNote(note);
+    }
+
     // Llamar directamente desde lógica NPC con la melodía ya decidida.
     public void SpawnSoundwave(Melody melody, notesEnum? note = null)
     {

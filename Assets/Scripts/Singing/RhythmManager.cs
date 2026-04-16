@@ -1,202 +1,122 @@
 using System;
 using UnityEngine;
+using System.Collections;
+using UnityEngine.InputSystem.iOS;
+using UnityEngine.UI;
 
 public class RhythmManager : MonoBehaviour
 {
+    public float bpm = 96f;
+    public float negWindowPercent = 0.15f;
+    public float posWindowPercent;
+    private bool playerNoteToNextBeat = false;
+    private double t; //Time between beats
+    private double nextBeatTime;
+    public int currentBeat;
+    public int beatType; //0 = whole; 1 = Whole; 2 = quarter.
+    private int beatOf16; //Beat real de los 16 que conforman una bar
+    public BeatCountUIImage beatImage;
+    public RectTransform needle;
+    
+
+     public static event Action<int> OnBeatChanged; //CLAVE, una campanada que emite una int de info (nº de beat) cada vez que suena
+
+     // Pause vars
+    private bool isPaused = false;
+    private double pauseStartDspTime;
     public static RhythmManager Instance { get; private set; }
 
-    [Header("Audio")]
-    [SerializeField] private AudioSource musicSource;
+    // Timing expuesto para que otros scripts (ej. Singer NPC) puedan programar
+    // notas con lookahead respecto al próximo subbeat.
+    public double SubBeatDuration => t;
+    public double NextSubBeatDspTime => nextBeatTime;
+    public int CurrentSubBeat => beatOf16;
 
-    [Header("Tempo")]
-    [SerializeField] private int bpm = 120;
 
-    [Header("Timing Window")]
-    [Tooltip("Fracción del beatDuration como media-ventana. 0.2 = ±20% del beat.")]
-    [SerializeField] [Range(0.05f, 0.5f)] private float timingWindowPercent = 0.2f;
-
-    // --- Estado interno ---
-    private double beatDuration;
-    private int currentBeat;
-    private double musicStartDspTime;
-    private double pauseStartDspTime;
-    private double totalPausedDuration;
-    private bool isPlaying;
-    private bool isPaused;
-
-    // --- Propiedades públicas ---
-    public int CurrentBeat => currentBeat;
-    public double BeatDuration => beatDuration;
-    public bool IsPlaying => isPlaying;
-    public bool IsPaused => isPaused;
-    public int BPM => bpm;
-
-    // --- Eventos ---
-    public event Action<int> OnBeat;
-    public event Action OnMeasureStart;
-    public event Action<double> OnResumed; // pasa duración de la pausa
-
-    private void Awake()
+    void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-
-        RecalculateBeatDuration();
+        posWindowPercent = negWindowPercent/2;
     }
 
-    private void OnDestroy()
+    void Start()
     {
-        if (Instance == this) Instance = null;
+        currentBeat = 0;
+        beatOf16 = 0;
+        beatType = 0;
+        t = 60/(bpm*4); //60 (BPM to BPS) * 4 (subBeats) / bpm
+        nextBeatTime = AudioSettings.dspTime;
     }
-
-    private void Update()
+    void Update()
     {
-        if (!isPlaying || isPaused) return;
+        if (isPaused) return;
 
-        double elapsed = GetElapsedMusicalTime();
-        int totalBeatsElapsed = (int)(elapsed / beatDuration);
-        int expectedBeat = (totalBeatsElapsed % 4) + 1;
-
-        if (expectedBeat != currentBeat)
+        if (AudioSettings.dspTime >= nextBeatTime) //Si has acabado de contar hasta t
         {
-            currentBeat = expectedBeat;
-            OnBeat?.Invoke(currentBeat);
-            if (currentBeat == 1) OnMeasureStart?.Invoke();
-        }
-    }
-
-    // ==================== API Pública ====================
-
-    public void StartMusic()
-    {
-        if (musicSource == null)
-        {
-            Debug.LogError("[RhythmManager] No hay AudioSource asignado.");
-            return;
+            StartNextSubBeat();
+            nextBeatTime += t;
         }
 
-        RecalculateBeatDuration();
-        musicSource.Play();
-        musicStartDspTime = AudioSettings.dspTime;
-        totalPausedDuration = 0;
-        currentBeat = 1;
-        isPlaying = true;
-        isPaused = false;
-
-        OnBeat?.Invoke(1);
-        OnMeasureStart?.Invoke();
-    }
-
-    public void StopMusic()
+        if (needle != null)
     {
-        if (musicSource != null) musicSource.Stop();
-        isPlaying = false;
-        isPaused = false;
+        // 1. Calculamos cuánto tiempo ha pasado desde el inicio del sub-beat actual (0.0 a 1.0)
+        float subBeatProgress = (float)((AudioSettings.dspTime - (nextBeatTime - t)) / t);
+
+        // 2. Calculamos el progreso total dentro del ciclo de 16 sub-beats (0.0 a 16.0)
+        // Usamos (beatOf16 - 1) para que empiece en 0 al inicio del ciclo
+        float totalProgress = (beatOf16 - 1) + subBeatProgress;
+
+        // 3. Mapeamos ese progreso (0-16) a grados (0-360)
+        // La fórmula es: (Progreso Actual / Total de Sub-beats) * 360
+        float angle = (totalProgress / 16f) * 360f;
+
+        // 4. Aplicamos la rotación (usamos ángulo negativo para rotación horaria)
+        needle.localRotation = Quaternion.Euler(0, 0, -angle);
+    }
     }
 
     public void Pause()
     {
-        if (!isPlaying || isPaused) return;
+        if (isPaused) return;
         isPaused = true;
         pauseStartDspTime = AudioSettings.dspTime;
-        if (musicSource != null) musicSource.Pause();
     }
 
     public void Resume()
     {
-        if (!isPlaying || !isPaused) return;
-        double pauseDuration = AudioSettings.dspTime - pauseStartDspTime;
-        totalPausedDuration += pauseDuration;
+        if (!isPaused) return;
+        double pausedDuration = AudioSettings.dspTime - pauseStartDspTime;
+        nextBeatTime += pausedDuration;
         isPaused = false;
-        if (musicSource != null) musicSource.UnPause();
-        OnResumed?.Invoke(pauseDuration);
+    }
+        void StartNextSubBeat()
+    {
+        beatOf16++;
+        if (beatOf16 >= 17) beatOf16 = 1;
+        currentBeat = (beatOf16 - 1) / 4;
+
+        DetermineBeatType(beatOf16);
+
+        // if (beatImage != null) beatImage.SwapSubBeatImage(beatOf16);
+
+        if (beatType == 0 && beatImage != null) beatImage.SwapImage(currentBeat);
+        int subNoteIndex = (beatOf16 - 1) % 4;
+        if (beatImage != null) beatImage.SwapSubNoteImage(subNoteIndex);
+
+        // Debug.Log("BEAT " + currentBeat + " |  Sub: " + beatOf16);
+
+        OnBeatChanged?.Invoke(beatOf16); //Emit signal to every subscriber with subbeat number
     }
 
-    public void SetBPM(int newBpm)
+    void DetermineBeatType(int beatNumber)
     {
-        bpm = Mathf.Max(1, newBpm);
-        RecalculateBeatDuration();
-    }
+        int n = beatNumber - 1;
 
-    /// <summary>
-    /// Evalúa si un hit (en dspTime) cae dentro de la ventana de un tipo de subdivisión.
-    /// </summary>
-    public TimingResult EvaluateHit(double hitDspTime, SubdivisionType subdivision)
-    {
-        var result = new TimingResult
-        {
-            isOnBeat = false,
-            subdivision = subdivision,
-            offsetFromBeat = double.MaxValue
-        };
+        if (n % 4 == 0) beatType = 0; // Whole
 
-        if (!isPlaying) return result;
-
-        double elapsed = hitDspTime - musicStartDspTime - totalPausedDuration;
-        if (elapsed < 0) return result;
-
-        double subdivisionInterval = SubdivisionToBeats(subdivision) * beatDuration;
-        double positionInGrid = elapsed % subdivisionInterval;
-
-        // Distancia al beat más cercano de esta subdivisión (puede ser antes o después)
-        double offset = positionInGrid;
-        if (offset > subdivisionInterval * 0.5)
-            offset -= subdivisionInterval;
-
-        double halfWindow = beatDuration * timingWindowPercent;
-        result.offsetFromBeat = offset;
-        result.isOnBeat = Math.Abs(offset) <= halfWindow;
-
-        return result;
-    }
-
-    /// <summary>
-    /// Devuelve el tiempo musical transcurrido corregido por pausas.
-    /// </summary>
-    public double GetElapsedMusicalTime()
-    {
-        double pauseCorrection = isPaused
-            ? totalPausedDuration + (AudioSettings.dspTime - pauseStartDspTime)
-            : totalPausedDuration;
-
-        return AudioSettings.dspTime - musicStartDspTime - pauseCorrection;
-    }
-
-    /// <summary>
-    /// Devuelve el dspTime absoluto del próximo beat de la subdivisión dada.
-    /// </summary>
-    public double GetNextBeatDspTime(SubdivisionType subdivision)
-    {
-        double elapsed = GetElapsedMusicalTime();
-        double interval = SubdivisionToBeats(subdivision) * beatDuration;
-        double beatsPassed = Math.Floor(elapsed / interval);
-        double nextBeatElapsed = (beatsPassed + 1) * interval;
-        double pauseCorrection = isPaused
-            ? totalPausedDuration + (AudioSettings.dspTime - pauseStartDspTime)
-            : totalPausedDuration;
-
-        return musicStartDspTime + pauseCorrection + nextBeatElapsed;
-    }
-
-    // ==================== Helpers ====================
-
-    private void RecalculateBeatDuration()
-    {
-        beatDuration = 60.0 / Mathf.Max(1, bpm);
-    }
-
-    private static double SubdivisionToBeats(SubdivisionType type)
-    {
-        return type switch
-        {
-            SubdivisionType.Quarter => 1.0,
-            SubdivisionType.Half    => 2.0,
-            SubdivisionType.Whole   => 4.0,
-            _ => 1.0
-        };
+        else if (n % 2 == 0) beatType = 1; // Half
+    
+        else beatType = 2; // Quarter
     }
 }

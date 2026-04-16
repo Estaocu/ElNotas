@@ -11,7 +11,10 @@ public class FlowerStepped : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (canBufferMelody == false || other.layerOverridePriority == 8) return;
+        if (!canBufferMelody || other.gameObject.layer == 8) return; // Layer 8 == Soundwave
+        singer.Sing();
+        //Buffer your melody for the next desired beat.
+
 
     }
 }

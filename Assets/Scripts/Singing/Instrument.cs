@@ -61,6 +61,14 @@ public class Instrument : MonoBehaviour
         OnNoteAdded?.Invoke(noteSequence, notesPlayed);
     }
 
+    // Llamado por Singer tras detectar una melodía y spawnear la soundwave,
+    // para que la última nota no arrastre hacia el siguiente match.
+    public void ClearSequence()
+    {
+        for (int i = 0; i < noteSequence.Length; i++) noteSequence[i] = default;
+        notesPlayed = 0;
+    }
+
     private void OnNote1Played(InputAction.CallbackContext context) => AddNote(notesEnum.Note1);
     private void OnNote2Played(InputAction.CallbackContext context) => AddNote(notesEnum.Note2);
     private void OnNote3Played(InputAction.CallbackContext context) => AddNote(notesEnum.Note3);

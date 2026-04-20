@@ -54,6 +54,8 @@ public class Singer : MonoBehaviour
 
     public bool IsPlayer => instrument != null;
 
+    public event System.Action<Melody> onSoundwaveSpawned;
+
     private void OnValidate()
     {
         if (pattern == null || pattern.Length != 16)
@@ -281,6 +283,11 @@ public class Singer : MonoBehaviour
         var instance = Instantiate(soundwavePrefab, spawnPos, Quaternion.identity);
         var soundwave = instance.GetComponent<Soundwave>();
         if (soundwave != null)
+        {
             soundwave.myMelody = melody;
+            soundwave.source = this;
+        }
+
+        onSoundwaveSpawned?.Invoke(melody);
     }
 }

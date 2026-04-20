@@ -96,6 +96,7 @@ public class RhythmManager : MonoBehaviour
         if (beatOf16 >= 17) beatOf16 = 1;
         currentBeat = (beatOf16 - 1) / 4;
 
+
         DetermineBeatType(beatOf16);
 
         // if (beatImage != null) beatImage.SwapSubBeatImage(beatOf16);
@@ -104,9 +105,17 @@ public class RhythmManager : MonoBehaviour
         int subNoteIndex = (beatOf16 - 1) % 4;
         if (beatImage != null) beatImage.SwapSubNoteImage(subNoteIndex);
 
-        // Debug.Log("BEAT " + currentBeat + " |  Sub: " + beatOf16);
 
         OnBeatChanged?.Invoke(beatOf16); //Emit signal to every subscriber with subbeat number
+    }
+
+    void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            RhythmBeatWaiter.CancelAll();
+            Instance = null;
+        }
     }
 
     void DetermineBeatType(int beatNumber)

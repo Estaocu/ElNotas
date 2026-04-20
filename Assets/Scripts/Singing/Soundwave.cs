@@ -4,6 +4,7 @@ using UnityEngine;
 public class Soundwave : MonoBehaviour
 {
     public Melody myMelody;
+    public Singer source;
 
     [SerializeField] private float lifetime = 3f;
     [SerializeField] private float expandDuration = 2f;

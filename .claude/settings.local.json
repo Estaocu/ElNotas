@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find \"C:/El Notas/ElNotas/Assets/Scripts/Testing Tools\" -type f -name \"*.cs\" -exec grep -l \"Debug\\\\|Test\" {} \\\\;)"
+    ]
+  }
+}

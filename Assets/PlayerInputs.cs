@@ -1050,6 +1050,214 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""DebugAndTesting"",
+            ""id"": ""40e80c06-27ae-43ac-a441-d970492b7a7e"",
+            ""actions"": [
+                {
+                    ""name"": ""TP_0"",
+                    ""type"": ""Button"",
+                    ""id"": ""36546575-fd7e-4738-919d-90dd8c545869"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TP_1"",
+                    ""type"": ""Button"",
+                    ""id"": ""ccf6bb6f-bbf3-4b19-bf15-e0b4963f6171"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TP_2"",
+                    ""type"": ""Button"",
+                    ""id"": ""59d70df3-d212-4be9-91e8-f4b733c18e2b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TP_3"",
+                    ""type"": ""Button"",
+                    ""id"": ""5f2bc955-5d3b-4a83-89b8-822bca897fb4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TP_4"",
+                    ""type"": ""Button"",
+                    ""id"": ""9841bf99-2821-440d-b697-ac092a6486c3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TP_5"",
+                    ""type"": ""Button"",
+                    ""id"": ""8edb86e0-0cad-459f-8b71-cc51029941a3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TP_6"",
+                    ""type"": ""Button"",
+                    ""id"": ""82372dec-3fe6-41ae-9e18-7d75d537ba38"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TP_7"",
+                    ""type"": ""Button"",
+                    ""id"": ""4af2d0d5-6d4f-42a2-803f-525d7f6094b2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TP_8"",
+                    ""type"": ""Button"",
+                    ""id"": ""9ab87948-6da6-443f-a1e1-5b6c2f770b37"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TP_9"",
+                    ""type"": ""Button"",
+                    ""id"": ""3f354921-8a4d-4845-933f-2913576a6146"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""210271c8-d110-4f8d-83d3-d47d843eff0a"",
+                    ""path"": ""<Keyboard>/numpad0"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TP_0"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6ee977c4-4626-408f-8bd1-63ffb5a17ab1"",
+                    ""path"": ""<Keyboard>/numpad1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TP_1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8ec88ff8-a684-4898-9cdb-1b8f61a5a345"",
+                    ""path"": ""<Keyboard>/numpad2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TP_2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1ff5f7ab-7dcf-431d-a169-1068669da62b"",
+                    ""path"": ""<Keyboard>/numpad3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TP_3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9fa63844-b0e5-4a5e-889d-fc45e7e516e3"",
+                    ""path"": ""<Keyboard>/numpad4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TP_4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3c978829-769d-44f8-86ff-b4e46b798031"",
+                    ""path"": ""<Keyboard>/numpad5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TP_5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aac2d5cf-4969-4843-80b3-1b526cdbccc6"",
+                    ""path"": ""<Keyboard>/numpad6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TP_6"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cd053573-e622-40c8-9163-34770665b688"",
+                    ""path"": ""<Keyboard>/numpad7"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TP_7"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3b3ee757-57fd-429b-8164-d6b61d7a47ed"",
+                    ""path"": ""<Keyboard>/numpad8"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TP_8"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""72601d9c-9109-40aa-9375-dc7d29824344"",
+                    ""path"": ""<Keyboard>/numpad9"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TP_9"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -1086,6 +1294,18 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         // RestrictedInput
         m_RestrictedInput = asset.FindActionMap("RestrictedInput", throwIfNotFound: true);
         m_RestrictedInput_Pause = m_RestrictedInput.FindAction("Pause", throwIfNotFound: true);
+        // DebugAndTesting
+        m_DebugAndTesting = asset.FindActionMap("DebugAndTesting", throwIfNotFound: true);
+        m_DebugAndTesting_TP_0 = m_DebugAndTesting.FindAction("TP_0", throwIfNotFound: true);
+        m_DebugAndTesting_TP_1 = m_DebugAndTesting.FindAction("TP_1", throwIfNotFound: true);
+        m_DebugAndTesting_TP_2 = m_DebugAndTesting.FindAction("TP_2", throwIfNotFound: true);
+        m_DebugAndTesting_TP_3 = m_DebugAndTesting.FindAction("TP_3", throwIfNotFound: true);
+        m_DebugAndTesting_TP_4 = m_DebugAndTesting.FindAction("TP_4", throwIfNotFound: true);
+        m_DebugAndTesting_TP_5 = m_DebugAndTesting.FindAction("TP_5", throwIfNotFound: true);
+        m_DebugAndTesting_TP_6 = m_DebugAndTesting.FindAction("TP_6", throwIfNotFound: true);
+        m_DebugAndTesting_TP_7 = m_DebugAndTesting.FindAction("TP_7", throwIfNotFound: true);
+        m_DebugAndTesting_TP_8 = m_DebugAndTesting.FindAction("TP_8", throwIfNotFound: true);
+        m_DebugAndTesting_TP_9 = m_DebugAndTesting.FindAction("TP_9", throwIfNotFound: true);
     }
 
     ~@PlayerInputs()
@@ -1094,6 +1314,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_Notebook.enabled, "This will cause a leak and performance issues, PlayerInputs.Notebook.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_PauseMenu.enabled, "This will cause a leak and performance issues, PlayerInputs.PauseMenu.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_RestrictedInput.enabled, "This will cause a leak and performance issues, PlayerInputs.RestrictedInput.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_DebugAndTesting.enabled, "This will cause a leak and performance issues, PlayerInputs.DebugAndTesting.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1769,6 +1990,201 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="RestrictedInputActions" /> instance referencing this action map.
     /// </summary>
     public RestrictedInputActions @RestrictedInput => new RestrictedInputActions(this);
+
+    // DebugAndTesting
+    private readonly InputActionMap m_DebugAndTesting;
+    private List<IDebugAndTestingActions> m_DebugAndTestingActionsCallbackInterfaces = new List<IDebugAndTestingActions>();
+    private readonly InputAction m_DebugAndTesting_TP_0;
+    private readonly InputAction m_DebugAndTesting_TP_1;
+    private readonly InputAction m_DebugAndTesting_TP_2;
+    private readonly InputAction m_DebugAndTesting_TP_3;
+    private readonly InputAction m_DebugAndTesting_TP_4;
+    private readonly InputAction m_DebugAndTesting_TP_5;
+    private readonly InputAction m_DebugAndTesting_TP_6;
+    private readonly InputAction m_DebugAndTesting_TP_7;
+    private readonly InputAction m_DebugAndTesting_TP_8;
+    private readonly InputAction m_DebugAndTesting_TP_9;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "DebugAndTesting".
+    /// </summary>
+    public struct DebugAndTestingActions
+    {
+        private @PlayerInputs m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public DebugAndTestingActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "DebugAndTesting/TP_0".
+        /// </summary>
+        public InputAction @TP_0 => m_Wrapper.m_DebugAndTesting_TP_0;
+        /// <summary>
+        /// Provides access to the underlying input action "DebugAndTesting/TP_1".
+        /// </summary>
+        public InputAction @TP_1 => m_Wrapper.m_DebugAndTesting_TP_1;
+        /// <summary>
+        /// Provides access to the underlying input action "DebugAndTesting/TP_2".
+        /// </summary>
+        public InputAction @TP_2 => m_Wrapper.m_DebugAndTesting_TP_2;
+        /// <summary>
+        /// Provides access to the underlying input action "DebugAndTesting/TP_3".
+        /// </summary>
+        public InputAction @TP_3 => m_Wrapper.m_DebugAndTesting_TP_3;
+        /// <summary>
+        /// Provides access to the underlying input action "DebugAndTesting/TP_4".
+        /// </summary>
+        public InputAction @TP_4 => m_Wrapper.m_DebugAndTesting_TP_4;
+        /// <summary>
+        /// Provides access to the underlying input action "DebugAndTesting/TP_5".
+        /// </summary>
+        public InputAction @TP_5 => m_Wrapper.m_DebugAndTesting_TP_5;
+        /// <summary>
+        /// Provides access to the underlying input action "DebugAndTesting/TP_6".
+        /// </summary>
+        public InputAction @TP_6 => m_Wrapper.m_DebugAndTesting_TP_6;
+        /// <summary>
+        /// Provides access to the underlying input action "DebugAndTesting/TP_7".
+        /// </summary>
+        public InputAction @TP_7 => m_Wrapper.m_DebugAndTesting_TP_7;
+        /// <summary>
+        /// Provides access to the underlying input action "DebugAndTesting/TP_8".
+        /// </summary>
+        public InputAction @TP_8 => m_Wrapper.m_DebugAndTesting_TP_8;
+        /// <summary>
+        /// Provides access to the underlying input action "DebugAndTesting/TP_9".
+        /// </summary>
+        public InputAction @TP_9 => m_Wrapper.m_DebugAndTesting_TP_9;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_DebugAndTesting; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="DebugAndTestingActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(DebugAndTestingActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="DebugAndTestingActions" />
+        public void AddCallbacks(IDebugAndTestingActions instance)
+        {
+            if (instance == null || m_Wrapper.m_DebugAndTestingActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_DebugAndTestingActionsCallbackInterfaces.Add(instance);
+            @TP_0.started += instance.OnTP_0;
+            @TP_0.performed += instance.OnTP_0;
+            @TP_0.canceled += instance.OnTP_0;
+            @TP_1.started += instance.OnTP_1;
+            @TP_1.performed += instance.OnTP_1;
+            @TP_1.canceled += instance.OnTP_1;
+            @TP_2.started += instance.OnTP_2;
+            @TP_2.performed += instance.OnTP_2;
+            @TP_2.canceled += instance.OnTP_2;
+            @TP_3.started += instance.OnTP_3;
+            @TP_3.performed += instance.OnTP_3;
+            @TP_3.canceled += instance.OnTP_3;
+            @TP_4.started += instance.OnTP_4;
+            @TP_4.performed += instance.OnTP_4;
+            @TP_4.canceled += instance.OnTP_4;
+            @TP_5.started += instance.OnTP_5;
+            @TP_5.performed += instance.OnTP_5;
+            @TP_5.canceled += instance.OnTP_5;
+            @TP_6.started += instance.OnTP_6;
+            @TP_6.performed += instance.OnTP_6;
+            @TP_6.canceled += instance.OnTP_6;
+            @TP_7.started += instance.OnTP_7;
+            @TP_7.performed += instance.OnTP_7;
+            @TP_7.canceled += instance.OnTP_7;
+            @TP_8.started += instance.OnTP_8;
+            @TP_8.performed += instance.OnTP_8;
+            @TP_8.canceled += instance.OnTP_8;
+            @TP_9.started += instance.OnTP_9;
+            @TP_9.performed += instance.OnTP_9;
+            @TP_9.canceled += instance.OnTP_9;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="DebugAndTestingActions" />
+        private void UnregisterCallbacks(IDebugAndTestingActions instance)
+        {
+            @TP_0.started -= instance.OnTP_0;
+            @TP_0.performed -= instance.OnTP_0;
+            @TP_0.canceled -= instance.OnTP_0;
+            @TP_1.started -= instance.OnTP_1;
+            @TP_1.performed -= instance.OnTP_1;
+            @TP_1.canceled -= instance.OnTP_1;
+            @TP_2.started -= instance.OnTP_2;
+            @TP_2.performed -= instance.OnTP_2;
+            @TP_2.canceled -= instance.OnTP_2;
+            @TP_3.started -= instance.OnTP_3;
+            @TP_3.performed -= instance.OnTP_3;
+            @TP_3.canceled -= instance.OnTP_3;
+            @TP_4.started -= instance.OnTP_4;
+            @TP_4.performed -= instance.OnTP_4;
+            @TP_4.canceled -= instance.OnTP_4;
+            @TP_5.started -= instance.OnTP_5;
+            @TP_5.performed -= instance.OnTP_5;
+            @TP_5.canceled -= instance.OnTP_5;
+            @TP_6.started -= instance.OnTP_6;
+            @TP_6.performed -= instance.OnTP_6;
+            @TP_6.canceled -= instance.OnTP_6;
+            @TP_7.started -= instance.OnTP_7;
+            @TP_7.performed -= instance.OnTP_7;
+            @TP_7.canceled -= instance.OnTP_7;
+            @TP_8.started -= instance.OnTP_8;
+            @TP_8.performed -= instance.OnTP_8;
+            @TP_8.canceled -= instance.OnTP_8;
+            @TP_9.started -= instance.OnTP_9;
+            @TP_9.performed -= instance.OnTP_9;
+            @TP_9.canceled -= instance.OnTP_9;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="DebugAndTestingActions.UnregisterCallbacks(IDebugAndTestingActions)" />.
+        /// </summary>
+        /// <seealso cref="DebugAndTestingActions.UnregisterCallbacks(IDebugAndTestingActions)" />
+        public void RemoveCallbacks(IDebugAndTestingActions instance)
+        {
+            if (m_Wrapper.m_DebugAndTestingActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="DebugAndTestingActions.AddCallbacks(IDebugAndTestingActions)" />
+        /// <seealso cref="DebugAndTestingActions.RemoveCallbacks(IDebugAndTestingActions)" />
+        /// <seealso cref="DebugAndTestingActions.UnregisterCallbacks(IDebugAndTestingActions)" />
+        public void SetCallbacks(IDebugAndTestingActions instance)
+        {
+            foreach (var item in m_Wrapper.m_DebugAndTestingActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_DebugAndTestingActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="DebugAndTestingActions" /> instance referencing this action map.
+    /// </summary>
+    public DebugAndTestingActions @DebugAndTesting => new DebugAndTestingActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Gameplay" which allows adding and removing callbacks.
     /// </summary>
@@ -1968,5 +2384,83 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPause(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "DebugAndTesting" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="DebugAndTestingActions.AddCallbacks(IDebugAndTestingActions)" />
+    /// <seealso cref="DebugAndTestingActions.RemoveCallbacks(IDebugAndTestingActions)" />
+    public interface IDebugAndTestingActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "TP_0" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTP_0(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "TP_1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTP_1(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "TP_2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTP_2(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "TP_3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTP_3(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "TP_4" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTP_4(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "TP_5" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTP_5(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "TP_6" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTP_6(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "TP_7" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTP_7(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "TP_8" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTP_8(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "TP_9" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTP_9(InputAction.CallbackContext context);
     }
 }

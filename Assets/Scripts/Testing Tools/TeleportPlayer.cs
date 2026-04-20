@@ -33,7 +33,7 @@ public class TeleportPlayer : MonoBehaviour
         }
 
         _playerTransform = source;
-        _playerRigidbody = source.GetComponent<Rigidbody>();
+        _playerRigidbody = source.GetComponentInChildren<Rigidbody>();
         Debug.Log($"[TeleportPlayer] Player resuelto: {source.name}");
     }
 
@@ -75,6 +75,7 @@ public class TeleportPlayer : MonoBehaviour
 
     private TeleportPoint FindPoint(int number)
     {
+        if (_points == null) return null;
         foreach (TeleportPoint point in _points)
         {
             if (point != null && point.Number == number)

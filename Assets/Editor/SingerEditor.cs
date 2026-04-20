@@ -16,6 +16,7 @@ public class SingerEditor : Editor
 
     private void OnEnable()
     {
+        if (target == null) return;
         databaseProp = serializedObject.FindProperty("database");
         soundwavePrefabProp = serializedObject.FindProperty("soundwavePrefab");
         soundwaveSpawnpointProp = serializedObject.FindProperty("soundwaveSpawnpoint");
@@ -29,6 +30,7 @@ public class SingerEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        if (target == null || databaseProp == null) return;
         serializedObject.Update();
 
         bool isPlayer = instrumentProp.objectReferenceValue != null;

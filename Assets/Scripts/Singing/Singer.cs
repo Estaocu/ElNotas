@@ -1,7 +1,28 @@
+using System.Collections;
 using UnityEngine;
+
+public enum NoteSlot
+{
+    Empty = -1,
+    Note1 = 0,
+    Note2 = 1,
+    Note3 = 2,
+    Note4 = 3
+}
+
+public enum PatternMode
+{
+    // El patrón se alinea al siguiente whole beat (subbeat global 1/5/9/13)
+    // y los 16 slots son relativos a ese punto.
+    Local,
+    // Los 16 slots están alineados a los subbeats globales 1-16. Al dispararse,
+    // espera al siguiente subbeat global 1 y ejecuta un ciclo completo.
+    Absolute
+}
 
 public class Singer : MonoBehaviour
 {
+    // ====== Core (jugador + NPC) ======
     [SerializeField] private MelodyDatabase database;
     [SerializeField] private GameObject soundwavePrefab;
     [SerializeField] private Transform soundwaveSpawnpoint;
@@ -9,33 +30,181 @@ public class Singer : MonoBehaviour
     // Opcional: solo el jugador lo necesita. NPCs dejan este campo vacío.
     [SerializeField] private Instrument instrument;
 
+    // Opcional: si tiene voz, suena al cantar cada nota.
+    [SerializeField] private SingerVoice voice;
+
     [SerializeField] private float cooldown = 0.5f;
 
+    // ====== NPC rhythm pattern ======
+    [SerializeField] private PatternMode patternMode = PatternMode.Local;
+    [SerializeField] private NoteSlot[] pattern = new NoteSlot[16];
+    [SerializeField, Range(0f, 0.25f)] private float humanizationPercent = 0.05f;
+
+    // ====== Estado runtime ======
     private float lastSingTime = -999f;
+
+    // Buffer propio del NPC (replica la lógica del Instrument del jugador).
+    private readonly notesEnum[] noteBuffer = new notesEnum[4];
+    private int notesPlayed;
+
+    private bool isPatternActive;
+    private bool waitingForStart;
+    private int nextSlotIndex;
+    private int slotsRemaining;
+
+    public bool IsPlayer => instrument != null;
+
+    public event System.Action<Melody> onSoundwaveSpawned;
+
+    private void OnValidate()
+    {
+        if (pattern == null || pattern.Length != 16)
+        {
+            var resized = new NoteSlot[16];
+            if (pattern != null)
+            {
+                int copy = Mathf.Min(pattern.Length, 16);
+                for (int i = 0; i < copy; i++) resized[i] = pattern[i];
+            }
+            pattern = resized;
+        }
+    }
 
     private void OnEnable()
     {
         if (instrument != null)
-            instrument.OnNoteAdded += OnNoteAdded;
+            instrument.OnNoteAdded += OnPlayerNoteAdded;
+        else
+            RhythmManager.OnBeatChanged += OnBeatChanged;
     }
 
     private void OnDisable()
     {
         if (instrument != null)
-            instrument.OnNoteAdded -= OnNoteAdded;
+            instrument.OnNoteAdded -= OnPlayerNoteAdded;
+        else
+            RhythmManager.OnBeatChanged -= OnBeatChanged;
     }
 
-    // Llamado por Instrument via evento (jugador) o directamente por lógica NPC.
-    public void AddNote(notesEnum note)
+    // ========================================================================
+    // JUGADOR
+    // ========================================================================
+
+    private void OnPlayerNoteAdded(notesEnum[] sequence, int played)
     {
-        if (instrument != null) return; // El jugador usa OnNoteAdded, no este método.
-        // NPCs mantienen su propio buffer si usan este método directamente.
-        // Por ahora los NPCs deberían implementar su propia lógica de buffer
-        // y llamar a SpawnSoundwave directamente cuando corresponda.
+        if (voice != null)
+            voice.PlayNote(sequence[3]);
+
+        if (database == null || soundwavePrefab == null) return;
+
+        foreach (var melody in database.melodies)
+        {
+            if (melody == null || melody.notes == null || melody.notes.Length == 0) continue;
+
+            int n = melody.notes.Length;
+            if (played < n) continue;
+
+            if (SequenceEndMatches(sequence, melody.notes))
+            {
+                TrySpawnSoundwave(melody);
+                if (instrument != null) instrument.ClearSequence();
+                return; // Una melodía por pulsación
+            }
+        }
     }
 
-    private void OnNoteAdded(notesEnum[] sequence, int notesPlayed)
+    // ========================================================================
+    // NPC
+    // ========================================================================
+
+    // Disparo externo: arranca el patrón según el modo configurado.
+    public void Sing()
     {
+        if (IsPlayer) return;
+        waitingForStart = true;
+    }
+
+    public void StopSinging()
+    {
+        waitingForStart = false;
+        isPatternActive = false;
+    }
+
+    private void OnBeatChanged(int beatOf16)
+    {
+        if (IsPlayer) return;
+        if (pattern == null || pattern.Length < 16) return;
+
+        int nextSubBeat = beatOf16 >= 16 ? 1 : beatOf16 + 1;
+
+        // 1. Alinear arranque. Procesamos aquí el subbeat próximo (lookahead).
+        if (waitingForStart)
+        {
+            bool aligned =
+                (patternMode == PatternMode.Local && IsWholeBeat(nextSubBeat)) ||
+                (patternMode == PatternMode.Absolute && nextSubBeat == 1);
+
+            if (!aligned) return;
+
+            waitingForStart = false;
+            isPatternActive = true;
+            nextSlotIndex = 0;
+            slotsRemaining = 16;
+        }
+
+        if (!isPatternActive) return;
+
+        // 2. Programar el slot que debe sonar en el próximo subbeat.
+        NoteSlot slot = pattern[nextSlotIndex];
+        if (slot != NoteSlot.Empty)
+        {
+            var rm = RhythmManager.Instance;
+            if (rm != null)
+            {
+                // NextSubBeatDspTime apunta al subbeat actual cuando se lee desde
+                // dentro de OnBeatChanged (nextBeatTime se incrementa después del invoke).
+                // Sumamos un SubBeatDuration para apuntar correctamente al siguiente.
+                double target = rm.NextSubBeatDspTime + rm.SubBeatDuration
+                                + Random.Range(-humanizationPercent, humanizationPercent)
+                                  * rm.SubBeatDuration;
+
+                StartCoroutine(PerformNoteAt((notesEnum)slot, target));
+            }
+        }
+
+        // 3. Avanzar el cursor del patrón.
+        nextSlotIndex++;
+        slotsRemaining--;
+        if (slotsRemaining <= 0)
+            isPatternActive = false;
+    }
+
+    private static bool IsWholeBeat(int subBeat)
+    {
+        // Whole beats con 4 subbeats por beat: 1, 5, 9, 13.
+        return ((subBeat - 1) % 4) == 0;
+    }
+
+    private IEnumerator PerformNoteAt(notesEnum note, double targetDspTime)
+    {
+        while (AudioSettings.dspTime < targetDspTime)
+            yield return null;
+
+        SingNote(note);
+    }
+
+    private void SingNote(notesEnum note)
+    {
+        if (voice != null)
+            voice.PlayNote(note);
+
+        // Shift-left e insertar al final (idéntico al buffer del Instrument).
+        noteBuffer[0] = noteBuffer[1];
+        noteBuffer[1] = noteBuffer[2];
+        noteBuffer[2] = noteBuffer[3];
+        noteBuffer[3] = note;
+        if (notesPlayed < 4) notesPlayed++;
+
         if (database == null || soundwavePrefab == null) return;
 
         foreach (var melody in database.melodies)
@@ -45,15 +214,48 @@ public class Singer : MonoBehaviour
             int n = melody.notes.Length;
             if (notesPlayed < n) continue;
 
-            if (SequenceEndMatches(sequence, melody.notes))
+            if (SequenceEndMatches(noteBuffer, melody.notes))
             {
                 TrySpawnSoundwave(melody);
-                return; // Una melodía por pulsación
+                ClearLocalBuffer();
+                return;
             }
         }
     }
 
-    // Compara las últimas n notas del buffer circular con el array de la melodía.
+    private void ClearLocalBuffer()
+    {
+        for (int i = 0; i < noteBuffer.Length; i++) noteBuffer[i] = default;
+        notesPlayed = 0;
+    }
+
+    // ========================================================================
+    // API COMÚN
+    // ========================================================================
+
+    // Empuja una nota externamente al flujo de canto NPC (sonido + buffer + match).
+    public void AddNote(notesEnum note)
+    {
+        if (IsPlayer) return;
+        SingNote(note);
+    }
+
+    // Tocar una nota sin generar soundwave.
+    public void PlayNoteSound(notesEnum note)
+    {
+        if (voice != null)
+            voice.PlayNote(note);
+    }
+
+    // Llamar directamente con la melodía ya decidida.
+    public void SpawnSoundwave(Melody melody, notesEnum? note = null)
+    {
+        if (note.HasValue && voice != null)
+            voice.PlayNote(note.Value);
+
+        TrySpawnSoundwave(melody);
+    }
+
     private bool SequenceEndMatches(notesEnum[] sequence, notesEnum[] melodyNotes)
     {
         int n = melodyNotes.Length;
@@ -67,12 +269,6 @@ public class Singer : MonoBehaviour
         return true;
     }
 
-    // Llamar directamente desde lógica NPC con la melodía ya decidida.
-    public void SpawnSoundwave(Melody melody)
-    {
-        TrySpawnSoundwave(melody);
-    }
-
     private void TrySpawnSoundwave(Melody melody)
     {
         if (Time.time - lastSingTime < cooldown) return;
@@ -81,12 +277,17 @@ public class Singer : MonoBehaviour
         Vector3 spawnPos = soundwaveSpawnpoint != null
             ? soundwaveSpawnpoint.position
             : transform.position;
-        
+
         Debug.Log($"[Singer] Melodía detectada: {melody?.melodyName ?? "DEBUG"} | Spawn pos: {spawnPos}");
 
         var instance = Instantiate(soundwavePrefab, spawnPos, Quaternion.identity);
         var soundwave = instance.GetComponent<Soundwave>();
         if (soundwave != null)
+        {
             soundwave.myMelody = melody;
+            soundwave.source = this;
+        }
+
+        onSoundwaveSpawned?.Invoke(melody);
     }
 }

@@ -18,12 +18,26 @@ public class UnifiedCameraInput : CameraInput
 
 
     /// <summary>
-    /// Public reference to PlayerInputs for device detection in ThirdPersonCameraController
+    /// Public reference to PlayerInputs for device detection in ThirdPersonCameraController.
+    /// Llama a EnsureInitialized() para evitar depender del orden de Awake.
     /// </summary>
-    public PlayerInputs PlayerInputsInstance => playerInputs;
+    public PlayerInputs PlayerInputsInstance
+    {
+        get
+        {
+            EnsureInitialized();
+            return playerInputs;
+        }
+    }
 
     private void Awake()
     {
+        EnsureInitialized();
+    }
+
+    private void EnsureInitialized()
+    {
+        if (playerInputs != null) return;
         playerInputs = new PlayerInputs();
         playerInputs.Gameplay.Enable();
     }

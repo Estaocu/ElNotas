@@ -6,6 +6,7 @@ public class PauseManager : MonoBehaviour
 {
     [Header("UI")]
     public GameObject pauseMenuUI;
+    public AudioSource musicSource;
 
     public void TogglePause(InputAction.CallbackContext context)
 {
@@ -18,17 +19,24 @@ public class PauseManager : MonoBehaviour
         
         Time.timeScale = 0f;
         if (pauseMenuUI != null) pauseMenuUI.SetActive(true);
-        
+        RhythmManager.Instance?.Pause();
+
         // Forzamos el mapa de pausa/restricción
         ActionMapsManager.Instance.SetRestrictedInput();
+
+        if (musicSource.isPlaying) musicSource.Pause(); 
+
     }
     else
     {
         Time.timeScale = 1f;
         if (pauseMenuUI != null) pauseMenuUI.SetActive(false);
+        RhythmManager.Instance?.Resume();
 
         // En lugar de SetPlayerInput, usamos RESTAURAR
         ActionMapsManager.Instance.RestoreLastMap();
+
+        musicSource.UnPause();
     }
 }
 

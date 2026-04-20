@@ -8,6 +8,8 @@ namespace CMF
         [Header("Input Settings")]
         [Tooltip("Arrastra aquí la acción 'Move' de tu Input Action Asset")]
         public InputActionReference moveAction;
+        [Tooltip("Arrastra aquí la acción 'Jump' de tu Input Action Asset")]
+        public InputActionReference jumpAction;
 
         private Vector2 currentMovementInput;
 
@@ -18,6 +20,10 @@ namespace CMF
             {
                 moveAction.action.Enable();
             }
+            if (jumpAction != null)
+            {
+                jumpAction.action.Enable();
+            }
         }
 
         private void OnDisable()
@@ -25,6 +31,10 @@ namespace CMF
             if (moveAction != null)
             {
                 moveAction.action.Disable();
+            }
+            if (jumpAction != null)
+            {
+                jumpAction.action.Disable();
             }
         }
 
@@ -50,8 +60,9 @@ namespace CMF
 
         public override bool IsJumpKeyPressed()
         {
-            return false;
-            throw new System.NotImplementedException();
+            if (jumpAction == null)
+                return false;
+            return jumpAction.action.triggered;
         }
     }
 }

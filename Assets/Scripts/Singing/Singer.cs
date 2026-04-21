@@ -33,6 +33,10 @@ public class Singer : MonoBehaviour
     // Opcional: si tiene voz, suena al cantar cada nota.
     [SerializeField] private SingerVoice voice;
 
+    // Timing and meter
+    [SerializeField] private RhythmTimingValidator timingValidator;
+    [SerializeField] private LifeAndMeter lifeAndMeter;
+
     [SerializeField] private float cooldown = 0.5f;
 
     // ====== NPC rhythm pattern ======
@@ -94,6 +98,18 @@ public class Singer : MonoBehaviour
     {
         if (voice != null)
             voice.PlayNote(sequence[3]);
+
+        // Calculate timing reward
+        double hitTime = AudioSettings.dspTime;
+        int meterAward = 0;
+        if (timingValidator != null)
+        {
+            meterAward = timingValidator.GetMeterAward(hitTime);
+            if (meterAward > 0 && lifeAndMeter != null)
+            {
+                lifeAndMeter.ChangeMeterCharge(meterAward);
+            }
+        }
 
         if (database == null || soundwavePrefab == null) return;
 
@@ -278,7 +294,7 @@ public class Singer : MonoBehaviour
             ? soundwaveSpawnpoint.position
             : transform.position;
 
-        Debug.Log($"[Singer] Melodía detectada: {melody?.melodyName ?? "DEBUG"} | Spawn pos: {spawnPos}");
+        //Debug.Log($"[Singer] Melodía detectada: {melody?.melodyName ?? "DEBUG"} | Spawn pos: {spawnPos}");
 
         var instance = Instantiate(soundwavePrefab, spawnPos, Quaternion.identity);
         var soundwave = instance.GetComponent<Soundwave>();

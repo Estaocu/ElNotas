@@ -101,7 +101,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -116,12 +116,11 @@ GameObject:
   - component: {fileID: 4460048312922731874}
   - component: {fileID: 2989854860647649785}
   - component: {fileID: 3343888976148886420}
-  - component: {fileID: 6838313256418439691}
   - component: {fileID: 108109710666919391}
   - component: {fileID: 5042880092936730101}
   - component: {fileID: 4830153490639154673}
   - component: {fileID: 3894618539409404804}
-  - component: {fileID: 6023562945634223731}
+  - component: {fileID: 2725611551508977993}
   m_Layer: 0
   m_Name: Mosquito
   m_TagString: Untagged
@@ -196,25 +195,6 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &6838313256418439691
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4609813583533158504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 343a9761191985741b030464d178871e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isStatic: 0
-  patrolSpeed: 4
-  chaseSpeed: 6
-  attackDistance: 4
-  targetTags:
-  - Player
-  - NPC
 --- !u!114 &108109710666919391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,6 +229,8 @@ MonoBehaviour:
   soundwaveSpawnpoint: {fileID: 6345804331113606732}
   instrument: {fileID: 0}
   voice: {fileID: 4830153490639154673}
+  timingValidator: {fileID: 0}
+  lifeAndMeter: {fileID: 0}
   cooldown: 0.5
   patternMode: 0
   pattern: ffffffff02000000ffffffffffffffffffffffffffffffff0100000001000000ffffffff00000000ffffffffffffffffffffffffffffffffffffffffffffffff
@@ -282,8 +264,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53d67915f7b59ca448b270d6cafbd00e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  desiredMelody: {fileID: 11400000, guid: 846d4567507f101449c4bd7d84e818b4, type: 2}
---- !u!114 &6023562945634223731
+  desiredMelody: {fileID: 11400000, guid: 9efdf06f083bf2843a81354e795abb38, type: 2}
+--- !u!114 &2725611551508977993
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -292,9 +274,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 4609813583533158504}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38037389cd81aac4f81d2a0e23f3aa62, type: 3}
+  m_Script: {fileID: 11500000, guid: ce05f7fcdfd140b4e90fce25dc019140, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isStatic: 0
+  patrolSpeed: 5
+  chaseSpeed: 6
+  stoppingDistance: 2
+  stunDuration: 36
+  targetTags:
+  - Player
+  - NPC
 --- !u!1 &7914360112382350202
 GameObject:
   m_ObjectHideFlags: 0

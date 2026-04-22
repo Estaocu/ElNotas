@@ -143,16 +143,18 @@ public class HostileEntityAI : MonoBehaviour
     }
 
     private void Attack()
+{
+    Debug.Log($"[HostileEntityAI] ⚔️ ATTACKING {currentTarget?.name ?? "unknown"}!");
+    
+    // Obtener el componente LifeAndMeter del objetivo
+    LifeAndMeter lifeMeter = currentTarget.GetComponent<LifeAndMeter>();
+    
+    if (lifeMeter != null)
     {
-        Debug.Log($"[HostileEntityAI] ⚔️ ATTACKING {currentTarget?.name ?? "unknown"}!");
-        // TODO: Implementar daño al objetivo aquí
+        // Si el objetivo tiene LifeAndMeter (es el player), infligir daño
+        lifeMeter.OnHit(1); // 1 de daño, ajusta según necesites
     }
-
-    private void OnDisable()
-    {
-        relaxHandle?.Cancel();
-        singer.onSoundwaveSpawned -= OnMelodyEmitted;
-    }
+}
 
     private void OnTriggerEnter(Collider other)
     {

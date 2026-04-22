@@ -33,15 +33,16 @@ public class LifeAndMeter : MonoBehaviour
         {
             currentHp = Mathf.Max(currentHp - dmg, 0);
             SetExactMeterCharge(0);
+            Debug.Log($"HITS LEFT: {currentHp} / {maxHp}");
             CheckHp();
-            Debug.Log("Ai quin mal...");
+            
         }
     }
 
     public void ChangeMeterCharge(int q)
     {
         currentMeter = Mathf.Clamp(currentMeter + q, 0, maxMeter);
-        Debug.Log($"meter charge: {currentMeter} / {maxMeter}");
+        // Debug.Log($"meter charge: {currentMeter} / {maxMeter}");
     }
 
     public void SetExactMeterCharge(int q)

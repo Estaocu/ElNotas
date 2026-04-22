@@ -70,7 +70,7 @@ public static class RhythmBeatWaiter
 
     static void OnBeat(int subBeat)
     {
-        Debug.Log($"[RhythmBeatWaiter.OnBeat] subBeat={subBeat}, active waiters={_active.Count}");
+        // Debug.Log($"[RhythmBeatWaiter.OnBeat] subBeat={subBeat}, active waiters={_active.Count}");
         _isIterating = true;
 
         for (int i = 0; i < _active.Count; i++)
@@ -85,11 +85,11 @@ public static class RhythmBeatWaiter
             }
 
             e.BeatsRemaining--;
-            Debug.Log($"  [Waiter {i}] BeatsRemaining: {e.BeatsRemaining}");
+            // Debug.Log($"  [Waiter {i}] BeatsRemaining: {e.BeatsRemaining}");
             if (e.BeatsRemaining <= 0)
             {
                 e.IsCompleted = true;
-                Debug.Log($"  [Waiter {i}] COMPLETED! Invoking callback");
+                // Debug.Log($"  [Waiter {i}] COMPLETED! Invoking callback");
                 try { e.Callback?.Invoke(); }
                 catch (Exception ex) { Debug.LogException(ex); }
             }

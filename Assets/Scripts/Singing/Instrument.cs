@@ -56,7 +56,7 @@ public class Instrument : MonoBehaviour
 
         if (notesPlayed < 4) notesPlayed++;
 
-        Debug.Log($"Nota tocada: {note} | Secuencia: [{noteSequence[0]}, {noteSequence[1]}, {noteSequence[2]}, {noteSequence[3]}]");
+        // Debug.Log($"Nota tocada: {note} | Secuencia: [{noteSequence[0]}, {noteSequence[1]}, {noteSequence[2]}, {noteSequence[3]}]");
 
         OnNoteAdded?.Invoke(noteSequence, notesPlayed);
     }

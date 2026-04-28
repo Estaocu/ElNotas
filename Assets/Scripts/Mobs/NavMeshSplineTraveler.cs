@@ -12,10 +12,15 @@ public class NavMeshSplineTraveler : MonoBehaviour
     [Header("Movement Settings")]
     public float arrivalDistance = 0.5f;
     public bool isLoop = true; 
+    public float decelerationRate = 2f;
 
     private float splineT = 0f;
     private bool isPatrolling = false;
     private bool movingForward = true;
+
+    public float originalSpeed;
+    private bool isDecelerating = false;
+
 
     void Start()
     {
@@ -24,24 +29,32 @@ public class NavMeshSplineTraveler : MonoBehaviour
         {
             isPatrolling = !ai.isStatic;
             agent.speed = ai.patrolSpeed;
+            originalSpeed = ai.patrolSpeed;
+        }
+        else
+        {
+            originalSpeed = agent.speed;
         }
     }
 
     void Update()
     {
+
+        if (isDecelerating)
+        {
+            PerformDeceleration();
+        }
+
         if (isPatrolling && splineContainer != null) 
             MoveAlongSpline();
     }
 
     private void MoveAlongSpline()
     {
-        // 1. Calculamos cuánto debería avanzar T basándonos en la velocidad del agente
-        // La longitud de la spline nos ayuda a que el avance sea constante en metros
         float splineLength = splineContainer.CalculateLength();
         float speedInT = agent.speed / splineLength; 
         float delta = speedInT * Time.deltaTime;
 
-        // 2. Avanzamos T según el modo (Loop o Ping-Pong)
         if (isLoop)
         {
             splineT = (splineT + delta) % 1f;
@@ -60,15 +73,29 @@ public class NavMeshSplineTraveler : MonoBehaviour
             }
         }
 
-        // 3. Colocamos el destino del NavMesh un poco por delante del agente en la curva
-        // Esto crea un "efecto imán" que obliga al agente a seguir la forma de la spline
         Vector3 targetPos = (Vector3)splineContainer.EvaluatePosition(splineT);
         agent.SetDestination(targetPos);
+    }
+
+    private void PerformDeceleration()
+    {
+        // Gradually reduce speed to 0
+        agent.speed = Mathf.MoveTowards(agent.speed, 0, decelerationRate * Time.deltaTime);
+
+        if (agent.speed <= 0.01f)
+        {
+            agent.speed = 0;
+            isDecelerating = false;
+            
+            Debug.Log("Hemos llamado al reloj, pronto empezamos a patrullar de nuevo");
+            RhythmBeatWaiter.WaitForSubBeats(24, BeatWaitMode.Immediate, () => ResumePatrol(originalSpeed));
+        }
     }
 
     public void MoveToDestination(Vector3 destination, float speed)
     {
         isPatrolling = false;
+        isDecelerating = false;
         agent.speed = speed;
         agent.SetDestination(destination);
     }
@@ -79,6 +106,7 @@ public class NavMeshSplineTraveler : MonoBehaviour
         splineT = FindClosestPointOnSpline(transform.position);
         movingForward = (splineT < 0.99f); 
         isPatrolling = true;
+        isDecelerating = false;
     }
 
     public bool HasReachedDestination()
@@ -93,4 +121,13 @@ public class NavMeshSplineTraveler : MonoBehaviour
         SplineUtility.GetNearestPoint(splineContainer.Spline, localPos, out _, out float t);
         return t;
     }
+
+    public void StopOnPoint()
+    {
+        if (!isPatrolling) return;
+        isDecelerating = true;
+
+    }
+
 }
+

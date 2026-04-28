@@ -21,7 +21,7 @@ MonoBehaviour:
     x: 0
     y: 30
     width: 1920
-    height: 947
+    height: 939
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
@@ -145,9 +145,9 @@ MonoBehaviour:
     x: 0
     y: 0
     width: 320
-    height: 947
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+    height: 939
+  m_MinSize: {x: 201, y: 221}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 4}
   m_Panes:
   - {fileID: 4}
@@ -177,7 +177,7 @@ MonoBehaviour:
     x: 0
     y: 73
     width: 319
-    height: 926
+    height: 918
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -309,7 +309,7 @@ MonoBehaviour:
       floating: 0
       collapsed: 0
       displayed: 1
-      snapOffset: {x: -238, y: -26}
+      snapOffset: {x: -243, y: -26}
       snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 3
       id: Tool Settings
@@ -570,7 +570,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 1
       snapOffset: {x: -216, y: -194}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: -48}
       snapCorner: 3
       id: AINavigationOverlay
       index: 7
@@ -895,7 +895,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/Mobs
+    - Assets/Prefabs/Mobs/Mosquito
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -903,9 +903,9 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scripts/Mobs
+  - Assets/Prefabs/Mobs/Mosquito
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: C:\El Notas\ElNotas
+  m_LastProjectPath: C:\REPOS\ElNotas
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:

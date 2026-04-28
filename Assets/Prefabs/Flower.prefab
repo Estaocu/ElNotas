@@ -297,6 +297,8 @@ MonoBehaviour:
   soundwaveSpawnpoint: {fileID: 4330348171103034480}
   instrument: {fileID: 0}
   voice: {fileID: 1387699327826087117}
+  timingValidator: {fileID: 0}
+  lifeAndMeter: {fileID: 0}
   cooldown: 0.1
   patternMode: 0
   pattern: 0300000001000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
@@ -386,7 +388,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 2
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0

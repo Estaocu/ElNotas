@@ -2,6 +2,7 @@ using System;
 using CMF;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class Instrument : MonoBehaviour
 {
@@ -9,6 +10,10 @@ public class Instrument : MonoBehaviour
     [SerializeField] private Singer singer;
     private PlayerInputs input;
     public ActionMapsManager controlsManager;
+    [SerializeField] private int timeToClearMelody;
+    private BeatWaitHandle afkHandle;
+    
+    [SerializeField] public TMP_Text[] uiNotes;
 
     // Las últimas 4 notas tocadas. El índice 3 es siempre la más reciente.
     public notesEnum[] noteSequence = new notesEnum[4];
@@ -22,6 +27,7 @@ public class Instrument : MonoBehaviour
     private void Awake()
     {
         input = new PlayerInputs();
+
     }
 
     private void OnEnable()
@@ -48,6 +54,7 @@ public class Instrument : MonoBehaviour
 
     private void AddNote(notesEnum note)
     {
+        afkHandle?.Cancel();
         // Desplaza las notas hacia la izquierda y coloca la nueva al final.
         noteSequence[0] = noteSequence[1];
         noteSequence[1] = noteSequence[2];
@@ -58,7 +65,10 @@ public class Instrument : MonoBehaviour
 
         // Debug.Log($"Nota tocada: {note} | Secuencia: [{noteSequence[0]}, {noteSequence[1]}, {noteSequence[2]}, {noteSequence[3]}]");
 
+        UpdateUIDisplays();
         OnNoteAdded?.Invoke(noteSequence, notesPlayed);
+
+        afkHandle = RhythmBeatWaiter.WaitForSubBeats(timeToClearMelody, BeatWaitMode.Immediate, ClearSequence);
     }
 
     // Llamado por Singer tras detectar una melodía y spawnear la soundwave,
@@ -67,6 +77,29 @@ public class Instrument : MonoBehaviour
     {
         for (int i = 0; i < noteSequence.Length; i++) noteSequence[i] = default;
         notesPlayed = 0;
+        UpdateUIDisplays();
+        Debug.Log("Notes Cleared");
+    }
+
+    private void UpdateUIDisplays()
+    {
+        for (int i = 0; i < uiNotes.Length; i++)
+        {
+            if (uiNotes[i] != null)
+            {
+                if (i < notesPlayed)
+                {
+                    // Calcular el índice de origen: mientras notesPlayed < 4,
+                    // las notas se alinean a la izquierda en la UI
+                    int sourceIndex = 4 - notesPlayed + i;
+                    uiNotes[i].text = ((int)noteSequence[sourceIndex] + 1).ToString();
+                }
+                else
+                {
+                    uiNotes[i].text = "";
+                }
+            }
+        }
     }
 
     private void OnNote1Played(InputAction.CallbackContext context) => AddNote(notesEnum.Note1);

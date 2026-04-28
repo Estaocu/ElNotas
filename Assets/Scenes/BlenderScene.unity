@@ -676,9 +676,64 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2730102331358824128, guid: 41d5060342076c64fbfc3a2c9be14c3c,
         type: 3}
+      propertyPath: uiNote1
+      value: 
+      objectReference: {fileID: 1084577356}
+    - target: {fileID: 2730102331358824128, guid: 41d5060342076c64fbfc3a2c9be14c3c,
+        type: 3}
+      propertyPath: uiNote2
+      value: 
+      objectReference: {fileID: 1685245182}
+    - target: {fileID: 2730102331358824128, guid: 41d5060342076c64fbfc3a2c9be14c3c,
+        type: 3}
+      propertyPath: uiNote3
+      value: 
+      objectReference: {fileID: 257377216}
+    - target: {fileID: 2730102331358824128, guid: 41d5060342076c64fbfc3a2c9be14c3c,
+        type: 3}
+      propertyPath: uiNote4
+      value: 
+      objectReference: {fileID: 1511452604}
+    - target: {fileID: 2730102331358824128, guid: 41d5060342076c64fbfc3a2c9be14c3c,
+        type: 3}
       propertyPath: playerInput
       value: 
+      objectReference: {fileID: 1388797271}
+    - target: {fileID: 2730102331358824128, guid: 41d5060342076c64fbfc3a2c9be14c3c,
+        type: 3}
+      propertyPath: controlsManager
+      value: 
+      objectReference: {fileID: 1568445505}
+    - target: {fileID: 2730102331358824128, guid: 41d5060342076c64fbfc3a2c9be14c3c,
+        type: 3}
+      propertyPath: timeToClearMelody
+      value: 32
       objectReference: {fileID: 0}
+    - target: {fileID: 2730102331358824128, guid: 41d5060342076c64fbfc3a2c9be14c3c,
+        type: 3}
+      propertyPath: uiNotes.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2730102331358824128, guid: 41d5060342076c64fbfc3a2c9be14c3c,
+        type: 3}
+      propertyPath: uiNotes.Array.data[0]
+      value: 
+      objectReference: {fileID: 1084577356}
+    - target: {fileID: 2730102331358824128, guid: 41d5060342076c64fbfc3a2c9be14c3c,
+        type: 3}
+      propertyPath: uiNotes.Array.data[1]
+      value: 
+      objectReference: {fileID: 1685245182}
+    - target: {fileID: 2730102331358824128, guid: 41d5060342076c64fbfc3a2c9be14c3c,
+        type: 3}
+      propertyPath: uiNotes.Array.data[2]
+      value: 
+      objectReference: {fileID: 257377216}
+    - target: {fileID: 2730102331358824128, guid: 41d5060342076c64fbfc3a2c9be14c3c,
+        type: 3}
+      propertyPath: uiNotes.Array.data[3]
+      value: 
+      objectReference: {fileID: 1511452604}
     - target: {fileID: 6098411241587295807, guid: 41d5060342076c64fbfc3a2c9be14c3c,
         type: 3}
       propertyPath: lifeAndMeter
@@ -1712,7 +1767,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 2
-  maxMeter: 20
+  maxMeter: 40
   immunityTime: 16
   meterText: {fileID: 1712039488}
 --- !u!1 &1407089190 stripped
@@ -2076,6 +2131,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wholeQuarterWindow: 0.1
   halfWindow: 0.15
+--- !u!114 &1568445505 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7476597574689282346, guid: 246aa9467fd319c4b8aea4b4088ab797,
+    type: 3}
+  m_PrefabInstance: {fileID: 1568445501}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1568445502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 463d9bf59b7b6f24d907a81f6d4b22e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1618259844 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a7503e3345bd6314cac5b06f4b55d7e1,

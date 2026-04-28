@@ -1,11 +1,14 @@
+using CMF;
 using UnityEngine;
+using TMPro;
 
 public class LifeAndMeter : MonoBehaviour
 {
-    [Header("settings")]
+    [Header("Settings")]
     [SerializeField] private int maxHp = 2;
     [SerializeField] private int maxMeter = 10;
     [SerializeField] private int immunityTime = 16;
+    [SerializeField] public TMP_Text meterText;
 
     // Campos privados (Estado interno)
     private int currentHp;
@@ -43,11 +46,13 @@ public class LifeAndMeter : MonoBehaviour
     {
         currentMeter = Mathf.Clamp(currentMeter + q, 0, maxMeter);
         // Debug.Log($"meter charge: {currentMeter} / {maxMeter}");
+        meterText.SetText($"Meter: {currentMeter} / {maxMeter}");
     }
 
     public void SetExactMeterCharge(int q)
     {
         currentMeter = Mathf.Clamp(q, 0, maxMeter);
+        meterText.SetText($"Meter: {currentMeter} / {maxMeter}");
     }
 
     private void DoParry()

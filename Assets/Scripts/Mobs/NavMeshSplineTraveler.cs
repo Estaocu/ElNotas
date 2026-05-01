@@ -21,7 +21,6 @@ public class NavMeshSplineTraveler : MonoBehaviour
     public float originalSpeed;
     private bool isDecelerating = false;
 
-
     void Start()
     {
         HostileEntityAI ai = GetComponent<HostileEntityAI>();
@@ -39,7 +38,6 @@ public class NavMeshSplineTraveler : MonoBehaviour
 
     void Update()
     {
-
         if (isDecelerating)
         {
             PerformDeceleration();
@@ -87,8 +85,12 @@ public class NavMeshSplineTraveler : MonoBehaviour
             agent.speed = 0;
             isDecelerating = false;
             
-            Debug.Log("Hemos llamado al reloj, pronto empezamos a patrullar de nuevo");
-            RhythmBeatWaiter.WaitForSubBeats(24, BeatWaitMode.Immediate, () => ResumePatrol(originalSpeed));
+            // To prevent splineT from shifting while waiting, we can pause patrolling
+            isPatrolling = false;
+
+            // Debug.Log("Hemos llamado al reloj, pronto empezamos a patrullar de nuevo");
+            // We use the new resume method here to maintain current direction and T
+            RhythmBeatWaiter.WaitForSubBeats(24, BeatWaitMode.Immediate, () => ResumePatrolMaintainingDirection(originalSpeed));
         }
     }
 
@@ -100,6 +102,10 @@ public class NavMeshSplineTraveler : MonoBehaviour
         agent.SetDestination(destination);
     }
 
+    /// <summary>
+    /// Existing resume method used when re-entering the spline from an external state.
+    /// Recalculates the closest point and defaults direction.
+    /// </summary>
     public void ResumePatrol(float speed)
     {
         agent.speed = speed;
@@ -107,6 +113,18 @@ public class NavMeshSplineTraveler : MonoBehaviour
         movingForward = (splineT < 0.99f); 
         isPatrolling = true;
         isDecelerating = false;
+    }
+
+    /// <summary>
+    /// New resume method for stops during patrol. 
+    /// Maintains the current progress and direction on the spline.
+    /// </summary>
+    public void ResumePatrolMaintainingDirection(float speed)
+    {
+        agent.speed = speed;
+        isPatrolling = true;
+        isDecelerating = false;
+        // Logic continues from the current splineT and movingForward state
     }
 
     public bool HasReachedDestination()
@@ -126,8 +144,5 @@ public class NavMeshSplineTraveler : MonoBehaviour
     {
         if (!isPatrolling) return;
         isDecelerating = true;
-
     }
-
 }
-

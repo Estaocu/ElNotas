@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FlowerStepped : MonoBehaviour
@@ -8,13 +6,15 @@ public class FlowerStepped : MonoBehaviour
     [SerializeField] private Singer singer;
     [SerializeField] private Melody melody;
 
-
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        if (!canBufferMelody || other.gameObject.layer == 8) return; // Layer 8 == Soundwave
+        if (!canBufferMelody) return;
+
+        ExecuteFlowerLogic();
+    }
+
+    private void ExecuteFlowerLogic()
+    {
         singer.Sing();
-        //Buffer your melody for the next desired beat.
-
-
     }
 }

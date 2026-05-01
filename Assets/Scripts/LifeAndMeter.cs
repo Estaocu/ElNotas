@@ -1,19 +1,22 @@
 using CMF;
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class LifeAndMeter : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private int maxHp = 2;
     [SerializeField] private int maxMeter = 10;
-    [SerializeField] private int immunityTime = 16;
+    [SerializeField] private float stunTime = 2f;
+    [SerializeField] private float immunityTime = 2f;
     [SerializeField] public TMP_Text meterText;
 
     // Campos privados (Estado interno)
     private int currentHp;
     private int currentMeter;
     private bool damageImmune;
+    private bool isStunned;
 
     // Propiedades calculadas (Solo lectura para el exterior)
     public bool IsMeterFull => currentMeter >= maxMeter;
@@ -34,6 +37,13 @@ public class LifeAndMeter : MonoBehaviour
         }
         else
         {
+            if(currentMeter != 0)
+            {
+                StartCoroutine(StunRoutine());
+                SetExactMeterCharge(0);
+                return;
+            }
+
             currentHp = Mathf.Max(currentHp - dmg, 0);
             SetExactMeterCharge(0);
             Debug.Log($"HITS LEFT: {currentHp} / {maxHp}");
@@ -58,15 +68,17 @@ public class LifeAndMeter : MonoBehaviour
     private void DoParry()
     {
         SetExactMeterCharge(0);
-        TriggerImmunity();
+        StartCoroutine(ImmunityRoutine());
         Debug.Log("PARRIED");
     }
 
-    private void TriggerImmunity()
+    private IEnumerator ImmunityRoutine()
     {
         damageImmune = true;
-        RhythmBeatWaiter.WaitForSubBeats(immunityTime, BeatWaitMode.Immediate, () => 
-            damageImmune = false);
+        Debug.Log("Player DMG Immune");
+        yield return new WaitForSeconds(immunityTime);
+        damageImmune = false;
+        Debug.Log("Player can be damaged");
     }
 
     private void CheckHp()
@@ -77,8 +89,16 @@ public class LifeAndMeter : MonoBehaviour
         }
     }
 
-    public void GetStunned()
+    private IEnumerator StunRoutine()
     {
-        Debug.Log("stunneao");
+        isStunned = true;
+        Debug.Log("Player Stunned");
+        ActionMapsManager.Instance.SwapActionMap("RestrictedInput");
+
+        yield return new WaitForSeconds(stunTime);
+
+        isStunned = false;
+        ActionMapsManager.Instance.SwapActionMap("Gameplay");
+        Debug.Log("Player no longer Stunned");
     }
 }

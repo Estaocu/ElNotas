@@ -211,6 +211,8 @@ MonoBehaviour:
   splineContainer: {fileID: 0}
   arrivalDistance: 0.5
   isLoop: 1
+  decelerationRate: 2
+  originalSpeed: 0
 --- !u!114 &5042880092936730101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -422,6 +424,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6883181311741681954}
+  - component: {fileID: 8549910538910360354}
   - component: {fileID: 1864162840354032480}
   m_Layer: 0
   m_Name: Collider
@@ -439,12 +442,34 @@ Transform:
   m_GameObject: {fileID: 8712913837814337100}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 1.157, z: 0}
+  m_LocalScale: {x: 11, y: 8, z: 11}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4460048312922731874}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &8549910538910360354
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8712913837814337100}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -673806808914266383, guid: 98bb7e3e5eedc4d439e64c31aa0263f5, type: 3}
 --- !u!135 &1864162840354032480
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -462,7 +487,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 5
   m_Center: {x: 0, y: 0, z: 0}

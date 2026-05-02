@@ -1,64 +1,69 @@
 using System.Collections;
 using UnityEngine;
 
-public enum NoteSlot
-{
-    Empty = -1,
-    Note1 = 0,
-    Note2 = 1,
-    Note3 = 2,
-    Note4 = 3
-}
+public enum NoteSlot { Empty = -1, Note1 = 0, Note2 = 1, Note3 = 2, Note4 = 3 }
+public enum PatternMode { Local, Absolute }
 
-public enum PatternMode
-{
-    // El patrón se alinea al siguiente whole beat (subbeat global 1/5/9/13)
-    // y los 16 slots son relativos a ese punto.
-    Local,
-    // Los 16 slots están alineados a los subbeats globales 1-16. Al dispararse,
-    // espera al siguiente subbeat global 1 y ejecuta un ciclo completo.
-    Absolute
-}
-
+[RequireComponent(typeof(SingerVoice))]
 public class Singer : MonoBehaviour
 {
-    // ====== Core (jugador + NPC) ======
-    [SerializeField] private MelodyDatabase database;
-    [SerializeField] private GameObject soundwavePrefab;
+    // ====== Core References (Cargados en Awake) ======
+    private RhythmTimingValidator timingValidator;
+    private MelodyDatabase database;
+    private GameObject soundwavePrefab;
+    private GameObject singleSw;
+    private Instrument instrument;
+    private SingerVoice voice;
+    private LifeAndMeter lifeAndMeter;
+
+    [Header("Settings")]
     [SerializeField] private Transform soundwaveSpawnpoint;
-
-    // Opcional: solo el jugador lo necesita. NPCs dejan este campo vacío.
-    [SerializeField] private Instrument instrument;
-
-    // Opcional: si tiene voz, suena al cantar cada nota.
-    [SerializeField] private SingerVoice voice;
-
-    // Timing and meter
-    [SerializeField] private RhythmTimingValidator timingValidator;
-    [SerializeField] private LifeAndMeter lifeAndMeter;
-
     [SerializeField] private float cooldown = 0.5f;
 
-    // ====== NPC rhythm pattern ======
+    [Space]
+
+    [Header("NPC Rhythm Pattern")]
     [SerializeField] private PatternMode patternMode = PatternMode.Local;
     [SerializeField] private NoteSlot[] pattern = new NoteSlot[16];
     [SerializeField, Range(0f, 0.25f)] private float humanizationPercent = 0.05f;
 
-    // ====== Estado runtime ======
+    // ====== Estado runtime (Ocultos) ======
     private float lastSingTime = -999f;
-
-    // Buffer propio del NPC (replica la lógica del Instrument del jugador).
     private readonly notesEnum[] noteBuffer = new notesEnum[4];
     private int notesPlayed;
-
     private bool isPatternActive;
     private bool waitingForStart;
     private int nextSlotIndex;
     private int slotsRemaining;
 
     public bool IsPlayer => instrument != null;
-
     public event System.Action<Melody> onSoundwaveSpawned;
+
+    private void Awake()
+    {
+        soundwavePrefab = Resources.Load<GameObject>("Soundwave");
+        singleSw = Resources.Load<GameObject>("SingleNoteSoundwave");
+        database = Resources.Load<MelodyDatabase>("MelodyDatabase");
+        Debug.Log(singleSw == null ? "SingleSw NULL" : "SingleSw OK");
+
+        // Singleton access
+        if (GameManager.Instance != null)
+        {
+            timingValidator = GameManager.Instance.RhythmTimingValidator;
+        }
+
+        // Auto-detect player vs NPC
+        if (gameObject.CompareTag("Player"))
+        {
+            instrument = GetComponent<Instrument>();
+            lifeAndMeter = GetComponent<LifeAndMeter>();
+        }
+
+        voice = GetComponent<SingerVoice>();
+
+        // Safety check for spawnpoint
+        if (soundwaveSpawnpoint == null) soundwaveSpawnpoint = transform;
+    }
 
     private void OnValidate()
     {
@@ -221,6 +226,8 @@ public class Singer : MonoBehaviour
         noteBuffer[3] = note;
         if (notesPlayed < 4) notesPlayed++;
 
+        // SpawnSingleNoteSoundwave(note);
+
         if (database == null || soundwavePrefab == null) return;
 
         foreach (var melody in database.melodies)
@@ -238,6 +245,24 @@ public class Singer : MonoBehaviour
             }
         }
     }
+
+    // private void SpawnSingleNoteSoundwave(notesEnum note)
+    // {
+    //     Vector3 spawnPos = soundwaveSpawnpoint != null
+    //     ? soundwaveSpawnpoint.position
+    //     : transform.position;
+
+    //     Debug.Log("Intentando spawn SingleNote");
+    //     var instance = Instantiate(singleSw, spawnPos, Quaternion.identity);
+    //     var miniSw = instance.GetComponent<SingleNoteSoundwave>();
+    //     if (singleSw == null)
+    //     {
+    //         Debug.LogError("SingleNoteSoundwave prefab no cargado");
+    //         return;
+    //     }
+    //     miniSw.Expand(note);
+    //     Debug.Log("SingleNoteSW spawned: " + note);
+    // }
 
     private void ClearLocalBuffer()
     {

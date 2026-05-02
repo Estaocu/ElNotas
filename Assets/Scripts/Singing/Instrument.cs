@@ -7,7 +7,7 @@ using TMPro;
 public class Instrument : MonoBehaviour
 {
     [SerializeField] private PlayerInput playerInput;
-    [SerializeField] private Singer singer;
+    private Singer singer;
     private PlayerInputs input;
     public ActionMapsManager controlsManager;
     [SerializeField] private int timeToClearMelody;
@@ -21,12 +21,19 @@ public class Instrument : MonoBehaviour
     // Cuántas notas reales ha tocado el jugador (máx 4).
     public int notesPlayed { get; private set; }
 
+    private SingleNoteSoundwave singleSwPrefab;
+    [SerializeField] private Transform soundwaveSpawnpoint;
+
     // Singer se suscribe a este evento para comprobar melodías.
     public event Action<notesEnum[], int> OnNoteAdded;
 
     private void Awake()
     {
         input = new PlayerInputs();
+        singer = GetComponent<Singer>();
+        singleSwPrefab = Resources.Load<SingleNoteSoundwave>("SingleNoteSoundwave");
+        if (soundwaveSpawnpoint == null) soundwaveSpawnpoint = transform;
+
 
     }
 
@@ -61,6 +68,8 @@ public class Instrument : MonoBehaviour
         noteSequence[2] = noteSequence[3];
         noteSequence[3] = note;
 
+        SpawnSingleNoteSoundwave(note);
+
         if (notesPlayed < 4) notesPlayed++;
 
         // Debug.Log($"Nota tocada: {note} | Secuencia: [{noteSequence[0]}, {noteSequence[1]}, {noteSequence[2]}, {noteSequence[3]}]");
@@ -69,6 +78,22 @@ public class Instrument : MonoBehaviour
         OnNoteAdded?.Invoke(noteSequence, notesPlayed);
 
         afkHandle = RhythmBeatWaiter.WaitForSubBeats(timeToClearMelody, BeatWaitMode.Immediate, ClearSequence);
+    }
+
+    private void SpawnSingleNoteSoundwave(notesEnum note)
+    {
+        Vector3 spawnPos = soundwaveSpawnpoint != null
+            ? soundwaveSpawnpoint.position
+            : transform.position;
+
+        var singleSwInstance = Instantiate(singleSwPrefab, spawnPos, Quaternion.identity);
+        var singleSw = singleSwInstance.GetComponent<SingleNoteSoundwave>();
+        if (singleSw != null)
+        {
+            singleSw.Expand(note);
+        }
+
+
     }
 
     // Llamado por Singer tras detectar una melodía y spawnear la soundwave,

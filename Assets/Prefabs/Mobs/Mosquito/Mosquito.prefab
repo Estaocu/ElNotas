@@ -222,21 +222,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4609813583533158504}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 457ca5846d51b8f4abd2a4fa75d50120, type: 3}
+  m_Script: {fileID: 11500000, guid: e3668034910bdd343b0b20ad8e8adc90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  database: {fileID: 11400000, guid: 1f388edbdfbf1ef468723ceadba8e496, type: 2}
-  soundwavePrefab: {fileID: 7595099893487920229, guid: a8bc68ec8019efc4c933f1fa2a02ee97,
-    type: 3}
   soundwaveSpawnpoint: {fileID: 6345804331113606732}
-  instrument: {fileID: 0}
-  voice: {fileID: 4830153490639154673}
-  timingValidator: {fileID: 0}
-  lifeAndMeter: {fileID: 0}
   cooldown: 0.5
   patternMode: 0
-  pattern: ffffffff02000000ffffffffffffffffffffffffffffffff0100000001000000ffffffff00000000ffffffffffffffffffffffffffffffffffffffffffffffff
-  humanizationPercent: 0.25
+  pattern: 02000000010000000100000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+  humanizationPercent: 0.05
 --- !u!114 &4830153490639154673
 MonoBehaviour:
   m_ObjectHideFlags: 0

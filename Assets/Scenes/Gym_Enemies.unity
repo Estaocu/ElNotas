@@ -4014,6 +4014,11 @@ PrefabInstance:
       propertyPath: splineContainer
       value: 
       objectReference: {fileID: 372722462}
+    - target: {fileID: 1864162840354032480, guid: 0bdd817ef57a81b49b9c2e3ece231191,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4460048312922731874, guid: 0bdd817ef57a81b49b9c2e3ece231191,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4068,6 +4073,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Mosquito (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8549910538910360354, guid: 0bdd817ef57a81b49b9c2e3ece231191,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4271,6 +4281,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myNote: 0
   lifeTime: 1.5
+  author: {fileID: 0}
 --- !u!114 &6804788215161895066
 MonoBehaviour:
   m_ObjectHideFlags: 0

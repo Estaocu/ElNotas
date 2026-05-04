@@ -90,6 +90,7 @@ public class Instrument : MonoBehaviour
         var singleSw = singleSwInstance.GetComponent<SingleNoteSoundwave>();
         if (singleSw != null)
         {
+            singleSw.author = gameObject;
             singleSw.Expand(note);
         }
 

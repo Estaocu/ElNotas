@@ -108,10 +108,16 @@ public class SingleNotesListener : MonoBehaviour
         }
         else
         {
-            // Si falla aunque sea la primera nota
-            Debug.Log("Melody mismatch! Exploding immediately.");
             ClearMelody(externalMelody);
-            wantsToListen = false;
+            Debug.Log("Nota incorrecta, ignorada");
+            // Si escucha una nota que no coincide con lo que pide:
+            //ignora XD
+
+
+
+            // Debug.Log("Melody mismatch! Exploding immediately.");
+            // ClearMelody(externalMelody);
+            // wantsToListen = false;
             // Explosion
 
         }

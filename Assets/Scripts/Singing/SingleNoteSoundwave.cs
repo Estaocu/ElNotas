@@ -7,6 +7,7 @@ public class SingleNoteSoundwave : MonoBehaviour
 {
     public notesEnum myNote;
     [SerializeField] private float lifeTime = 1.5f;
+    public GameObject author;
 
     void Awake()
     {

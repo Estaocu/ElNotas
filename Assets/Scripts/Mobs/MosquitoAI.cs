@@ -18,7 +18,7 @@ public class MosquitoAI : MonoBehaviour, IReactToMelody
     private Vector3 spawnPosition;
     private Quaternion spawnRotation;
 
-    private int peaceTime = 48;
+    private int peaceTime = 64;
     private bool peaceful = false;
 
 
@@ -106,7 +106,7 @@ public class MosquitoAI : MonoBehaviour, IReactToMelody
     
     if (currentState == State.Stunned) return;
     
-    relaxHandle = RhythmBeatWaiter.WaitForSubBeats(16, BeatWaitMode.Immediate, NoRelaxReceived);
+    relaxHandle = RhythmBeatWaiter.WaitForSubBeats(32, BeatWaitMode.Immediate, NoRelaxReceived);
 }
 
     private void NoRelaxReceived()

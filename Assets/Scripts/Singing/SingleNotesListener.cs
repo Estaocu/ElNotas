@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SingleNotesListener : MonoBehaviour
@@ -8,26 +9,24 @@ public class SingleNotesListener : MonoBehaviour
     [SerializeField] private notesEnum[] externalMelody = new notesEnum[2];
     [SerializeField] private notesEnum[] desiredMelody = new notesEnum[2];
     private int storedNotes = 0;
-
-    [Space]
-
-    [Header("Settings")]
-    [SerializeField] private float explodeTime = 5f;
-    [SerializeField] private float regrowthCooldown = 10f;
-    [SerializeField] private float speed = 2f;
-    [SerializeField] private int speedIncreaseRatio = 20; // En porcentaje I guess
-    private GameObject target;
-
     private bool wantsToListen = true;
-    //modes: recording, requesting
-    //record record --> launch y request
+    private HomingProjectile homingProjectile;
+    public SingleNoteSoundwave sw;
+
+    void Awake()
+    {
+        homingProjectile = transform.parent.GetComponentInChildren<HomingProjectile>();
+    }
 
     void OnTriggerEnter(Collider other)
     {
-        SingleNoteSoundwave sw = other.GetComponent<SingleNoteSoundwave>();
+        sw = other.GetComponent<SingleNoteSoundwave>();
         if (sw == null || !wantsToListen ) return;
 
         Debug.Log("Me ha entrado una nota");
+        homingProjectile.SaveNotePosition(sw.author.transform);
+
+     
 
         switch (storedNotes)
         {
@@ -82,7 +81,10 @@ public class SingleNotesListener : MonoBehaviour
 
 
     ClearMelody(currentMelody);
-    storedNotes = 2; 
+    storedNotes = 2;
+
+    homingProjectile.SetMovementMode(Mode.Forward, sw.author);
+    Debug.Log("Maíz lanzado hacia delante");
 }
 
     private void CompareMelodies()
@@ -101,9 +103,11 @@ public class SingleNotesListener : MonoBehaviour
             // Si las 2 son buenas
             if (lastNoteIndex == 1)
             {
-                Debug.Log("MAIZ REDIRIGIDO");
+                homingProjectile.SetMovementMode(Mode.Forward, sw.author);
+
                 RearrangeMelody(desiredMelody);
                 ClearMelody(externalMelody);
+                Debug.Log("MAIZ REDIRIGIDO");
             }
         }
         else

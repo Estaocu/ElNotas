@@ -208,6 +208,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Debug_NPC_Sing"",
+                    ""type"": ""Button"",
+                    ""id"": ""6dfb978c-c637-4c91-a636-c974427f992e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -571,6 +580,28 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a0bc40fc-eebb-4e68-a33c-49fbc1fd48b4"",
+                    ""path"": ""<Keyboard>/backquote"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Debug_NPC_Sing"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""861d879b-06d9-42ce-9c32-4ba7f04a7d35"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Debug_NPC_Sing"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1277,6 +1308,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Gameplay_Map = m_Gameplay.FindAction("Map", throwIfNotFound: true);
         m_Gameplay_DebugSpawnSoundwave = m_Gameplay.FindAction("DebugSpawnSoundwave", throwIfNotFound: true);
         m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
+        m_Gameplay_Debug_NPC_Sing = m_Gameplay.FindAction("Debug_NPC_Sing", throwIfNotFound: true);
         // Notebook
         m_Notebook = asset.FindActionMap("Notebook", throwIfNotFound: true);
         m_Notebook_PreviousPage = m_Notebook.FindAction("Previous Page", throwIfNotFound: true);
@@ -1403,6 +1435,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Map;
     private readonly InputAction m_Gameplay_DebugSpawnSoundwave;
     private readonly InputAction m_Gameplay_Jump;
+    private readonly InputAction m_Gameplay_Debug_NPC_Sing;
     /// <summary>
     /// Provides access to input actions defined in input action map "Gameplay".
     /// </summary>
@@ -1466,6 +1499,10 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Gameplay/Jump".
         /// </summary>
         public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/Debug_NPC_Sing".
+        /// </summary>
+        public InputAction @Debug_NPC_Sing => m_Wrapper.m_Gameplay_Debug_NPC_Sing;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1531,6 +1568,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
+            @Debug_NPC_Sing.started += instance.OnDebug_NPC_Sing;
+            @Debug_NPC_Sing.performed += instance.OnDebug_NPC_Sing;
+            @Debug_NPC_Sing.canceled += instance.OnDebug_NPC_Sing;
         }
 
         /// <summary>
@@ -1581,6 +1621,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
+            @Debug_NPC_Sing.started -= instance.OnDebug_NPC_Sing;
+            @Debug_NPC_Sing.performed -= instance.OnDebug_NPC_Sing;
+            @Debug_NPC_Sing.canceled -= instance.OnDebug_NPC_Sing;
         }
 
         /// <summary>
@@ -2283,6 +2326,13 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnJump(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Debug_NPC_Sing" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDebug_NPC_Sing(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Notebook" which allows adding and removing callbacks.

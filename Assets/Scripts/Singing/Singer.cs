@@ -106,7 +106,7 @@ public class Singer : MonoBehaviour
 
         // Calculate timing reward
         double hitTime = AudioSettings.dspTime;
-        int meterAward = 0;
+        int meterAward = 1;
         if (timingValidator != null)
         {
             meterAward = timingValidator.GetMeterAward(hitTime);

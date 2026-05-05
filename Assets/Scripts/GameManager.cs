@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using CMF;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -26,6 +28,15 @@ public class GameManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void Update()
+    {
+        // Reiniciar la escena actual al pulsar la flecha de arriba
+        if (Keyboard.current != null && Keyboard.current.upArrowKey.wasPressedThisFrame)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }

@@ -40,6 +40,11 @@ public class HomingProjectile : MonoBehaviour
             MoveTowardsTarget();
             CheckImpact();
         }
+        else if (followingTarget && target == null)
+        {
+            // Si perdemos el objetivo, volvemos a modo Forward para no quedarnos quietos
+            SetMovementMode(Mode.Forward, sender);
+        }
     }
 
     public void MoveForward()

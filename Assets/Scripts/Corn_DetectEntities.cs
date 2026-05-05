@@ -16,10 +16,11 @@ public class Corn_DetectEntities : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        // Ignorar ondas sonoras para que no se conviertan en el objetivo del homing
+        if (other.GetComponent<SingleNoteSoundwave>() != null) return;
+
         if (projectile.sender == other.gameObject){ Debug.Log("Me he chocado con quien me envia"); return; } //No vayas hacia quien te ha lanzado tio porfa
         projectile.target = other.gameObject;
         projectile.SetMovementMode(Mode.Homing, projectile.sender);
-        
-
     }
 }

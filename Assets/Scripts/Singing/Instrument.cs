@@ -21,9 +21,6 @@ public class Instrument : MonoBehaviour
     // Cuántas notas reales ha tocado el jugador (máx 4).
     public int notesPlayed { get; private set; }
 
-    private SingleNoteSoundwave singleSwPrefab;
-    [SerializeField] private Transform soundwaveSpawnpoint;
-
     // Singer se suscribe a este evento para comprobar melodías.
     public event Action<notesEnum[], int> OnNoteAdded;
 
@@ -31,10 +28,6 @@ public class Instrument : MonoBehaviour
     {
         input = new PlayerInputs();
         singer = GetComponent<Singer>();
-        singleSwPrefab = Resources.Load<SingleNoteSoundwave>("SingleNoteSoundwave");
-        if (soundwaveSpawnpoint == null) soundwaveSpawnpoint = transform;
-
-
     }
 
     private void OnEnable()
@@ -43,7 +36,6 @@ public class Instrument : MonoBehaviour
         input.Gameplay.Note2.performed += OnNote2Played;
         input.Gameplay.Note3.performed += OnNote3Played;
         input.Gameplay.Note4.performed += OnNote4Played;
-        // input.Gameplay.DebugSpawnSoundwave.performed += OnDebugSpawnSoundwave;
 
         input.Gameplay.Enable();
     }
@@ -54,7 +46,6 @@ public class Instrument : MonoBehaviour
         input.Gameplay.Note2.performed -= OnNote2Played;
         input.Gameplay.Note3.performed -= OnNote3Played;
         input.Gameplay.Note4.performed -= OnNote4Played;
-        // input.Gameplay.DebugSpawnSoundwave.performed -= OnDebugSpawnSoundwave;
 
         input.Gameplay.Disable();
     }
@@ -68,33 +59,12 @@ public class Instrument : MonoBehaviour
         noteSequence[2] = noteSequence[3];
         noteSequence[3] = note;
 
-        SpawnSingleNoteSoundwave(note);
-
         if (notesPlayed < 4) notesPlayed++;
-
-        // Debug.Log($"Nota tocada: {note} | Secuencia: [{noteSequence[0]}, {noteSequence[1]}, {noteSequence[2]}, {noteSequence[3]}]");
 
         UpdateUIDisplays();
         OnNoteAdded?.Invoke(noteSequence, notesPlayed);
 
         afkHandle = RhythmBeatWaiter.WaitForSubBeats(timeToClearMelody, BeatWaitMode.Immediate, ClearSequence);
-    }
-
-    private void SpawnSingleNoteSoundwave(notesEnum note)
-    {
-        Vector3 spawnPos = soundwaveSpawnpoint != null
-            ? soundwaveSpawnpoint.position
-            : transform.position;
-
-        var singleSwInstance = Instantiate(singleSwPrefab, spawnPos, Quaternion.identity);
-        var singleSw = singleSwInstance.GetComponent<SingleNoteSoundwave>();
-        if (singleSw != null)
-        {
-            singleSw.author = gameObject;
-            singleSw.Expand(note);
-        }
-
-
     }
 
     // Llamado por Singer tras detectar una melodía y spawnear la soundwave,
@@ -115,8 +85,6 @@ public class Instrument : MonoBehaviour
             {
                 if (i < notesPlayed)
                 {
-                    // Calcular el índice de origen: mientras notesPlayed < 4,
-                    // las notas se alinean a la izquierda en la UI
                     int sourceIndex = 4 - notesPlayed + i;
                     uiNotes[i].text = ((int)noteSequence[sourceIndex] + 1).ToString();
                 }
@@ -132,10 +100,5 @@ public class Instrument : MonoBehaviour
     private void OnNote2Played(InputAction.CallbackContext context) => AddNote(notesEnum.Note2);
     private void OnNote3Played(InputAction.CallbackContext context) => AddNote(notesEnum.Note3);
     private void OnNote4Played(InputAction.CallbackContext context) => AddNote(notesEnum.Note4);
-
-    // private void OnDebugSpawnSoundwave(InputAction.CallbackContext context)
-    // {
-    //     if (singer != null)
-    //         singer.SpawnSoundwave(null);
-    // }
 }
+

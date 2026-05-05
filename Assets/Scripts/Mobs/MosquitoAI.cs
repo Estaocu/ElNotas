@@ -26,6 +26,7 @@ public class MosquitoAI : MonoBehaviour, IReactToMelody
     public string[] targetTags = { "Player", "NPC" };
     private NavMeshSplineTraveler traveler;
     private Singer singer;
+    private AddNotesOnBeat beatSinger;
     private GameObject currentTarget;
     private BeatWaitHandle relaxHandle;
     private BeatWaitHandle stunHandle;
@@ -38,6 +39,7 @@ public class MosquitoAI : MonoBehaviour, IReactToMelody
         traveler = GetComponent<NavMeshSplineTraveler>();
         currentState = isStatic ? State.Idle : State.Patrol;
         singer = GetComponent<Singer>();
+        beatSinger = GetComponent<AddNotesOnBeat>();
     }
 
     void Start()
@@ -95,7 +97,7 @@ public class MosquitoAI : MonoBehaviour, IReactToMelody
     {
         if (hasAskedForMelody) return;
         singer.onSoundwaveSpawned += OnMelodyEmitted; //Avisame cuando la soundwave se spawnee 
-        singer.Sing(); //Empieza a meter notas en la cola y ve cantando
+        if (beatSinger != null) beatSinger.Sing(); //Empieza a meter notas en la cola y ve cantando
         hasAskedForMelody = true;
 
     }
@@ -178,7 +180,7 @@ public class MosquitoAI : MonoBehaviour, IReactToMelody
         if (currentState != State.Chase) return;
 
         relaxHandle?.Cancel();
-        singer.StopSinging();
+        if (beatSinger != null) beatSinger.StopSinging();
 
         currentState = State.Stunned;
         traveler.MoveToDestination(transform.position, patrolSpeed);

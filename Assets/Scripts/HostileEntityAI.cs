@@ -21,12 +21,14 @@ public class HostileEntityAI : MonoBehaviour
     private Vector3 spawnPosition;
     private Quaternion spawnRotation;
     private Singer singer;
+    private AddNotesOnBeat beatSinger;
     private BeatWaitHandle relaxHandle;
     private bool hasAskedForMelody = false;
 
     void Awake()
     {
         singer = GetComponent<Singer>();
+        beatSinger = GetComponent<AddNotesOnBeat>();
         traveler = GetComponent<NavMeshSplineTraveler>();
         spawnPosition = transform.position;
         spawnRotation = transform.rotation;
@@ -115,7 +117,7 @@ public class HostileEntityAI : MonoBehaviour
         hasAskedForMelody = true;
         currentState = State.Asking;
         singer.onSoundwaveSpawned += OnMelodyEmitted;
-        singer.Sing();
+        if (beatSinger != null) beatSinger.Sing();
     }
 
     private void OnMelodyEmitted(Melody melody)

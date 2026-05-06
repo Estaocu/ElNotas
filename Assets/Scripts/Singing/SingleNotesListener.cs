@@ -23,7 +23,7 @@ public class SingleNotesListener : MonoBehaviour
         sw = other.GetComponent<SingleNoteSoundwave>();
         if (sw == null || !wantsToListen ) return;
 
-        Debug.Log("Me ha entrado una nota");
+        // Debug.Log("Me ha entrado una nota");
         homingProjectile.SaveNotePosition(sw.author.transform);
 
      
@@ -77,14 +77,15 @@ public class SingleNotesListener : MonoBehaviour
     desiredMelody[0] = currentMelody[0];
     desiredMelody[1] = currentMelody[1];
 
-    Debug.Log($"Melodía guardada: {desiredMelody[0]} e {desiredMelody[1]}");
+    // Debug.Log($"Melodía guardada: {desiredMelody[0]} e {desiredMelody[1]}");
 
 
     ClearMelody(currentMelody);
     storedNotes = 2;
 
-    homingProjectile.SetMovementMode(Mode.Forward, sw.author);
-    Debug.Log("Maíz lanzado hacia delante");
+    // homingProjectile.SetMovementMode(Mode.Homing, sw.author);
+    homingProjectile.Launch(sw.author);
+    Debug.Log("Maíz lanzado por " + sw.author);
 }
 
     private void CompareMelodies()
@@ -103,43 +104,20 @@ public class SingleNotesListener : MonoBehaviour
             // Si las 2 son buenas
             if (lastNoteIndex == 1)
             {
-                homingProjectile.SetMovementMode(Mode.Forward, sw.author);
+                // homingProjectile.SetMovementMode(Mode.Forward, sw.author);
+                homingProjectile.Launch(sw.author);
 
                 RearrangeMelody(desiredMelody);
                 ClearMelody(externalMelody);
-                Debug.Log("MAIZ REDIRIGIDO");
+                //Debug.Log("MAIZ REDIRIGIDO");
             }
         }
         else
         {
             ClearMelody(externalMelody);
-            Debug.Log("Nota incorrecta, ignorada");
-            // Si escucha una nota que no coincide con lo que pide:
-            //ignora XD
-
-
-
-            // Debug.Log("Melody mismatch! Exploding immediately.");
-            // ClearMelody(externalMelody);
-            // wantsToListen = false;
-            // Explosion
+            //Debug.Log("Nota incorrecta, ignorada");
 
         }
-
-        
-        // if (externalMelody[1] == default) return;
-        // if (desiredMelody[0] == externalMelody[1] && desiredMelody[1] == externalMelody[0])
-        // {
-        //     //Redirigir maiz
-        //     Debug.Log("MAIZ REDIRIGIDO");
-        //     RearrangeMelody(desiredMelody);
-        //     ClearMelody(externalMelody);
-        // }
-        // else
-        // {
-        //     Debug.Log("Melody not equal! Exploding on target.");
-        //     ClearMelody(externalMelody);
-        // }
     }
 
     private void RearrangeMelody(notesEnum[] melody)

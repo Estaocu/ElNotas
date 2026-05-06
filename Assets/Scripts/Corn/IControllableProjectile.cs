@@ -13,4 +13,5 @@ public interface IControllableProjectile
     void SetMovementMode(Mode mode, GameObject sender);
     void SetTarget(GameObject newTarget);
     void SaveNotePosition(Transform noteTransform);
+    void Launch(GameObject whoSends);
 }

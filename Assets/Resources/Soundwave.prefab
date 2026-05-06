@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5368065716576273082}
   - component: {fileID: 8473502662488679427}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66,7 +66,7 @@ GameObject:
   - component: {fileID: 1528117504032224172}
   - component: {fileID: 354741875876592770}
   - component: {fileID: 5083875855502434633}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Soundwave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,6 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myMelody: {fileID: 11400000, guid: 4e5b5778be65d564e9e231206cea811d, type: 2}
+  source: {fileID: 0}
   lifetime: 1
   expandDuration: 0.4
   maxScale: 10

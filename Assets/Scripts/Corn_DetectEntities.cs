@@ -1,26 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 
 public class Corn_DetectEntities : MonoBehaviour
 {
-    private HomingProjectile projectile;
+    private IControllableProjectile projectile;
+
     void Awake()
     {
-        projectile = transform.parent.GetComponent<HomingProjectile>();
+        projectile = transform.parent.GetComponent<IControllableProjectile>();
     }
 
-
-
-    void OnTriggerEnter(Collider other)
+    void OnTriggerStay(Collider other)
     {
-        // Ignorar ondas sonoras para que no se conviertan en el objetivo del homing
-        if (other.GetComponent<SingleNoteSoundwave>() != null) return;
+        // if (other.CompareTag("Soundwave")) return;
 
-        if (projectile.sender == other.gameObject){ Debug.Log("Me he chocado con quien me envia"); return; } //No vayas hacia quien te ha lanzado tio porfa
-        projectile.target = other.gameObject;
-        projectile.SetMovementMode(Mode.Homing, projectile.sender);
+        // Usar transform.root para cubrir el caso en que el sender tenga colliders en hijos
+        if (projectile.Sender != null && other.transform.root.gameObject == projectile.Sender)
+        {
+            Debug.Log("Me he chocado con quien me envia");
+            return;
+        }
+
+        projectile.SetTarget(other.gameObject);
+        projectile.SetMovementMode(Mode.Homing, projectile.Sender);
     }
 }

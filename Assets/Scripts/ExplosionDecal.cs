@@ -5,7 +5,7 @@ public class ExplosionDecal : MonoBehaviour
 {
     [Header("Animation Settings")]
     [SerializeField] private Sprite[] animationFrames;
-    [SerializeField] private float framesPerSecond = 20f;
+    [SerializeField] private float framesPerSecond = 60f;
     [SerializeField] private bool loopAnimation = false;
 
     private SpriteRenderer spriteRenderer;

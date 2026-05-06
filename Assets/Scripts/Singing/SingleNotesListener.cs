@@ -10,12 +10,12 @@ public class SingleNotesListener : MonoBehaviour
     [SerializeField] private notesEnum[] desiredMelody = new notesEnum[2];
     private int storedNotes = 0;
     private bool wantsToListen = true;
-    private HomingProjectile homingProjectile;
-    public SingleNoteSoundwave sw;
+    private IControllableProjectile homingProjectile;
+    private SingleNoteSoundwave sw;
 
     void Awake()
     {
-        homingProjectile = transform.parent.GetComponentInChildren<HomingProjectile>();
+        homingProjectile = transform.parent.GetComponent<IControllableProjectile>();
     }
 
     void OnTriggerEnter(Collider other)

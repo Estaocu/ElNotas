@@ -680,7 +680,6 @@ GameObject:
   - component: {fileID: 2980497290240750932}
   - component: {fileID: 1645496335446225618}
   - component: {fileID: 2754525846742868463}
-  - component: {fileID: 7061878138406442608}
   - component: {fileID: 2902904493212257918}
   - component: {fileID: 8795301043739215124}
   m_Layer: 0
@@ -879,21 +878,6 @@ MonoBehaviour:
   note2: {fileID: 8300000, guid: eda1af705f9b3bf468c1d8bca0a7f2ae, type: 3}
   note3: {fileID: 8300000, guid: bc6183da4e5464b4bbaa11832a7ca978, type: 3}
   note4: {fileID: 8300000, guid: 8756d71c9872fd248a7ba4b04b13d09d, type: 3}
---- !u!114 &7061878138406442608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7146024218861173856}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e40bdb0f2779c2d4f9fba204a5ec194c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveAction: {fileID: -5475275977055151916, guid: 56c211aa1fdd20b43b909e36b9bafac1,
-    type: 3}
-  jumpAction: {fileID: 0}
 --- !u!114 &2902904493212257918
 MonoBehaviour:
   m_ObjectHideFlags: 0

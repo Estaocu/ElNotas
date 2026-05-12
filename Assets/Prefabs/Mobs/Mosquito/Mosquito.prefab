@@ -227,9 +227,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundwaveSpawnpoint: {fileID: 6345804331113606732}
   cooldown: 0.5
-  patternMode: 0
-  pattern: 02000000010000000100000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-  humanizationPercent: 0.05
 --- !u!114 &4830153490639154673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -420,7 +417,7 @@ GameObject:
   - component: {fileID: 8549910538910360354}
   - component: {fileID: 1864162840354032480}
   m_Layer: 0
-  m_Name: Collider
+  m_Name: PlayerDetection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

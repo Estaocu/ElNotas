@@ -8,7 +8,7 @@ public class AddNotesOnBeat : MonoBehaviour
 
     [Header("NPC Rhythm Pattern")]
     [SerializeField] private PatternMode patternMode = PatternMode.Local;
-    [SerializeField] private NoteSlot[] pattern = new NoteSlot[16];
+    public NoteSlot[] pattern = new NoteSlot[16];
     [SerializeField, Range(0f, 0.25f)] private float humanizationPercent = 0.05f;
 
     public bool IsSinging => isPatternActive || waitingForStart;

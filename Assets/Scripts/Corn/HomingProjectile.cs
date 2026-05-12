@@ -4,7 +4,8 @@ using UnityEngine;
 public enum Mode { Forward, Homing }
 public enum SenderType { Player, Enemy}
 
-public class HomingProjectile : MonoBehaviour, IControllableProjectile
+
+public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolable
 {
     private Rigidbody rb;
     [SerializeField] private Vector3 moveDirection = Vector3.forward;
@@ -12,12 +13,17 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile
     [SerializeField] private float speed = 5f;
     [SerializeField] private float impactThreshold = 5f;
     [SerializeField] private GameObject explosionPrefab;
+    [SerializeField] private float lifeTime = 10f;
+    private Coroutine _suicideCoroutine;
     
     public GameObject sender;
-    public GameObject Sender => sender; 
+    public GameObject Sender => sender;
+    public GameObject Enemy => enemy;
+    public bool mobIsOgSender = false;
     
     private GameObject _target; 
     private Transform _targetAnchor; // Este es el que manda ahora
+    private Transform spawnPoint;
 
     public bool movingForward = false;
     public bool followingTarget = false;
@@ -32,10 +38,40 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile
     public GameObject player;
     public GameObject enemy;
     [SerializeField] private int launchesNumber = 0;
+    public int LaunchesNumber => launchesNumber;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+    }
+
+    void OnEnable()
+    {
+        spawnPoint = gameObject.transform;
+        transform.position = spawnPoint.position;
+        transform.rotation = spawnPoint.rotation;
+    }
+
+    public void OnSpawn()
+    {
+        ResetRBVelocity();
+        player = null;
+        enemy = null;
+        sender = null;
+        _target = null;
+        _targetAnchor = null;
+        movingForward = false;
+        followingTarget = false;
+        destinationAlreadySet = false;
+        launchesNumber = 0;
+        mobIsOgSender = false;
+        latestNoteTransform = null;
+        moveDirection = Vector3.zero;
+        if (_suicideCoroutine != null)
+        {
+            StopCoroutine(_suicideCoroutine);
+            _suicideCoroutine = null;
+        }
     }
 
     void FixedUpdate()
@@ -46,7 +82,6 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile
             return;
         }
 
-        // CAMBIO: Validamos _targetAnchor en lugar de _target
         if (followingTarget && _targetAnchor != null)
         {
             MoveTowardsTarget();
@@ -60,10 +95,12 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile
     public void MoveForward()
     {
         if (destinationAlreadySet) return;
+        if (latestNoteTransform == null) return;
         moveDirection = (transform.position - latestNoteTransform.position).normalized;
         rb.velocity = moveDirection * speed;
 
         transform.forward = moveDirection;
+        StartSuicideTimer();
         destinationAlreadySet = true;
     }
 
@@ -75,6 +112,7 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile
         rb.velocity = moveDirection * speed;
 
         gameObject.transform.forward = moveDirection;
+        CancelSuicide();
     }
 
     public void SetTarget(GameObject newTarget)
@@ -83,7 +121,6 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile
         
         if (_target != null)
         {
-            // Intentamos obtener el punto de anclaje
             if (_target.TryGetComponent(out TargetForCorn anchorProvider))
             {
                 _targetAnchor = anchorProvider.AimTransform;
@@ -136,6 +173,11 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile
             {
                 player = whoSends;
                 enemy = GetBestTargetByScreenCenter();
+                if (enemy != null)
+                {
+                    var ai = enemy.GetComponent<CornSpitterAI>();
+                    if (ai != null) ai.RegisterIncomingCorn(this);
+                }
             }
             SetTarget(enemy);
             SetMovementMode(Mode.Homing, whoSends);
@@ -148,7 +190,17 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile
             }
             SetTarget(player);
             SetMovementMode(Mode.Homing, whoSends);
+            var enemyAI = enemy != null ? enemy.GetComponent<CornSpitterAI>() : null;
+            if (enemyAI != null) enemyAI.currentHp--;
         }
+    }
+
+    public void LaunchLinear(GameObject whoSends)
+    {
+        launchesNumber++;
+        sender = whoSends;
+        SetMovementMode(Mode.Forward, whoSends);
+        StartSuicideTimer();
     }
 
     public void ResetRBVelocity()
@@ -164,11 +216,24 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile
 
     public void Explode()
     {
-        if (explosionPrefab != null)
-            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-        
-        Destroy(gameObject);
+        if (explosionPrefab != null) Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+
+        if (enemy != null)
+        {
+            var ai = enemy.GetComponent<CornSpitterAI>();
+            if (ai != null)
+            {
+                ai.UnregisterIncomingCorn(this);
+                ai.OnEngagementCornExploded(this);
+            }
+        }
+
+        CancelInvoke();
+        if (TryGetComponent(out PoolMember member)) member.ReturnToPool();
+        gameObject.SetActive(false);
     }
+
+    
 
     private GameObject GetBestTargetByScreenCenter()
     {
@@ -182,6 +247,10 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile
         for (int i = 0; i < count; i++)
         {
             GameObject potentialEnemy = detectionResults[i].gameObject;
+
+            var ai = potentialEnemy.GetComponent<CornSpitterAI>();
+            if (ai != null && ai.State != SpitterState.Idle) continue;
+
             Vector3 screenPoint = mainCam.WorldToViewportPoint(potentialEnemy.transform.position);
 
             if (IsInsideViewport(screenPoint))
@@ -202,4 +271,30 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile
 
     private bool IsInsideViewport(Vector3 screenPoint) => screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
     private bool HasLineOfSight(Vector3 camPos, Vector3 targetPos) => !Physics.Linecast(camPos, targetPos, occlusionLayer);
+
+    private IEnumerator SuicideRoutine()
+    {
+        Debug.Log("Suicide timer started");
+        yield return new WaitForSeconds(lifeTime);
+        Debug.Log("Suicide timer ended. Exploding.");
+        Explode();
+        
+        
+    }
+
+    public void StartSuicideTimer()
+    {
+        if (_suicideCoroutine != null) StopCoroutine(_suicideCoroutine);
+        _suicideCoroutine = StartCoroutine(SuicideRoutine());
+    }
+    public void CancelSuicide()
+    {
+        if (_suicideCoroutine != null)
+        {
+            StopCoroutine(SuicideRoutine());
+            _suicideCoroutine = null;
+            Debug.Log("Suicide timer canceled");
+        }
+    }
+
 }

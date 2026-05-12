@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1219517300601635116}
   - component: {fileID: 1883925743078191627}
   - component: {fileID: 3404502830262671651}
+  - component: {fileID: 4459468880233548298}
   m_Layer: 12
   m_Name: Corn_Projectile
   m_TagString: Untagged
@@ -150,13 +151,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveDirection: {x: 0, y: 0, z: 1}
   latestNoteTransform: {fileID: 0}
-  speed: 5
-  explodeTime: 5
-  speedIncreaseRatio: 20
+  speed: 10
   impactThreshold: 1
   explosionPrefab: {fileID: 4123485699104678487, guid: 1d5f8fefcdb2bfa4ea3b10dcc9f596a7,
     type: 3}
+  lifeTime: 5
   sender: {fileID: 0}
+  mobIsOgSender: 0
   movingForward: 0
   followingTarget: 0
   destinationAlreadySet: 0
@@ -170,6 +171,18 @@ MonoBehaviour:
   player: {fileID: 0}
   enemy: {fileID: 0}
   launchesNumber: 0
+--- !u!114 &4459468880233548298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4979776350224951418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72572a91de21f0e49b5d7be8a4373ade, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8712990693181608995
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,7 +213,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 9.4, y: 9.4, z: 9.4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 5182690266577647600}
@@ -224,7 +237,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3798697936029449018
 MonoBehaviour:

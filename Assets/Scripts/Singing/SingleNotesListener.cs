@@ -1,14 +1,15 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class SingleNotesListener : MonoBehaviour
+public class SingleNotesListener : MonoBehaviour, IPoolable
 {
 
     [Header ("Melodies")]
     [SerializeField] private notesEnum[] currentMelody = new notesEnum[2];
     [SerializeField] private notesEnum[] externalMelody = new notesEnum[2];
-    [SerializeField] private notesEnum[] desiredMelody = new notesEnum[2];
+    public notesEnum[] desiredMelody = new notesEnum[2];
     private int storedNotes = 0;
+    private int externalNotesStored = 0;
     private bool wantsToListen = true;
     private IControllableProjectile homingProjectile;
     private SingleNoteSoundwave sw;
@@ -16,6 +17,17 @@ public class SingleNotesListener : MonoBehaviour
     void Awake()
     {
         homingProjectile = transform.parent.GetComponent<IControllableProjectile>();
+    }
+
+    public void OnSpawn()
+    {
+        ClearMelody(currentMelody);
+        ClearMelody(externalMelody);
+        ClearMelody(desiredMelody);
+        storedNotes = 0;
+        externalNotesStored = 0;
+        wantsToListen = true;
+        sw = null;
     }
 
     void OnTriggerEnter(Collider other)
@@ -31,7 +43,7 @@ public class SingleNotesListener : MonoBehaviour
         switch (storedNotes)
         {
             case 0:
-            AddNote(sw.myNote, currentMelody); //A pelo, se añade y ya
+            AddCurrentNote(sw.myNote);
             break;
 
             case 1:
@@ -39,7 +51,7 @@ public class SingleNotesListener : MonoBehaviour
             break;
 
             case 2: // Se podría decir que pasa de modo "recording" a modo "requesting"
-            AddNote(sw.myNote, externalMelody);
+            AddExternalNote(sw.myNote);
             CompareMelodies();
             break;
 
@@ -47,29 +59,28 @@ public class SingleNotesListener : MonoBehaviour
         }
     }
 
-    private void AddNote(notesEnum newNote, notesEnum[] whichArray)
-{
-    for (int i = 0; i < whichArray.Length; i++)
+    private void AddCurrentNote(notesEnum note)
     {
-        if (whichArray[i] == default) // default es más seguro que 0
-        {
-            whichArray[i] = newNote;
-
-            if (whichArray == externalMelody) return;
-
-            storedNotes = Mathf.Min(storedNotes + 1, 2);
-            return;
-        }
+        if (storedNotes >= currentMelody.Length) return;
+        currentMelody[storedNotes] = note;
+        storedNotes++;
     }
-}
+
+    private void AddExternalNote(notesEnum note)
+    {
+        if (externalNotesStored >= externalMelody.Length) return;
+        externalMelody[externalNotesStored] = note;
+        externalNotesStored++;
+    }
 
     private void CompareWithFirstNote(notesEnum newNote)
 {
     if (newNote == currentMelody[0])
     {
-        ClearMelody(currentMelody); // Esto pondrá storedNotes = 0
+        ClearMelody(currentMelody);
+        storedNotes = 0;
         Debug.Log("Nota repetida. Maiz desinflado.");
-        return;   
+        return;
     }
 
     currentMelody[1] = newNote;
@@ -83,14 +94,14 @@ public class SingleNotesListener : MonoBehaviour
     ClearMelody(currentMelody);
     storedNotes = 2;
 
-    // homingProjectile.SetMovementMode(Mode.Homing, sw.author);
     homingProjectile.Launch(sw.author);
     Debug.Log("Maíz lanzado por " + sw.author);
 }
 
     private void CompareMelodies()
     {
-        int lastNoteIndex = (externalMelody[1] == default) ? 0 : 1;
+        int lastNoteIndex = externalNotesStored - 1;
+        if (lastNoteIndex < 0) return;
         notesEnum noteToVerify = externalMelody[lastNoteIndex];
 
         bool isCorrect = false;
@@ -100,24 +111,24 @@ public class SingleNotesListener : MonoBehaviour
         if (isCorrect)
         {
             Debug.Log($"Nota {lastNoteIndex + 1} correcta.");
-            
-            // Si las 2 son buenas
+
             if (lastNoteIndex == 1)
             {
-                // homingProjectile.SetMovementMode(Mode.Forward, sw.author);
                 homingProjectile.Launch(sw.author);
-
                 RearrangeMelody(desiredMelody);
-                ClearMelody(externalMelody);
-                //Debug.Log("MAIZ REDIRIGIDO");
+                ClearExternalMelody();
             }
         }
         else
         {
-            ClearMelody(externalMelody);
-            //Debug.Log("Nota incorrecta, ignorada");
-
+            ClearExternalMelody();
         }
+    }
+
+    private void ClearExternalMelody()
+    {
+        ClearMelody(externalMelody);
+        externalNotesStored = 0;
     }
 
     private void RearrangeMelody(notesEnum[] melody)

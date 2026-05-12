@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4830153490639154673}
   - component: {fileID: 3894618539409404804}
   - component: {fileID: 2725611551508977993}
+  - component: {fileID: 8377302604967112286}
   m_Layer: 0
   m_Name: Mosquito
   m_TagString: Untagged
@@ -121,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3668034910bdd343b0b20ad8e8adc90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundwaveSpawnpoint: {fileID: 6345804331113606732}
+  soundwaveSpawnpoint: {fileID: 0}
   cooldown: 0.5
 --- !u!114 &4830153490639154673
 MonoBehaviour:
@@ -173,6 +174,22 @@ MonoBehaviour:
   targetTags:
   - Player
   - NPC
+--- !u!114 &8377302604967112286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4609813583533158504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb16a742cc835e418d11680978dd9ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  singer: {fileID: 5042880092936730101}
+  patternMode: 0
+  pattern: 02000000ffffffff0100000001000000ffffffff00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+  humanizationPercent: 0.047
 --- !u!1 &5721214730761204880
 GameObject:
   m_ObjectHideFlags: 0

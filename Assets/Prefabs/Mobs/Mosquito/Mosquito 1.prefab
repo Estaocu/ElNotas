@@ -12,10 +12,11 @@ GameObject:
   - component: {fileID: 2989854860647649785}
   - component: {fileID: 3343888976148886420}
   - component: {fileID: 108109710666919391}
-  - component: {fileID: 5042880092936730101}
+  - component: {fileID: 637688029272634455}
   - component: {fileID: 4830153490639154673}
   - component: {fileID: 3894618539409404804}
   - component: {fileID: 2725611551508977993}
+  - component: {fileID: 2650432285275569220}
   m_Layer: 0
   m_Name: Mosquito 1
   m_TagString: Untagged
@@ -109,7 +110,7 @@ MonoBehaviour:
   isLoop: 1
   decelerationRate: 2
   originalSpeed: 0
---- !u!114 &5042880092936730101
+--- !u!114 &637688029272634455
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,21 +119,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4609813583533158504}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 457ca5846d51b8f4abd2a4fa75d50120, type: 3}
+  m_Script: {fileID: 11500000, guid: e3668034910bdd343b0b20ad8e8adc90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  database: {fileID: 11400000, guid: 1f388edbdfbf1ef468723ceadba8e496, type: 2}
-  soundwavePrefab: {fileID: 7595099893487920229, guid: a8bc68ec8019efc4c933f1fa2a02ee97,
-    type: 3}
   soundwaveSpawnpoint: {fileID: 0}
-  instrument: {fileID: 0}
-  voice: {fileID: 4830153490639154673}
-  timingValidator: {fileID: 0}
-  lifeAndMeter: {fileID: 0}
-  cooldown: 0.5
-  patternMode: 0
-  pattern: ffffffff02000000ffffffffffffffffffffffffffffffff0100000001000000ffffffff00000000ffffffffffffffffffffffffffffffffffffffffffffffff
-  humanizationPercent: 0.25
+  cooldown: 0.2
 --- !u!114 &4830153490639154673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,6 +174,22 @@ MonoBehaviour:
   targetTags:
   - Player
   - NPC
+--- !u!114 &2650432285275569220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4609813583533158504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb16a742cc835e418d11680978dd9ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  singer: {fileID: 637688029272634455}
+  patternMode: 0
+  pattern: 02000000ffffffff0100000001000000ffffffff00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+  humanizationPercent: 0.25
 --- !u!1 &5721214730761204880
 GameObject:
   m_ObjectHideFlags: 0

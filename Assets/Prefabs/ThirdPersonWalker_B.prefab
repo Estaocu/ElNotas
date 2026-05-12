@@ -836,17 +836,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7146024218861173856}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc843c0346dfdac4e9877bcf85793ddd, type: 3}
+  m_Script: {fileID: 11500000, guid: e3668034910bdd343b0b20ad8e8adc90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instrument: {fileID: 0}
-  voice: {fileID: 0}
-  lifeAndMeter: {fileID: 0}
   soundwaveSpawnpoint: {fileID: 0}
-  cooldown: 0.5
-  patternMode: 0
-  pattern: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-  humanizationPercent: 0.05
+  cooldown: 0.2
 --- !u!114 &1645496335446225618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -860,7 +854,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 2902904493212257918}
-  singer: {fileID: 0}
   controlsManager: {fileID: 0}
   timeToClearMelody: 32
   uiNotes:
@@ -1087,6 +1080,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 3f354921-8a4d-4845-933f-2913576a6146
     m_ActionName: DebugAndTesting/TP_9[/Keyboard/numpad9]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6dfb978c-c637-4c91-a636-c974427f992e
+    m_ActionName: Gameplay/Debug_NPC_Sing[/Keyboard/backquote,/XInputControllerWindows/leftStickPress]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Gameplay

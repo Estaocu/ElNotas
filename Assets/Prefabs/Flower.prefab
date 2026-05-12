@@ -181,6 +181,7 @@ GameObject:
   - component: {fileID: 4779004897540506876}
   - component: {fileID: 1387699327826087117}
   - component: {fileID: 7905668233716063666}
+  - component: {fileID: 4976674740136143927}
   m_Layer: 11
   m_Name: Flower
   m_TagString: Untagged
@@ -292,7 +293,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canBufferMelody: 1
-  singer: {fileID: 0}
+  singer: {fileID: 7905668233716063666}
+  beatSinger: {fileID: 4976674740136143927}
   melody: {fileID: 11400000, guid: 846d4567507f101449c4bd7d84e818b4, type: 2}
 --- !u!114 &1387699327826087117
 MonoBehaviour:
@@ -325,9 +327,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundwaveSpawnpoint: {fileID: 4330348171103034480}
   cooldown: 0.5
+--- !u!114 &4976674740136143927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2746868023409992681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb16a742cc835e418d11680978dd9ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  singer: {fileID: 7905668233716063666}
   patternMode: 0
-  pattern: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-  humanizationPercent: 0.05
+  pattern: 0100000001000000ffffffffffffffff0300000001000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+  humanizationPercent: 0
 --- !u!1 &5653237980402108962
 GameObject:
   m_ObjectHideFlags: 0

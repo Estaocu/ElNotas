@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 3894618539409404804}
   - component: {fileID: 2725611551508977993}
   m_Layer: 0
-  m_Name: Mosquito
+  m_Name: Mosquito 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -509,6 +509,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: b178dfa8a5d6339419faabe931d9e023,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 25df48ca7fb19bc47b9891acabffaf75, type: 2}
+    - target: {fileID: -7511558181221131132, guid: b178dfa8a5d6339419faabe931d9e023,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6038a33a383d7c3418adeec383307e11, type: 2}
+    - target: {fileID: -7511558181221131132, guid: b178dfa8a5d6339419faabe931d9e023,
+        type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6038a33a383d7c3418adeec383307e11, type: 2}
+    - target: {fileID: -7511558181221131132, guid: b178dfa8a5d6339419faabe931d9e023,
+        type: 3}
+      propertyPath: m_Materials.Array.data[5]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7b9f9b2f7b7f40a4886a90155c229de6, type: 2}
     - target: {fileID: 919132149155446097, guid: b178dfa8a5d6339419faabe931d9e023,
         type: 3}
       propertyPath: m_Name

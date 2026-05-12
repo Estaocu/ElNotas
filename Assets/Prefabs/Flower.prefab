@@ -178,9 +178,9 @@ GameObject:
   - component: {fileID: 4376071188723135962}
   - component: {fileID: 8407057067556288357}
   - component: {fileID: 3286638974589688823}
-  - component: {fileID: 4841438033501070113}
   - component: {fileID: 4779004897540506876}
   - component: {fileID: 1387699327826087117}
+  - component: {fileID: 7905668233716063666}
   m_Layer: 11
   m_Name: Flower
   m_TagString: Untagged
@@ -279,30 +279,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.65
   m_Center: {x: 0, y: -0.36, z: 0}
---- !u!114 &4841438033501070113
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2746868023409992681}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 457ca5846d51b8f4abd2a4fa75d50120, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  database: {fileID: 11400000, guid: 1f388edbdfbf1ef468723ceadba8e496, type: 2}
-  soundwavePrefab: {fileID: 7595099893487920229, guid: a8bc68ec8019efc4c933f1fa2a02ee97,
-    type: 3}
-  soundwaveSpawnpoint: {fileID: 4330348171103034480}
-  instrument: {fileID: 0}
-  voice: {fileID: 1387699327826087117}
-  timingValidator: {fileID: 0}
-  lifeAndMeter: {fileID: 0}
-  cooldown: 0.1
-  patternMode: 0
-  pattern: 03000000010000000300000001000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-  humanizationPercent: 0.058
 --- !u!114 &4779004897540506876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -316,7 +292,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canBufferMelody: 1
-  singer: {fileID: 4841438033501070113}
+  singer: {fileID: 0}
   melody: {fileID: 11400000, guid: 846d4567507f101449c4bd7d84e818b4, type: 2}
 --- !u!114 &1387699327826087117
 MonoBehaviour:
@@ -335,6 +311,23 @@ MonoBehaviour:
   note2: {fileID: 8300000, guid: eda1af705f9b3bf468c1d8bca0a7f2ae, type: 3}
   note3: {fileID: 8300000, guid: bc6183da4e5464b4bbaa11832a7ca978, type: 3}
   note4: {fileID: 8300000, guid: 8756d71c9872fd248a7ba4b04b13d09d, type: 3}
+--- !u!114 &7905668233716063666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2746868023409992681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3668034910bdd343b0b20ad8e8adc90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundwaveSpawnpoint: {fileID: 4330348171103034480}
+  cooldown: 0.5
+  patternMode: 0
+  pattern: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  humanizationPercent: 0.05
 --- !u!1 &5653237980402108962
 GameObject:
   m_ObjectHideFlags: 0

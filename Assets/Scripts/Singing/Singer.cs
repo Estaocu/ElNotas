@@ -65,7 +65,17 @@ public class Singer : MonoBehaviour
     private void OnPlayerNoteAdded(notesEnum[] sequence, int played)
     {
         notesEnum note = sequence[3];
-        
+
+        if (timingValidator == null && GameManager.Instance != null)
+            timingValidator = GameManager.Instance.RhythmTimingValidator;
+
+        if (timingValidator != null && lifeAndMeter != null)
+        {
+            int award = timingValidator.GetMeterAward(AudioSettings.dspTime);
+            if (award > 0) lifeAndMeter.ChangeMeterCharge(award);
+        }
+
+
         // 1. Sonido y Onda Individual (SIEMPRE)
         ProcessSingleNote(note);
 

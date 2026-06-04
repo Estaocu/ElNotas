@@ -94,21 +94,21 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             ""actions"": [
                 {
                     ""name"": ""NavigateWords"",
-                    ""type"": ""Value"",
-                    ""id"": ""f9a3bce2-54ab-449a-856f-d1f0073c4b76"",
-                    ""expectedControlType"": ""Axis"",
+                    ""type"": ""Button"",
+                    ""id"": ""fc82d8b7-b1a2-4eae-bde6-250b06e33d55"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""NavigateCategory"",
-                    ""type"": ""Value"",
-                    ""id"": ""09c5b43d-36e1-4746-8513-a0d87966aae8"",
-                    ""expectedControlType"": ""Axis"",
+                    ""name"": ""NavigateCategories"",
+                    ""type"": ""Button"",
+                    ""id"": ""2b2cf35f-378b-42fa-9672-7e17317ef00c"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""AcceptWord"",
@@ -175,61 +175,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""99d167e5-9636-44f3-ab1f-b4578a89b4fc"",
-                    ""path"": ""<Gamepad>/leftStick/y"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";ControllerScheme"",
-                    ""action"": ""NavigateWords"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""24eda3ce-776b-4997-884e-629b536b8f3f"",
-                    ""path"": ""<Gamepad>/dpad/y"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";ControllerScheme"",
-                    ""action"": ""NavigateWords"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""1D Axis"",
-                    ""id"": ""6427f085-6237-49ef-85c0-0962767384ce"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""NavigateWords"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""6028b96d-5145-4f9d-b1b9-d73a55723196"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";KeyboardScheme"",
-                    ""action"": ""NavigateWords"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""be829607-ad47-461c-93f1-4045dc24579f"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";KeyboardScheme"",
-                    ""action"": ""NavigateWords"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
                 {
                     ""name"": """",
                     ""id"": ""f04b7d5a-7216-41f7-9c68-f8979fa8aee5"",
@@ -319,39 +264,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""1D Axis"",
-                    ""id"": ""0fe7bad3-5981-4268-ba55-dd8bc7ab531a"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""NavigateCategory"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""ce71c040-6cbb-44f8-9834-fa7318efce48"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";ControllerScheme"",
-                    ""action"": ""NavigateCategory"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""651bb681-c6ad-4f4b-9f0f-d2f239a3049c"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";ControllerScheme"",
-                    ""action"": ""NavigateCategory"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
                     ""id"": ""65666d3e-4cec-4d01-af8e-e61f28abc3b4"",
                     ""path"": ""<Gamepad>/rightTrigger"",
@@ -394,6 +306,127 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""EraseWord"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Gamepad"",
+                    ""id"": ""efb64f1a-42ce-4268-8d5d-173f2cc45fe8"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateWords"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""3e10bc71-078f-40a9-affb-2db1f8790994"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateWords"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""ef6cf90e-815e-41d5-a49e-19a0d70a78bc"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateWords"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""15bd0419-64fc-4ef5-b7be-71221e1e7f87"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateWords"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""772e74a3-c44d-4978-b46f-eb01f2b0fe0b"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateWords"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""9d5e96be-c6e1-478a-b33d-680e8ba412ec"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateWords"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""353fd1bb-fe35-4a01-ae66-ee58a5fa0159"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateWords"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""bce59c29-957c-4f71-88ff-0aa378d2cf08"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateWords"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Gamepad"",
+                    ""id"": ""35acfd11-657e-4194-84e9-15c087aa4132"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateCategories"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""ab3c9ae0-66db-414e-9afe-859bc07ed39b"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateCategories"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""2a0149cc-7678-4d53-a983-281ad781e072"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NavigateCategories"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -1638,7 +1671,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         // Conversation
         m_Conversation = asset.FindActionMap("Conversation", throwIfNotFound: true);
         m_Conversation_NavigateWords = m_Conversation.FindAction("NavigateWords", throwIfNotFound: true);
-        m_Conversation_NavigateCategory = m_Conversation.FindAction("NavigateCategory", throwIfNotFound: true);
+        m_Conversation_NavigateCategories = m_Conversation.FindAction("NavigateCategories", throwIfNotFound: true);
         m_Conversation_AcceptWord = m_Conversation.FindAction("AcceptWord", throwIfNotFound: true);
         m_Conversation_EraseWord = m_Conversation.FindAction("EraseWord", throwIfNotFound: true);
         m_Conversation_Note1 = m_Conversation.FindAction("Note1", throwIfNotFound: true);
@@ -1777,7 +1810,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Conversation;
     private List<IConversationActions> m_ConversationActionsCallbackInterfaces = new List<IConversationActions>();
     private readonly InputAction m_Conversation_NavigateWords;
-    private readonly InputAction m_Conversation_NavigateCategory;
+    private readonly InputAction m_Conversation_NavigateCategories;
     private readonly InputAction m_Conversation_AcceptWord;
     private readonly InputAction m_Conversation_EraseWord;
     private readonly InputAction m_Conversation_Note1;
@@ -1801,9 +1834,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @NavigateWords => m_Wrapper.m_Conversation_NavigateWords;
         /// <summary>
-        /// Provides access to the underlying input action "Conversation/NavigateCategory".
+        /// Provides access to the underlying input action "Conversation/NavigateCategories".
         /// </summary>
-        public InputAction @NavigateCategory => m_Wrapper.m_Conversation_NavigateCategory;
+        public InputAction @NavigateCategories => m_Wrapper.m_Conversation_NavigateCategories;
         /// <summary>
         /// Provides access to the underlying input action "Conversation/AcceptWord".
         /// </summary>
@@ -1861,9 +1894,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @NavigateWords.started += instance.OnNavigateWords;
             @NavigateWords.performed += instance.OnNavigateWords;
             @NavigateWords.canceled += instance.OnNavigateWords;
-            @NavigateCategory.started += instance.OnNavigateCategory;
-            @NavigateCategory.performed += instance.OnNavigateCategory;
-            @NavigateCategory.canceled += instance.OnNavigateCategory;
+            @NavigateCategories.started += instance.OnNavigateCategories;
+            @NavigateCategories.performed += instance.OnNavigateCategories;
+            @NavigateCategories.canceled += instance.OnNavigateCategories;
             @AcceptWord.started += instance.OnAcceptWord;
             @AcceptWord.performed += instance.OnAcceptWord;
             @AcceptWord.canceled += instance.OnAcceptWord;
@@ -1899,9 +1932,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @NavigateWords.started -= instance.OnNavigateWords;
             @NavigateWords.performed -= instance.OnNavigateWords;
             @NavigateWords.canceled -= instance.OnNavigateWords;
-            @NavigateCategory.started -= instance.OnNavigateCategory;
-            @NavigateCategory.performed -= instance.OnNavigateCategory;
-            @NavigateCategory.canceled -= instance.OnNavigateCategory;
+            @NavigateCategories.started -= instance.OnNavigateCategories;
+            @NavigateCategories.performed -= instance.OnNavigateCategories;
+            @NavigateCategories.canceled -= instance.OnNavigateCategories;
             @AcceptWord.started -= instance.OnAcceptWord;
             @AcceptWord.performed -= instance.OnAcceptWord;
             @AcceptWord.canceled -= instance.OnAcceptWord;
@@ -2807,12 +2840,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnNavigateWords(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "NavigateCategory" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "NavigateCategories" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnNavigateCategory(InputAction.CallbackContext context);
+        void OnNavigateCategories(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "AcceptWord" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

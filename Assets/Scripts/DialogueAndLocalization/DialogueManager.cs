@@ -1,78 +1,53 @@
+using System.Collections;
+using System.Collections.Generic;
+using System;
 using UnityEngine;
-using UnityEngine.Localization;
-using Febucci.TextAnimatorForUnity;
 using UnityEngine.InputSystem;
+using CMF;
 
 public class DialogueManager : MonoBehaviour
 {
-    [SerializeField] private LocalizedString dialogueLine;
-    [SerializeField] private TypewriterComponent typewriter;
+    public bool canInteract = false;
+    public NPC currentNPC;
+    [SerializeField] private DictionaryUIManager dialogueUI;
 
-    private string[] pages;
-    private int currentPage;
-    private bool waitingForInput;
-
-    void Start()
+    public void EnterDialogue(InputAction.CallbackContext context)
     {
-        // Conectar LocalizeString al sistema
-        dialogueLine.StringChanged += StartDialogue;
-    }
-
-    void OnDestroy()
-    {
-        dialogueLine.StringChanged -= StartDialogue;
-    }
-
-    void StartDialogue(string localizedText)
-    {
-        // Separar por | en páginas
-        pages = localizedText.Split('|');
-        currentPage = 0;
-        ShowCurrentPage();
-    }
-
-    void ShowCurrentPage()
-    {
-        waitingForInput = false;
-        typewriter.onTextShowed.AddListener(OnPageFinished);
-        typewriter.ShowText(pages[currentPage].Trim());
-    }
-
-    void OnPageFinished()
-    {
-        typewriter.onTextShowed.RemoveListener(OnPageFinished);
-        waitingForInput = true;
-    }
-
-    void Update()
-    {
-        if (!waitingForInput) return;
-
-        // Cambia esto al input system que uses
-        if (Keyboard.current.spaceKey.wasPressedThisFrame || 
-            Keyboard.current.enterKey.wasPressedThisFrame)
+        if (context.performed)
         {
-            AdvancePage();
+            if (!canInteract) return;
+            dialogueUI.gameObject.SetActive(true);
+            dialogueUI.currentNpc = currentNPC;
+            RemoveCurrentNPC(currentNPC);
+            ActionMapsManager.SetActiveMaps(DefaultActionMap.Conversation);
+        }
+        
+
+    }
+
+    public void SetNewNPC(NPC newNpc)
+    {
+        currentNPC = newNpc;
+        canInteract = true;
+    }
+
+    public void RemoveCurrentNPC(NPC newNpc) //Al exitear collider de npc
+    {
+        if (newNpc != null && newNpc !=currentNPC) return;
+        currentNPC = null;
+        canInteract = false;
+    }
+
+    public void ExitDialogue(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            dialogueUI.gameObject.SetActive(false);
+            RemoveCurrentNPC(currentNPC);
+            ActionMapsManager.SetActiveMaps(DefaultActionMap.Gameplay);
         }
     }
 
-    void AdvancePage()
-    {
-        currentPage++;
 
-        if (currentPage < pages.Length)
-        {
-            ShowCurrentPage();
-        }
-        else
-        {
-            EndDialogue();
-        }
-    }
 
-    void EndDialogue()
-    {
-        waitingForInput = false;
-        // Aquí: ocultar UI, notificar al sistema de juego, etc.
-    }
 }

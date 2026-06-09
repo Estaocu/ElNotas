@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5184405932379447632}
   - component: {fileID: 2219512438970327701}
   - component: {fileID: 1255941511951736442}
+  - component: {fileID: 7092565439373064622}
   m_Layer: 5
   m_Name: Basic Default Dialogue
   m_TagString: Untagged
@@ -255,3 +256,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b598e66f5fac384b83d4aa14a99ad2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7092565439373064622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8613333163273397919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee67adce55ebff14998073aa55a0b27e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tmp: {fileID: 1127413478223981816}
+  locString: {fileID: 2219512438970327701}
+  typewriter: {fileID: 5899639827618844825}
+  tAnimator: {fileID: 5184405932379447632}
+  trigger: {fileID: 1255941511951736442}
+  tableName: NPCS

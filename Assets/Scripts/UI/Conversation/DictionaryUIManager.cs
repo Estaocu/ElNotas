@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 using UnityEngine.Splines.ExtrusionShapes;
 
 public class DictionaryUIManager : MonoBehaviour
@@ -14,15 +16,21 @@ public class DictionaryUIManager : MonoBehaviour
     private IReadOnlyList<Word> currentWordList;
     // private int scroll = 0;
     private int catLenght;
-    [SerializeField] private GameObject circlePivot;
+    //[SerializeField] private GameObject circlePivot;
+
+    public MelodyUI melodyUI;
+
+    public NPC currentNpc;
+
+    [SerializeField] private DialogueTextMaster npcText;
 
     
     // Words for the player's sentence in the speech bubble
-    private Word word1;
-    private Word word2;
+    [SerializeField] private PlayerBubbleWordBehaviour[] bubbleWords = new PlayerBubbleWordBehaviour[2];
 
     void OnEnable()
     {
+        ResetUI();
 
         currentWordList = totalWordList.GetWordsByCategory(currentCategory);
 
@@ -34,9 +42,20 @@ public class DictionaryUIManager : MonoBehaviour
 
             slot.word = currentWordList[index];
             slot.DisplayNewWord();
+
+            if (slot.currentSlot == 3)
+                {
+                    melodyUI.ChangeMelodyDisplayed(slot.word.melody);
+                    melodyUI.SetYValues();
+                }
             //slot.SetWordText(word.displayName.GetLocalizedString());
             // slot.SetWordText(slot.currentSlot.ToString());
         }
+    }
+
+    public void ResetUI()
+    {
+        
     }
 
     
@@ -49,19 +68,7 @@ public class DictionaryUIManager : MonoBehaviour
             return;
         }
         GetCategoryLenght();
-
-        // read TWL's category list equal to current category DONE
-        // Initially Slot 3 = Word 0. 
-        // ALWAYS Slot N = Word N-3 . 
-        // At the same time: current word ALWAYS equals N-3 + M (M=scroll) minScroll = 0; maxScroll = currentCategory.lenght DONE
-        // NavigateWords negative --M; positive ++M DONE
     }
-        //word in position 1 and 5, invisible, i'm setting you up in case any of you both are showing up next. how?
-        //position 3 is the boss. marks the 0 point. check words for scroll +-2 and assign to extremes. keep them invisible
-        //on navigatewords replay this function
-
-    
-
     public void NavigateWords(InputAction.CallbackContext context)
     {
         if (context.performed)
@@ -74,33 +81,66 @@ public class DictionaryUIManager : MonoBehaviour
                 // slot.SetExtremesWords();
                 slot.Rotate30(dpadValue);
                 slot.OnWheelRotated(dpadValue);
+                if (slot.currentSlot == 3)
+                {
+                    melodyUI.ChangeMelodyDisplayed(slot.word.melody);
+                    melodyUI.SetYValues();
+                }
             }
     }
     }
 
-    public void SelectWord()
+    public void SelectWord(InputAction.CallbackContext context)
     {
-        foreach(WordUIBehaviour slot in slots)
+        if (!context.performed) return;
+
+        foreach (WordUIBehaviour slot in slots)
         {
-            if (slot.currentSlot == 2)
+            if (slot.currentSlot != 2) continue;
+
+            for (int i = 0; i < bubbleWords.Length; i++)
             {
-                Debug.Log("Word accepted: "+ slot.word.displayName.GetLocalizedString());
+                if (bubbleWords[i].full) continue;
+
+                bubbleWords[i].PlaceWord(slot.word);
+
+                // ¿Era la última burbuja libre? Entonces ya tenemos frase completa.
+                if (i == bubbleWords.Length - 1)
+                    FindDialogue();
+
+                return;
             }
+        }
+}
+
+    public void EraseWord(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            for (int i = bubbleWords.Length - 1; i >= 0; i--)
+        {
+            if (!bubbleWords[i].full) continue;
+            bubbleWords[i].EraseWord();
+            return;
+        }
         }
         
     }
 
-    public void RotateWheel(int sign)
+    public void FindDialogue()
     {
-        if (sign < 0)
-        {
-            circlePivot.transform.Rotate(0f, 0f, 30f); 
-        }
+        
+        string a = bubbleWords[0].word.name.ToLower();
+        string b = bubbleWords[1].word.name.ToLower();
+        string npc = currentNpc.npcName.ToLower();
+        if (string.CompareOrdinal(a, b) > 0) (a, b) = (b, a); // alfabético
 
-        else
-        {
-            circlePivot.transform.Rotate(0f, 0f, -30f);
-        }
+        string primaryId = $"npc_{npc}_{a}{b}";
+        string swappedId  = $"npc_{npc}_{b}{a}";
+
+        Debug.Log("Finding dialogue: " + primaryId);
+
+        npcText.AssignNewDialogue(primaryId, swappedId);
     }
 
     public void GetCategoryLenght()
@@ -111,5 +151,10 @@ public class DictionaryUIManager : MonoBehaviour
     public void OnCategoryChange()
     {
         GetCategoryLenght();
+    }
+
+    public void OnDisable()
+    {
+        currentNpc = null;
     }
 }

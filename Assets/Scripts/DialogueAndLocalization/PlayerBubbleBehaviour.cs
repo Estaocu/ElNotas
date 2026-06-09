@@ -9,9 +9,6 @@ public class PlayerBubbleBehaviour : MonoBehaviour
 
     [SerializeField] private Image wordContainer;
     [SerializeField] private TextMeshProUGUI wordText;
-    [SerializeField] private float xOffset;
-    [SerializeField] private float yOffset;
-    public Image[] noteImages = new Image[4];
 
 
 

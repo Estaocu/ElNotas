@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0691051421f06a44c970da575f3151fc, type: 3}
+  m_Name: Glyphs_Xbox
+  m_EditorClassIdentifier: 
+  category: 1
+  entries:
+  - controlPath: buttonSouth
+    sprite: {fileID: 21300000, guid: 2d1da8b924536ee459c0c3685f8153ce, type: 3}
+  - controlPath: buttonNorth
+    sprite: {fileID: 21300000, guid: abae57d650cc06e44b0c85d8fa1678ff, type: 3}
+  - controlPath: buttonEast
+    sprite: {fileID: 21300000, guid: 53f2e428029111247be41281f22bc055, type: 3}
+  - controlPath: buttonWest
+    sprite: {fileID: 21300000, guid: 95dda33cbc482f440a3e50e8d0777d83, type: 3}
+  - controlPath: leftStick
+    sprite: {fileID: 21300000, guid: 83198616b852097408556c45ae5f5ef9, type: 3}
+  - controlPath: rightStick
+    sprite: {fileID: 21300000, guid: e54f59d0771abe945915b99da37cb441, type: 3}
+  - controlPath: leftTrigger
+    sprite: {fileID: 21300000, guid: 5cbc0b537a30595469f22be10e965731, type: 3}
+  - controlPath: rightTrigger
+    sprite: {fileID: 21300000, guid: bdd213f5032cacf42805ea680d6ca07c, type: 3}
+  - controlPath: leftShoulder
+    sprite: {fileID: 21300000, guid: 15e7bee29faaf654aad568f76ba71d1e, type: 3}
+  - controlPath: rightShoulder
+    sprite: {fileID: 21300000, guid: 5165928f85fae3b499ac9ad32674cc9e, type: 3}
+  - controlPath: dpad/up
+    sprite: {fileID: 21300000, guid: 3b128338e4c23d8459f5a41e9d84ad21, type: 3}
+  - controlPath: dpad/down
+    sprite: {fileID: 21300000, guid: 6a8009521c273004a9174ecee086fbf6, type: 3}
+  - controlPath: dpad/left
+    sprite: {fileID: 21300000, guid: 1690fb82eefc5b948b50c9e7730fb317, type: 3}
+  - controlPath: dpad/right
+    sprite: {fileID: 21300000, guid: 5386567c3dbe48c4ebe29094188fa3d6, type: 3}
+  - controlPath: start
+    sprite: {fileID: 21300000, guid: af179c77b93018f4c986524907586c56, type: 3}
+  - controlPath: select
+    sprite: {fileID: 21300000, guid: 43fa7ae84a8b96642ab0c2e6903df742, type: 3}
+  fallback: {fileID: 21300000, guid: cadc4ba672a049d42b85a9928a5ce80c, type: 3}

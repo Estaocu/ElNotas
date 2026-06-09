@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0691051421f06a44c970da575f3151fc, type: 3}
+  m_Name: Glyphs_Switch
+  m_EditorClassIdentifier: 
+  category: 3
+  entries:
+  - controlPath: buttonSouth
+    sprite: {fileID: 0}
+  - controlPath: buttonNorth
+    sprite: {fileID: 0}
+  - controlPath: buttonEast
+    sprite: {fileID: 0}
+  - controlPath: buttonWest
+    sprite: {fileID: 0}
+  - controlPath: leftStick
+    sprite: {fileID: 0}
+  - controlPath: rightStick
+    sprite: {fileID: 0}
+  - controlPath: rightTrigger
+    sprite: {fileID: 0}
+  - controlPath: leftShoulder
+    sprite: {fileID: 0}
+  - controlPath: rightShoulder
+    sprite: {fileID: 0}
+  - controlPath: dpad/up
+    sprite: {fileID: 0}
+  - controlPath: dpad/down
+    sprite: {fileID: 0}
+  - controlPath: dpad/left
+    sprite: {fileID: 0}
+  - controlPath: dpad/right
+    sprite: {fileID: 0}
+  - controlPath: start
+    sprite: {fileID: 0}
+  - controlPath: select
+    sprite: {fileID: 0}
+  fallback: {fileID: 0}

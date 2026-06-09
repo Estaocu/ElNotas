@@ -238,7 +238,7 @@
                     "path": "<Gamepad>/dpad/up",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";ControllerScheme",
                     "action": "NavigateWords",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -249,7 +249,7 @@
                     "path": "<Gamepad>/dpad/down",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";ControllerScheme",
                     "action": "NavigateWords",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -260,7 +260,7 @@
                     "path": "<Gamepad>/leftStick/up",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";ControllerScheme",
                     "action": "NavigateWords",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -271,7 +271,7 @@
                     "path": "<Gamepad>/leftStick/down",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";ControllerScheme",
                     "action": "NavigateWords",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -326,7 +326,7 @@
                     "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";ControllerScheme",
                     "action": "NavigateCategories",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -337,7 +337,7 @@
                     "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";ControllerScheme",
                     "action": "NavigateCategories",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -681,6 +681,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "b1457f1b-91f2-4fbb-a191-72ed66a66172",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -690,7 +699,7 @@
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";ControllerScheme",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -712,7 +721,7 @@
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KeyboardScheme",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -723,7 +732,7 @@
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KeyboardScheme",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -734,7 +743,7 @@
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KeyboardScheme",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -745,7 +754,7 @@
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KeyboardScheme",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -756,7 +765,7 @@
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";ControllerScheme",
                     "action": "RotateCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -778,7 +787,7 @@
                     "path": "<Mouse>/delta/up",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KeyboardScheme",
                     "action": "RotateCamera",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -789,7 +798,7 @@
                     "path": "<Mouse>/delta/down",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KeyboardScheme",
                     "action": "RotateCamera",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -800,7 +809,7 @@
                     "path": "<Mouse>/delta/left",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KeyboardScheme",
                     "action": "RotateCamera",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -811,7 +820,7 @@
                     "path": "<Mouse>/delta/right",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KeyboardScheme",
                     "action": "RotateCamera",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -822,7 +831,7 @@
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KeyboardScheme",
                     "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -833,7 +842,7 @@
                     "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";ControllerScheme",
                     "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -844,7 +853,7 @@
                     "path": "<Gamepad>/dpad/up",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";ControllerScheme",
                     "action": "Notebook",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -855,7 +864,7 @@
                     "path": "<Keyboard>/tab",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KeyboardScheme",
                     "action": "Notebook",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -866,7 +875,7 @@
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";ControllerScheme",
                     "action": "Note1",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -877,7 +886,7 @@
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KeyboardScheme",
                     "action": "Note1",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -888,7 +897,7 @@
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";ControllerScheme",
                     "action": "Note2",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -899,7 +908,7 @@
                     "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KeyboardScheme",
                     "action": "Note2",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -910,7 +919,7 @@
                     "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";ControllerScheme",
                     "action": "Note3",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -921,7 +930,7 @@
                     "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KeyboardScheme",
                     "action": "Note3",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -932,7 +941,7 @@
                     "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";ControllerScheme",
                     "action": "Note4",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -943,7 +952,7 @@
                     "path": "<Keyboard>/c",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KeyboardScheme",
                     "action": "Note4",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -954,7 +963,7 @@
                     "path": "<Gamepad>/rightStickPress",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";ControllerScheme",
                     "action": "CrouchToggle",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -965,7 +974,7 @@
                     "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";ControllerScheme",
                     "action": "CrouchHold",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -976,7 +985,7 @@
                     "path": "<Keyboard>/leftCtrl",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";ControllerScheme",
                     "action": "CrouchHold",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -987,7 +996,7 @@
                     "path": "<Gamepad>/select",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";ControllerScheme",
                     "action": "Map",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -998,7 +1007,7 @@
                     "path": "<Keyboard>/m",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KeyboardScheme",
                     "action": "Map",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -1066,6 +1075,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Debug_NPC_Sing",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a0469fde-0f00-4213-a85e-a481a1361732",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardScheme",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9a8a316e-e56c-4da8-82b8-973226e52037",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";ControllerScheme",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -1264,6 +1295,138 @@
                     "processors": "",
                     "groups": "",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "id": "dc35ab6a-8990-4d75-8578-e8ad3f786b00",
+            "actions": [
+                {
+                    "name": "Note1",
+                    "type": "Button",
+                    "id": "13945612-8bdf-4f58-8fde-4abdcf278656",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Note2",
+                    "type": "Button",
+                    "id": "cac7d384-ce24-4b9c-ba58-38a9f25af2df",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Note3",
+                    "type": "Button",
+                    "id": "01504396-6ef9-4405-86ec-83c3d6cb5c66",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Note4",
+                    "type": "Button",
+                    "id": "1cc17a5c-c853-4cf8-9da6-f2beb5cbdaff",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "41db53ab-9d9c-43f7-9a46-f1e24c35a36c",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";ControllerScheme",
+                    "action": "Note1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d344e2c4-5b86-4c46-a145-83c810418954",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardScheme",
+                    "action": "Note1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2ff8917c-4f95-4a32-be0e-bc8029c788f8",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";ControllerScheme",
+                    "action": "Note2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c48fcdaf-05b0-4869-8224-abe1e9747a00",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardScheme",
+                    "action": "Note2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "20a5fd18-c6af-4480-b443-5b52effb070e",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";ControllerScheme",
+                    "action": "Note3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f36ee0f4-f1a8-4fd0-ad64-95a50c0a5a85",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardScheme",
+                    "action": "Note3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a3f00752-78ff-4793-924c-c98030e33752",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";ControllerScheme",
+                    "action": "Note4",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "beeb799f-08c9-45b6-aed9-9cf576f63e9b",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardScheme",
+                    "action": "Note4",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

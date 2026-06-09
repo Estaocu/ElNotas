@@ -324,7 +324,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/dpad/up"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";ControllerScheme"",
                     ""action"": ""NavigateWords"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -335,7 +335,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/dpad/down"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";ControllerScheme"",
                     ""action"": ""NavigateWords"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -346,7 +346,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftStick/up"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";ControllerScheme"",
                     ""action"": ""NavigateWords"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -357,7 +357,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftStick/down"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";ControllerScheme"",
                     ""action"": ""NavigateWords"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -412,7 +412,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";ControllerScheme"",
                     ""action"": ""NavigateCategories"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -423,7 +423,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";ControllerScheme"",
                     ""action"": ""NavigateCategories"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -767,6 +767,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""b1457f1b-91f2-4fbb-a191-72ed66a66172"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -776,7 +785,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";ControllerScheme"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -798,7 +807,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboardScheme"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -809,7 +818,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboardScheme"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -820,7 +829,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboardScheme"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -831,7 +840,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboardScheme"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -842,7 +851,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";ControllerScheme"",
                     ""action"": ""RotateCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -864,7 +873,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/delta/up"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboardScheme"",
                     ""action"": ""RotateCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -875,7 +884,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/delta/down"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboardScheme"",
                     ""action"": ""RotateCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -886,7 +895,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/delta/left"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboardScheme"",
                     ""action"": ""RotateCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -897,7 +906,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/delta/right"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboardScheme"",
                     ""action"": ""RotateCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -908,7 +917,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboardScheme"",
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -919,7 +928,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/start"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";ControllerScheme"",
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -930,7 +939,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/dpad/up"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";ControllerScheme"",
                     ""action"": ""Notebook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -941,7 +950,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/tab"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboardScheme"",
                     ""action"": ""Notebook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -952,7 +961,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";ControllerScheme"",
                     ""action"": ""Note1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -963,7 +972,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboardScheme"",
                     ""action"": ""Note1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -974,7 +983,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";ControllerScheme"",
                     ""action"": ""Note2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -985,7 +994,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboardScheme"",
                     ""action"": ""Note2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -996,7 +1005,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";ControllerScheme"",
                     ""action"": ""Note3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1007,7 +1016,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboardScheme"",
                     ""action"": ""Note3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1018,7 +1027,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";ControllerScheme"",
                     ""action"": ""Note4"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1029,7 +1038,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/c"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboardScheme"",
                     ""action"": ""Note4"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1040,7 +1049,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/rightStickPress"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";ControllerScheme"",
                     ""action"": ""CrouchToggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1051,7 +1060,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";ControllerScheme"",
                     ""action"": ""CrouchHold"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1062,7 +1071,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/leftCtrl"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";ControllerScheme"",
                     ""action"": ""CrouchHold"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1073,7 +1082,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/select"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";ControllerScheme"",
                     ""action"": ""Map"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1084,7 +1093,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/m"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboardScheme"",
                     ""action"": ""Map"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1152,6 +1161,28 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Debug_NPC_Sing"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a0469fde-0f00-4213-a85e-a481a1361732"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";KeyboardScheme"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9a8a316e-e56c-4da8-82b8-973226e52037"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";ControllerScheme"",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1350,6 +1381,138 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Notes"",
+            ""id"": ""dc35ab6a-8990-4d75-8578-e8ad3f786b00"",
+            ""actions"": [
+                {
+                    ""name"": ""Note1"",
+                    ""type"": ""Button"",
+                    ""id"": ""13945612-8bdf-4f58-8fde-4abdcf278656"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Note2"",
+                    ""type"": ""Button"",
+                    ""id"": ""cac7d384-ce24-4b9c-ba58-38a9f25af2df"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Note3"",
+                    ""type"": ""Button"",
+                    ""id"": ""01504396-6ef9-4405-86ec-83c3d6cb5c66"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Note4"",
+                    ""type"": ""Button"",
+                    ""id"": ""1cc17a5c-c853-4cf8-9da6-f2beb5cbdaff"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""41db53ab-9d9c-43f7-9a46-f1e24c35a36c"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";ControllerScheme"",
+                    ""action"": ""Note1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d344e2c4-5b86-4c46-a145-83c810418954"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";KeyboardScheme"",
+                    ""action"": ""Note1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2ff8917c-4f95-4a32-be0e-bc8029c788f8"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";ControllerScheme"",
+                    ""action"": ""Note2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c48fcdaf-05b0-4869-8224-abe1e9747a00"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";KeyboardScheme"",
+                    ""action"": ""Note2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""20a5fd18-c6af-4480-b443-5b52effb070e"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";ControllerScheme"",
+                    ""action"": ""Note3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f36ee0f4-f1a8-4fd0-ad64-95a50c0a5a85"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";KeyboardScheme"",
+                    ""action"": ""Note3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a3f00752-78ff-4793-924c-c98030e33752"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";ControllerScheme"",
+                    ""action"": ""Note4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""beeb799f-08c9-45b6-aed9-9cf576f63e9b"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";KeyboardScheme"",
+                    ""action"": ""Note4"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1707,12 +1870,19 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Gameplay_DebugSpawnSoundwave = m_Gameplay.FindAction("DebugSpawnSoundwave", throwIfNotFound: true);
         m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
         m_Gameplay_Debug_NPC_Sing = m_Gameplay.FindAction("Debug_NPC_Sing", throwIfNotFound: true);
+        m_Gameplay_Interact = m_Gameplay.FindAction("Interact", throwIfNotFound: true);
         // Notebook
         m_Notebook = asset.FindActionMap("Notebook", throwIfNotFound: true);
         m_Notebook_PreviousPage = m_Notebook.FindAction("Previous Page", throwIfNotFound: true);
         m_Notebook_NextPage = m_Notebook.FindAction("Next Page", throwIfNotFound: true);
         m_Notebook_Back = m_Notebook.FindAction("Back", throwIfNotFound: true);
         m_Notebook_Pause = m_Notebook.FindAction("Pause", throwIfNotFound: true);
+        // Notes
+        m_Notes = asset.FindActionMap("Notes", throwIfNotFound: true);
+        m_Notes_Note1 = m_Notes.FindAction("Note1", throwIfNotFound: true);
+        m_Notes_Note2 = m_Notes.FindAction("Note2", throwIfNotFound: true);
+        m_Notes_Note3 = m_Notes.FindAction("Note3", throwIfNotFound: true);
+        m_Notes_Note4 = m_Notes.FindAction("Note4", throwIfNotFound: true);
         // PauseMenu
         m_PauseMenu = asset.FindActionMap("PauseMenu", throwIfNotFound: true);
         m_PauseMenu_Up = m_PauseMenu.FindAction("Up", throwIfNotFound: true);
@@ -1732,6 +1902,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_DebugAndTesting.enabled, "This will cause a leak and performance issues, PlayerInputs.DebugAndTesting.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Gameplay.enabled, "This will cause a leak and performance issues, PlayerInputs.Gameplay.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Notebook.enabled, "This will cause a leak and performance issues, PlayerInputs.Notebook.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Notes.enabled, "This will cause a leak and performance issues, PlayerInputs.Notes.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_PauseMenu.enabled, "This will cause a leak and performance issues, PlayerInputs.PauseMenu.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_RestrictedInput.enabled, "This will cause a leak and performance issues, PlayerInputs.RestrictedInput.Disable() has not been called.");
     }
@@ -2202,6 +2373,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_DebugSpawnSoundwave;
     private readonly InputAction m_Gameplay_Jump;
     private readonly InputAction m_Gameplay_Debug_NPC_Sing;
+    private readonly InputAction m_Gameplay_Interact;
     /// <summary>
     /// Provides access to input actions defined in input action map "Gameplay".
     /// </summary>
@@ -2270,6 +2442,10 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Debug_NPC_Sing => m_Wrapper.m_Gameplay_Debug_NPC_Sing;
         /// <summary>
+        /// Provides access to the underlying input action "Gameplay/Interact".
+        /// </summary>
+        public InputAction @Interact => m_Wrapper.m_Gameplay_Interact;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
@@ -2337,6 +2513,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Debug_NPC_Sing.started += instance.OnDebug_NPC_Sing;
             @Debug_NPC_Sing.performed += instance.OnDebug_NPC_Sing;
             @Debug_NPC_Sing.canceled += instance.OnDebug_NPC_Sing;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
         }
 
         /// <summary>
@@ -2390,6 +2569,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Debug_NPC_Sing.started -= instance.OnDebug_NPC_Sing;
             @Debug_NPC_Sing.performed -= instance.OnDebug_NPC_Sing;
             @Debug_NPC_Sing.canceled -= instance.OnDebug_NPC_Sing;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
         }
 
         /// <summary>
@@ -2552,6 +2734,135 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="NotebookActions" /> instance referencing this action map.
     /// </summary>
     public NotebookActions @Notebook => new NotebookActions(this);
+
+    // Notes
+    private readonly InputActionMap m_Notes;
+    private List<INotesActions> m_NotesActionsCallbackInterfaces = new List<INotesActions>();
+    private readonly InputAction m_Notes_Note1;
+    private readonly InputAction m_Notes_Note2;
+    private readonly InputAction m_Notes_Note3;
+    private readonly InputAction m_Notes_Note4;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Notes".
+    /// </summary>
+    public struct NotesActions
+    {
+        private @PlayerInputs m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public NotesActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Notes/Note1".
+        /// </summary>
+        public InputAction @Note1 => m_Wrapper.m_Notes_Note1;
+        /// <summary>
+        /// Provides access to the underlying input action "Notes/Note2".
+        /// </summary>
+        public InputAction @Note2 => m_Wrapper.m_Notes_Note2;
+        /// <summary>
+        /// Provides access to the underlying input action "Notes/Note3".
+        /// </summary>
+        public InputAction @Note3 => m_Wrapper.m_Notes_Note3;
+        /// <summary>
+        /// Provides access to the underlying input action "Notes/Note4".
+        /// </summary>
+        public InputAction @Note4 => m_Wrapper.m_Notes_Note4;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Notes; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="NotesActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(NotesActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="NotesActions" />
+        public void AddCallbacks(INotesActions instance)
+        {
+            if (instance == null || m_Wrapper.m_NotesActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_NotesActionsCallbackInterfaces.Add(instance);
+            @Note1.started += instance.OnNote1;
+            @Note1.performed += instance.OnNote1;
+            @Note1.canceled += instance.OnNote1;
+            @Note2.started += instance.OnNote2;
+            @Note2.performed += instance.OnNote2;
+            @Note2.canceled += instance.OnNote2;
+            @Note3.started += instance.OnNote3;
+            @Note3.performed += instance.OnNote3;
+            @Note3.canceled += instance.OnNote3;
+            @Note4.started += instance.OnNote4;
+            @Note4.performed += instance.OnNote4;
+            @Note4.canceled += instance.OnNote4;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="NotesActions" />
+        private void UnregisterCallbacks(INotesActions instance)
+        {
+            @Note1.started -= instance.OnNote1;
+            @Note1.performed -= instance.OnNote1;
+            @Note1.canceled -= instance.OnNote1;
+            @Note2.started -= instance.OnNote2;
+            @Note2.performed -= instance.OnNote2;
+            @Note2.canceled -= instance.OnNote2;
+            @Note3.started -= instance.OnNote3;
+            @Note3.performed -= instance.OnNote3;
+            @Note3.canceled -= instance.OnNote3;
+            @Note4.started -= instance.OnNote4;
+            @Note4.performed -= instance.OnNote4;
+            @Note4.canceled -= instance.OnNote4;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="NotesActions.UnregisterCallbacks(INotesActions)" />.
+        /// </summary>
+        /// <seealso cref="NotesActions.UnregisterCallbacks(INotesActions)" />
+        public void RemoveCallbacks(INotesActions instance)
+        {
+            if (m_Wrapper.m_NotesActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="NotesActions.AddCallbacks(INotesActions)" />
+        /// <seealso cref="NotesActions.RemoveCallbacks(INotesActions)" />
+        /// <seealso cref="NotesActions.UnregisterCallbacks(INotesActions)" />
+        public void SetCallbacks(INotesActions instance)
+        {
+            foreach (var item in m_Wrapper.m_NotesActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_NotesActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="NotesActions" /> instance referencing this action map.
+    /// </summary>
+    public NotesActions @Notes => new NotesActions(this);
 
     // PauseMenu
     private readonly InputActionMap m_PauseMenu;
@@ -3079,6 +3390,13 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDebug_NPC_Sing(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInteract(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Notebook" which allows adding and removing callbacks.
@@ -3115,6 +3433,42 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPause(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Notes" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="NotesActions.AddCallbacks(INotesActions)" />
+    /// <seealso cref="NotesActions.RemoveCallbacks(INotesActions)" />
+    public interface INotesActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Note1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNote1(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Note2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNote2(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Note3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNote3(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Note4" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNote4(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PauseMenu" which allows adding and removing callbacks.

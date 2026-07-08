@@ -10,10 +10,10 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "TotalWordList", menuName = "ScriptableObjects/Total Word List", order = 2)]
 public class TotalWordList : ScriptableObject
 {
-    [SerializeField] private List<Word> wordList = new List<Word>();
+    public List<Word> wordList = new List<Word>();
 
     [ListToGroup("category")]
-    [SerializeField] private List<CategoryGroup> categories = new List<CategoryGroup>();
+    public List<CategoryGroup> categories = new List<CategoryGroup>();
 
     // Public getters to access data without exposing raw lists to accidental inspector modifications
     public IReadOnlyList<Word> TotalWords => wordList;

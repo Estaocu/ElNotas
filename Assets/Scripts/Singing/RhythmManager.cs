@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using System.Collections;
-using UnityEngine.InputSystem.iOS;
 using UnityEngine.UI;
 
 public class RhythmManager : MonoBehaviour

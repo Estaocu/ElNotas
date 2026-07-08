@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using ElNotas.Input.Glyphs;
-using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

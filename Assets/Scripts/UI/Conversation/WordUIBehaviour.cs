@@ -17,6 +17,17 @@ public class WordUIBehaviour : MonoBehaviour
     // public bool isSelected; REDUNDANTE, SI ES SLOT 3 (o 2 segun como cuentes) ESTÁ SELECTED SIEMPRE
     public int currentSlot;
     public Word word;
+    [SerializeField] private float rotationTime;
+    [SerializeField] private AnimationCurve curve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+    private RectTransform rectTransform;
+    public float startAngle;
+    public float endAngle;
+
+    private void Awake()
+    {
+        rectTransform = GetComponent<RectTransform>();
+    }
+
 
     void Start()
     {
@@ -44,17 +55,65 @@ public class WordUIBehaviour : MonoBehaviour
         bgMelody.GetComponent<Image>().enabled = true;
         melodyString.enabled = true;
     }
-    public void Rotate30(int dpadValue = 0)
+    public void RotateSlot(int dpadValue)
+    {
+        if (dpadValue == 0) return;
+        //Rotation time debe ser igual? independ. de qué operación se va a hacer, mismo tiempo con  30º que 360º
+        //SetEndAngle(false, dpadValue, slotAmount);
+
+        if (dpadValue == -1)
+        {
+            gameObject.transform.Rotate(0f, 0f, -30f);
+            Debug.Log("Rotated parriba");
+        }
+        else gameObject.transform.Rotate(0f, 0f, 30f);
+        Debug.Log("Rotated pabajo");
+
+        OnWheelRotated(dpadValue);
+    }
+
+    private IEnumerator RotateSlotRoutine()
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < rotationTime)
+        {
+            elapsedTime += Time.deltaTime;
+
+            float linearT = Mathf.Clamp01(elapsedTime / rotationTime);
+
+            float curveT = curve.Evaluate(linearT);
+
+            float currentAngle = Mathf.Lerp(startAngle, endAngle, curveT);
+
+            rectTransform.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
+
+            yield return null;
+        }
+
+        rectTransform.localRotation = Quaternion.Euler(0f, 0f, endAngle);
+    }
+
+    public void SetEndAngle(bool regularRotation, int slotAmount, int dpadValue = 0)
     {
         if (dpadValue == 0) return;
 
-        if (dpadValue < 0) gameObject.transform.Rotate(0f, 0f, 30f);
-        else gameObject.transform.Rotate(0f, 0f, -30f);
+        startAngle = rectTransform.localRotation.z;
+
+        if (regularRotation)
+        {
+            endAngle = 1;
+
+
+        }
+        else
+
+        endAngle = startAngle + (360-(slotAmount*30)*dpadValue);
     }
 
     public void OnWheelRotated(int dpadValue)
     {
-        currentSlot = (currentSlot + dpadValue);
+        currentSlot = currentSlot - dpadValue;
         UpdateVisuals(dpadValue);
         //TeleportExtremes();
     }
@@ -69,37 +128,29 @@ public class WordUIBehaviour : MonoBehaviour
             bgWord.color = Color.black;
             //bgWord.enabled = false;
             //wordText.enabled = false;
+            ToggleVisibility(false);
+            TeleportExtremes();
             HideMelody();    
             DisplayNewWord();
 
             break;
 
-            case 1: 
-            case 3:  
-            bgWord.enabled = true;
-            wordText.enabled = true;
+            case 1:
+            case 3:
+            ToggleVisibility(true);
             bgWord.color = Color.blue;
-            HideMelody();     
+            HideMelody();
             break;
 
             case 2:
             bgWord.color = Color.cyan;
-            ShowMelody(); 
-            break;
-
-            case 5:
-            gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 75f);
-            currentSlot = 0;
-            break;
-
-            case -1:
-            gameObject.transform.rotation = Quaternion.Euler(0f, 0f, -45f);
-            currentSlot = 4;
+            ShowMelody();
             break;
 
             default:
             Debug.Log("Default in Switch!");
             break;
+
         }
     }
 
@@ -120,6 +171,20 @@ public class WordUIBehaviour : MonoBehaviour
     {
         SetWordText(word.displayName);
         string melodyText = string.Concat(word.melody.Select(n => ((int)n + 1).ToString()));
-        melodyString.SetText(melodyText);
+        //melodyString.SetText(melodyText);
+        melodyString.SetText(currentSlot.ToString());
+    }
+
+    public void ToggleVisibility(bool isVisible)
+    {
+        // Desactiva o activa el componente visual sin afectar al GameObject
+        if (wordText != null)
+        {
+            wordText.enabled = isVisible;
+        }
+        if (bgWord != null)
+        {
+            bgWord.enabled = isVisible;
+        }
     }
 }

@@ -10,4 +10,4 @@ public class Word : ScriptableObject
     public notesEnum[] melody; //Sequence of 4 notes, the sung pronunciation of the word
 }
 
-public enum WordCategory {Place, Music, Creatures, Other}
+public enum WordCategory {Places, Music, Creatures, Other}

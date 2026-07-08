@@ -9,6 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 802775aefc3fb4844a53b6128fb2e8bf, type: 3}
+  m_Script: {fileID: 11500000, guid: fe27b5d3316f7274187a27ab78ba3ece, type: 3}
   m_Name: LearnedWords
   m_EditorClassIdentifier: 
+  totalWords: {fileID: 11400000, guid: 046c6d1eba450d34bab3183254887468, type: 2}
+  learnedWordList:
+  - {fileID: 11400000, guid: 0b78cb2b24b1fbb4aa038061c428a697, type: 2}
+  - {fileID: 11400000, guid: 7989c33f793146f468ec39d4d62ac215, type: 2}
+  learnedCategories:
+  - category: 2
+    words:
+    - {fileID: 11400000, guid: 0b78cb2b24b1fbb4aa038061c428a697, type: 2}
+    - {fileID: 11400000, guid: 7989c33f793146f468ec39d4d62ac215, type: 2}

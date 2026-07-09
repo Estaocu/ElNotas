@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5bdf935fabad224d810452ccdab4631, type: 3}
+  m_Name: GlyphRegistry
+  m_EditorClassIdentifier: 
+  keyboardMouse: {fileID: 11400000, guid: 57d0acdec55d9c54d89153aeabf30a5d, type: 2}
+  xbox: {fileID: 11400000, guid: 7ba56f51002ad904fa427996a6bc433f, type: 2}
+  playStation: {fileID: 11400000, guid: 1a6cccfa74b464942b42a9f8d619f7cb, type: 2}
+  nintendoSwitch: {fileID: 11400000, guid: b5691eafc84c4fe46a1bd6ce04a5116d, type: 2}
+  genericGamepad: {fileID: 11400000, guid: 80bcac0bc34d11e4baaff4e59dd01241, type: 2}

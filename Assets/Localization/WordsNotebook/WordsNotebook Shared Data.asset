@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: WordsNotebook Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: WordsNotebook
+  m_TableCollectionNameGuidString: 22b0c81510a55ee45943f7b0986d396a
+  m_Entries:
+  - m_Id: 2123833442304
+    m_Key: Altar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2377639165952
+    m_Key: Danger
+    m_Metadata:
+      m_Items: []
+  - m_Id: 382225163386880
+    m_Key: Enemy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21711192064
+    m_Key: Forest
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2260198653952
+    m_Key: Friend
+    m_Metadata:
+      m_Items: []
+  - m_Id: 382225209524224
+    m_Key: Help
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2215403487232
+    m_Key: Instrument
+    m_Metadata:
+      m_Items: []
+  - m_Id: 382225209524225
+    m_Key: Island
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2335155060736
+    m_Key: Location
+    m_Metadata:
+      m_Items: []
+  - m_Id: 628312408064
+    m_Key: Machine
+    m_Metadata:
+      m_Items: []
+  - m_Id: 382225213718528
+    m_Key: Me
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2155240390656
+    m_Key: Music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 382225213718529
+    m_Key: Plant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 382225213718530
+    m_Key: Secret
+    m_Metadata:
+      m_Items: []
+  - m_Id: 382225213718531
+    m_Key: Town
+    m_Metadata:
+      m_Items: []
+  - m_Id: 382225213718532
+    m_Key: You
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2895144816115712
+    m_Key: category_Places
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2895144862253056
+    m_Key: category_Music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2895144862253057
+    m_Key: category_Creatures
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2895144862253058
+    m_Key: category_Other
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 696593428078657538
+  references:
+    version: 2
+    RefIds:
+    - rid: 696593428078657538
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables,
+        asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1780321808234

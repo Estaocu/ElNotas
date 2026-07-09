@@ -1,9 +1,12 @@
 using UnityEngine;
 using UnityEngine.AI;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 public class NavMeshExporter : MonoBehaviour
 {
+#if UNITY_EDITOR
     [MenuItem("Tools/Export NavMesh to Mesh")]
     public static void ExportNavMesh()
     {
@@ -21,4 +24,5 @@ public class NavMeshExporter : MonoBehaviour
 
         Debug.Log("NavMesh exported to Assets/ExportedNavMesh.asset");
     }
+#endif
 }

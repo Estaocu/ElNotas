@@ -350,6 +350,61 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!1 &4075333305062323964
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6701108159583870306}
+  - component: {fileID: 3909866502027320316}
+  m_Layer: 15
+  m_Name: AbyssRayCast
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6701108159583870306
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4075333305062323964}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3612988293975310467}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3909866502027320316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4075333305062323964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa8f45af1549e364bb8ba078dae2c3b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ray1Start: {x: 0, y: 0.17, z: 0.5}
+  ray2Start: {x: 0, y: 0.17, z: 1}
+  rayLength: 2
+  minJumpSpeed: 4
+  mover: {fileID: 7994079705188547349}
+  walker: {fileID: 2028947995848929648}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 1
+  jumpApexHeight: 2
+  jumpForwardDistance: 4
 --- !u!1 &5014814239531084424
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,6 +437,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7417945812654771549}
+  - {fileID: 6701108159583870306}
+  - {fileID: 2312951697906200}
   m_Father: {fileID: 3006524449391289388}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &288482798428621297
@@ -663,6 +720,66 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d001133317f5746a00deb14f9a2339, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &6926651429260043629
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2312951697906200}
+  - component: {fileID: 7769595068345590230}
+  m_Layer: 0
+  m_Name: ClimbingRaycast
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2312951697906200
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6926651429260043629}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.99, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3612988293975310467}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7769595068345590230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6926651429260043629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d21be715ebede124b98eaa45e8f76e5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eyeRayStart: {x: 0, y: -0.03, z: 0.31}
+  eyeRayLength: 0.31
+  upRayForwardOffset: 0.32
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 1
+  standOffset: 0
+  walker: {fileID: 2028947995848929648}
+  mover: {fileID: 7994079705188547349}
+  lowClimbThreshold: 1.1
+  midClimbThreshold: 2.1
+  highClimbThreshold: 3.1
+  moveAction: {fileID: -5475275977055151916, guid: 56c211aa1fdd20b43b909e36b9bafac1,
+    type: 3}
+  durationToCheck: 0.3
+  climbHeight: 0
 --- !u!1 &7146024218861173856
 GameObject:
   m_ObjectHideFlags: 0
@@ -682,7 +799,7 @@ GameObject:
   - component: {fileID: 2754525846742868463}
   - component: {fileID: 2902904493212257918}
   - component: {fileID: 8795301043739215124}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ThirdPersonWalker_B
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1068,6 +1185,134 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 6dfb978c-c637-4c91-a636-c974427f992e
     m_ActionName: Gameplay/Debug_NPC_Sing[/Keyboard/backquote,/XInputControllerWindows/leftStickPress]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: DictionaryUIManager, Assembly-CSharp
+        m_MethodName: SelectWord
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: f5e96cd2-c692-45b7-ad57-33b6e4b7b39e
+    m_ActionName: Conversation/AcceptWord[/XInputControllerWindows/rightTrigger]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: DictionaryUIManager, Assembly-CSharp
+        m_MethodName: EraseWord
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 2a4abf00-6556-4d16-8f84-d44a40f50122
+    m_ActionName: Conversation/EraseWord[/XInputControllerWindows/leftTrigger]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1fbb581a-68d3-4754-b32b-331f9a90e9cd
+    m_ActionName: Conversation/Note1[/XInputControllerWindows/buttonSouth,/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4a1302b2-636c-4c8a-ade0-5ae55c81698d
+    m_ActionName: Conversation/Note2[/XInputControllerWindows/buttonEast,/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 32d9cfb3-2386-4b8f-b020-62138b814e87
+    m_ActionName: Conversation/Note3[/XInputControllerWindows/buttonWest,/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 759e1872-6ecb-42d3-be5f-2872937f0c4e
+    m_ActionName: Conversation/Note4[/XInputControllerWindows/buttonNorth,/Keyboard/c]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: DialogueManager, Assembly-CSharp
+        m_MethodName: ExitDialogue
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 8822781f-974e-4660-bcd0-46055adc8e29
+    m_ActionName: Conversation/Exit[/XInputControllerWindows/select,/Keyboard/tab]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: DictionaryUIManager, Assembly-CSharp
+        m_MethodName: NavigateWords
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: fc82d8b7-b1a2-4eae-bde6-250b06e33d55
+    m_ActionName: Conversation/NavigateWords[/XInputControllerWindows/dpad/up,/XInputControllerWindows/dpad/down,/XInputControllerWindows/leftStick/up,/XInputControllerWindows/leftStick/down,/Keyboard/w,/Keyboard/s]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: DictionaryUIManager, Assembly-CSharp
+        m_MethodName: NavigateCategory
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 2b2cf35f-378b-42fa-9672-7e17317ef00c
+    m_ActionName: Conversation/NavigateCategory[/XInputControllerWindows/leftShoulder,/XInputControllerWindows/rightShoulder]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 13945612-8bdf-4f58-8fde-4abdcf278656
+    m_ActionName: Notes/Note1[/XInputControllerWindows/buttonSouth,/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cac7d384-ce24-4b9c-ba58-38a9f25af2df
+    m_ActionName: Notes/Note2[/XInputControllerWindows/buttonEast,/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 01504396-6ef9-4405-86ec-83c3d6cb5c66
+    m_ActionName: Notes/Note3[/XInputControllerWindows/buttonWest,/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1cc17a5c-c853-4cf8-9da6-f2beb5cbdaff
+    m_ActionName: Notes/Note4[/XInputControllerWindows/buttonNorth,/Keyboard/c]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: DialogueManager, Assembly-CSharp
+        m_MethodName: EnterDialogue
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: b1457f1b-91f2-4fbb-a191-72ed66a66172
+    m_ActionName: Gameplay/Interact[/Keyboard/e,/XInputControllerWindows/buttonEast]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Gameplay

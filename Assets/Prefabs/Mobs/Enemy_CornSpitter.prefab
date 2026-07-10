@@ -463,6 +463,11 @@ MonoBehaviour:
   cornSpawnpoint: {fileID: 6241696902868849724}
   cornTrigger: {fileID: 8358866438339391095}
   playerTrigger: {fileID: 8264966049224216375}
+  raycastStartPoint: {fileID: 8013018246867252038}
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 65463
+  confirmationDuration: 1.5
   melodyToCopy: 0000000000000000
 --- !u!1 &6197459673897144269
 GameObject:

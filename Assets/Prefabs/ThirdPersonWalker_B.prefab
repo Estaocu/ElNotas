@@ -394,8 +394,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8f45af1549e364bb8ba078dae2c3b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ray1Start: {x: 0, y: 0.17, z: 0.5}
-  ray2Start: {x: 0, y: 0.17, z: 1}
+  ray1Start: {x: 0, y: 0.17, z: 0.38}
+  ray2Start: {x: 0, y: 0.17, z: 0.88}
   rayLength: 2
   minJumpSpeed: 4
   mover: {fileID: 7994079705188547349}
@@ -405,6 +405,38 @@ MonoBehaviour:
     m_Bits: 1
   jumpApexHeight: 2
   jumpForwardDistance: 4
+  climbingCast: {fileID: 7769595068345590230}
+--- !u!1 &4733068400481685590
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5223356599605855382}
+  m_Layer: 6
+  m_Name: TargetForCorn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5223356599605855382
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4733068400481685590}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.514, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3006524449391289388}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5014814239531084424
 GameObject:
   m_ObjectHideFlags: 0
@@ -779,6 +811,7 @@ MonoBehaviour:
   moveAction: {fileID: -5475275977055151916, guid: 56c211aa1fdd20b43b909e36b9bafac1,
     type: 3}
   durationToCheck: 0.3
+  abyssCast: {fileID: 3909866502027320316}
   climbHeight: 0
 --- !u!1 &7146024218861173856
 GameObject:
@@ -799,6 +832,7 @@ GameObject:
   - component: {fileID: 2754525846742868463}
   - component: {fileID: 2902904493212257918}
   - component: {fileID: 8795301043739215124}
+  - component: {fileID: 7755476730974396988}
   m_Layer: 6
   m_Name: ThirdPersonWalker_B
   m_TagString: Player
@@ -824,6 +858,7 @@ Transform:
   - {fileID: 320628767219898693}
   - {fileID: 4367752044322134640}
   - {fileID: 8383740447778231177}
+  - {fileID: 5223356599605855382}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!136 &851522681646524344
@@ -1335,6 +1370,19 @@ MonoBehaviour:
   stunTime: 2
   immunityTime: 2
   meterText: {fileID: 0}
+--- !u!114 &7755476730974396988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7146024218861173856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf6d0ae58f36de74f92686f1684623a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aimTransform: {fileID: 5223356599605855382}
 --- !u!1 &7835414320846562555
 GameObject:
   m_ObjectHideFlags: 0

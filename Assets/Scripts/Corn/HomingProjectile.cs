@@ -4,7 +4,6 @@ using UnityEngine;
 public enum Mode { Forward, Homing }
 public enum SenderType { Player, Enemy}
 
-
 public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolable
 {
     private Rigidbody rb;
@@ -18,11 +17,11 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
     
     public GameObject sender;
     public GameObject Sender => sender;
-    public GameObject Enemy => enemy;
+    public GameObject Enemy => enemy; 
     public bool mobIsOgSender = false;
     
     private GameObject _target; 
-    private Transform _targetAnchor; // Este es el que manda ahora
+    private Transform _targetAnchor;
     private Transform spawnPoint;
 
     public bool movingForward = false;
@@ -47,14 +46,19 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
 
     void OnEnable()
     {
-        spawnPoint = gameObject.transform;
-        transform.position = spawnPoint.position;
-        transform.rotation = spawnPoint.rotation;
     }
 
     public void OnSpawn()
     {
-        ResetRBVelocity();
+        transform.rotation = Quaternion.identity;
+
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero; 
+            rb.ResetInertiaTensor(); 
+        }
+
         player = null;
         enemy = null;
         sender = null;
@@ -67,6 +71,7 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
         mobIsOgSender = false;
         latestNoteTransform = null;
         moveDirection = Vector3.zero;
+
         if (_suicideCoroutine != null)
         {
             StopCoroutine(_suicideCoroutine);
@@ -127,7 +132,6 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
             }
             else
             {
-                // Si el objetivo no tiene el script, avisamos para depurar
                 Debug.LogWarning($"El objetivo {_target.name} no tiene TargetForCorn. Usando root.");
                 _targetAnchor = _target.transform;
             }
@@ -167,31 +171,23 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
     public void Launch(GameObject whoSends)
     {
         launchesNumber++;
+        
         if (whoSends.layer == 6) // Player
         {
-            if (launchesNumber == 1)
-            {
-                player = whoSends;
-                enemy = GetBestTargetByScreenCenter();
-                if (enemy != null)
-                {
-                    var ai = enemy.GetComponent<CornSpitterAI>();
-                    if (ai != null) ai.RegisterIncomingCorn(this);
-                }
-            }
-            SetTarget(enemy);
+            SetTarget(enemy); 
             SetMovementMode(Mode.Homing, whoSends);
         }
         else if (whoSends.layer == 14) // Enemy
         {
-            if (launchesNumber == 1)
-            {
-                enemy = whoSends;
-            }
+            sender = whoSends;
             SetTarget(player);
             SetMovementMode(Mode.Homing, whoSends);
+            
             var enemyAI = enemy != null ? enemy.GetComponent<CornSpitterAI>() : null;
-            if (enemyAI != null) enemyAI.currentHp--;
+            if (enemyAI != null && launchesNumber > 0 && !mobIsOgSender) 
+            {
+                 enemyAI.currentHp--;
+            }
         }
     }
 
@@ -216,6 +212,8 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
 
     public void Explode()
     {
+        if (!gameObject.activeSelf) return; 
+
         if (explosionPrefab != null) Instantiate(explosionPrefab, transform.position, Quaternion.identity);
 
         if (enemy != null)
@@ -228,12 +226,12 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
             }
         }
 
+        CancelSuicide(); 
         CancelInvoke();
+        
         if (TryGetComponent(out PoolMember member)) member.ReturnToPool();
         gameObject.SetActive(false);
     }
-
-    
 
     private GameObject GetBestTargetByScreenCenter()
     {
@@ -274,12 +272,8 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
 
     private IEnumerator SuicideRoutine()
     {
-        Debug.Log("Suicide timer started");
         yield return new WaitForSeconds(lifeTime);
-        Debug.Log("Suicide timer ended. Exploding.");
         Explode();
-        
-        
     }
 
     public void StartSuicideTimer()
@@ -287,14 +281,13 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
         if (_suicideCoroutine != null) StopCoroutine(_suicideCoroutine);
         _suicideCoroutine = StartCoroutine(SuicideRoutine());
     }
+
     public void CancelSuicide()
     {
         if (_suicideCoroutine != null)
         {
-            StopCoroutine(SuicideRoutine());
+            StopCoroutine(_suicideCoroutine); 
             _suicideCoroutine = null;
-            Debug.Log("Suicide timer canceled");
         }
     }
-
 }

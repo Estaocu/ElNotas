@@ -39,6 +39,8 @@ public class ClimbingRaycast : MonoBehaviour
     private bool inputFailed = false;
     private Vector3 targetClimbPoint = Vector3.zero;
 
+    [SerializeField] private AbyssRaycast abyssCast;
+
     public enum ClimbTier { Low, Mid, High, TooHigh }
 
     // Distance from the up ray spawn (ground level) to its hit point, i.e. the height of the current climb;
@@ -95,7 +97,6 @@ public class ClimbingRaycast : MonoBehaviour
 
         if (upHitSomething)
         {
-            // Fixed typo: was drawing sphere at old unassigned upHit out of context
             Gizmos.DrawSphere(upHit.point, 0.05f);
         }
     }
@@ -161,7 +162,6 @@ public class ClimbingRaycast : MonoBehaviour
         }
     }
 
-    // Classify a climb height into a tier based on the thresholds (used later to pick the climb animation);
     ClimbTier GetClimbTier(float height)
     {
         if (height <= lowClimbThreshold) return ClimbTier.Low;
@@ -170,12 +170,10 @@ public class ClimbingRaycast : MonoBehaviour
         return ClimbTier.TooHigh;
     }
 
-    // Teleport the player body to a point, killing momentum so CMF doesn't fling it afterwards;
     void TeleportPlayer(Vector3 point)
     {
         Vector3 target = point + Vector3.up * standOffset;
 
-        // Resolve the body to move: prefer the assigned walker, else the parent, else this object;
         Transform body = walker != null ? walker.transform
                        : transform.parent != null ? transform.parent
                        : transform;
@@ -184,7 +182,6 @@ public class ClimbingRaycast : MonoBehaviour
 
         body.position = target;
 
-        // Keep the Rigidbody in sync so interpolation doesn't drag the visual across the map;
         Rigidbody rb = body.GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -207,11 +204,7 @@ public class ClimbingRaycast : MonoBehaviour
 
     private void UpdateInputCheck()
     {
-        // Vector2 reads both Keyboard (WASD) and Gamepad (Left Stick)
         Vector2 moveInput = moveAction.action.ReadValue<Vector2>();
-
-        // Check if the Y axis is positive (W key or pushing the stick upward)
-        // A small deadzone (0.5f) ensures the stick is intentionally pushed forward
         bool isForwardActive = moveInput.y > 0.5f;
 
         if (!isForwardActive)
@@ -230,5 +223,16 @@ public class ClimbingRaycast : MonoBehaviour
             Debug.Log("Success: Forward input was held continuously for " + durationToCheck + " seconds.");
             TeleportPlayer(targetClimbPoint);
         }
+    }
+
+    public bool IsEyeRayHitting()
+    {
+        if (transform.parent == null) return false;
+
+        Vector3 worldEyeRayStart = transform.parent.TransformPoint(eyeRayStart);
+        Vector3 forward = transform.parent.forward;
+
+        // Realiza el mismo raycast para devolver el estado actual
+        return Physics.Raycast(worldEyeRayStart, forward, eyeRayLength, groundMask, QueryTriggerInteraction.Ignore);
     }
 }

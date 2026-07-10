@@ -19,6 +19,9 @@ public class AbyssRaycast : MonoBehaviour
     public float jumpApexHeight = 2f;
     public float jumpForwardDistance = 4f;
 
+    [Header("Climbing Reference")]
+    [SerializeField] private ClimbingRaycast climbingCast;
+
     void OnEnable()
     {
         if (Application.isPlaying && walker != null)
@@ -31,7 +34,6 @@ public class AbyssRaycast : MonoBehaviour
             walker.OnLand -= HandleLand;
     }
 
-    // Re-arm the auto-jump once the controller regains ground contact;
     void HandleLand(Vector3 collisionVelocity)
     {
         canJump = true;
@@ -89,31 +91,41 @@ public class AbyssRaycast : MonoBehaviour
 
         bool bothRaysDetectAbyss = !ray1DetectsGround && !ray2DetectsGround;
 
+        // Comprobamos si el climbing raycast está chocando con una pared
+        bool isClimbingObjectDetected = climbingCast != null && climbingCast.IsEyeRayHitting();
+
+        // Si ambos detectan abismo, el mover está en el suelo y podemos saltar...
         if (bothRaysDetectAbyss && mover.IsGrounded() && canJump)
+        {
+            // ...pero si el eyeray está detectando algo, se sobreescribe la orden y no salta
+            if (isClimbingObjectDetected)
             {
-                float currentSpeed = walker.GetVelocity().magnitude;
-                if (currentSpeed >= minJumpSpeed)
-                {
-                    LaunchParabolicJump();
-                    canJump = false;
-                }
-                else
-                {
-                    Debug.Log("Fall and grab ledge");
-                    canJump = false;
-                }
+                return;
             }
+
+            float currentSpeed = walker.GetVelocity().magnitude;
+            if (currentSpeed >= minJumpSpeed)
+            {
+                LaunchParabolicJump();
+                canJump = false;
+            }
+            else
+            {
+                Debug.Log("Fall and grab ledge");
+                canJump = false;
+            }
+        }
     }
 
     void LaunchParabolicJump()
-{
-    float g = walker.gravity;                       // usa la misma gravedad del controlador
-    float vUp = Mathf.Sqrt(2f * g * jumpApexHeight);
-    float airTime = 2f * vUp / g;
-    float vForward = jumpForwardDistance / airTime;
+    {
+        float g = walker.gravity;
+        float vUp = Mathf.Sqrt(2f * g * jumpApexHeight);
+        float airTime = 2f * vUp / g;
+        float vForward = jumpForwardDistance / airTime;
 
-    Transform body = transform.parent;              // el PLAYER
-    Vector3 launch = body.up * vUp + body.forward * vForward;
-    walker.SetMomentum(launch);
-}
+        Transform body = transform.parent;
+        Vector3 launch = body.up * vUp + body.forward * vForward;
+        walker.SetMomentum(launch);
+    }
 }

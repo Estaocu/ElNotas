@@ -665,15 +665,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Jump",
-                    "type": "Button",
-                    "id": "897b77e5-14ae-4255-ba35-de7c8f8b9dfb",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Debug_NPC_Sing",
                     "type": "Button",
                     "id": "6dfb978c-c637-4c91-a636-c974427f992e",
@@ -1031,28 +1022,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "DebugSpawnSoundwave",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "62d69ecf-c148-4237-92b6-e6d6eb49a21f",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "f17fe385-17d1-4f87-9baf-ca14539442ed",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

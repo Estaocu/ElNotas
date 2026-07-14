@@ -5,198 +5,153 @@ using UnityEngine.InputSystem;
 
 namespace CMF
 {
-	//This script is a slightly more specialized version of the regular 'CameraController' script, intended for games using a third-person camera.
-	//By enabling 'turnCameraTowardMovementDirection', the camera will gradually rotate toward the current movement direction of the gameobject it is attached to;
-	//The rate and speed of this rotation can be controlled using 'maximumMovementSpeed' and 'cameraTurnSpeed';
-	public class ThirdPersonCameraController : CameraController {
+    // This script is a slightly more specialized version of the regular 'CameraController' script, intended for games using a third-person camera.
+    // By enabling 'turnCameraTowardMovementDirection', the camera will gradually rotate toward the current movement direction of the gameobject it is attached to.
+    public class ThirdPersonCameraController : CameraController {
 
-		//Whether or not the camera turns towards the controller's movement direction;
-		public bool turnCameraTowardMovementDirection = true;
+        public bool turnCameraTowardMovementDirection = true;
+        public Controller controller;
+        public float maximumMovementSpeed = 7f;
+        public float cameraTurnSpeed = 120f;
 
-		public Controller controller;
+        [Header("Camera Sensitivity")]
+        [Range(0f, 1f)]
+        public float mouseHorizontalSensitivity = 1f;
+        [Range(0f, 1f)]
+        public float mouseVerticalSensitivity = 1f;
+        [Range(0.1f, 5f)]
+        public float gamepadHorizontalSensitivity = 1f;
+        [Range(0.1f, 5f)]
+        public float gamepadVerticalSensitivity = 1f;
 
-		//The maximum expected movement speed of this game object;
-		//This value should be set to the maximum movement speed achievable by this gameobject;
-		//The closer the current movement speed is to 'maximumMovementSpeed', the faster the camera will turn;
-		//As a result, if the gameobject moves slower (i.e. "walking" instead of "running", in case of a character), the camera will turn slower as well.
-		public float maximumMovementSpeed = 7f;
+        [Header("Mouse Smoothing (AAA Style)")]
+        public bool useMouseSmoothing = true;
+        [Range(0.01f, 0.3f)]
+        public float mouseSmoothTime = 0.05f; // Lower values are more responsive, higher values add more weight/inertia
 
-		//The general rate at which the camera turns toward the movement direction;
-		public float cameraTurnSpeed = 120f;
+        private UnifiedCameraInput unifiedCameraInput;
+        private PlayerInputs playerInputs;
+        private bool isGamepadActive = false;
 
-		[Header("Camera Sensitivity")]
-		[Range(0.1f, 5f)]
-		public float mouseHorizontalSensitivity = 1f;
+        // Physics-based smoothing variables
+        private float horizontalInputVelocity;
+        private float verticalInputVelocity;
+        private float smoothedHorizontalInput;
+        private float smoothedVerticalInput;
 
-		[Range(0.1f, 5f)]
-		public float mouseVerticalSensitivity = 1f;
+        protected override void Setup()
+        {
+            if(controller == null)
+                Debug.LogWarning("No controller reference has been assigned to this script.", this.gameObject);
 
-		[Range(0.1f, 5f)]
-		public float gamepadHorizontalSensitivity = 1f;
+            CameraInput oldCameraInput = GetComponent<CameraInput>();
+            if(oldCameraInput != null && !(oldCameraInput is UnifiedCameraInput))
+            {
+                DestroyImmediate(oldCameraInput);
+                unifiedCameraInput = gameObject.AddComponent<UnifiedCameraInput>();
+            }
+            else if(oldCameraInput is UnifiedCameraInput)
+            {
+                unifiedCameraInput = (UnifiedCameraInput)oldCameraInput;
+            }
 
-		[Range(0.1f, 5f)]
-		public float gamepadVerticalSensitivity = 1f;
+            if(unifiedCameraInput != null)
+            {
+                playerInputs = unifiedCameraInput.PlayerInputsInstance;
+            }
 
-		private UnifiedCameraInput unifiedCameraInput;
-		private PlayerInputs playerInputs;
-		private bool isGamepadActive = false;
-		private InputDevice lastInputDevice = null;
+            // Listen to all input events globally to detect device changes instantly
+            InputSystem.onEvent += OnInputEvent;
+        }
 
-		protected override void Setup()
-		{
-			if(controller == null)
-				Debug.LogWarning("No controller reference has been assigned to this script.", this.gameObject);
+        private void OnDestroy()
+        {
+            InputSystem.onEvent -= OnInputEvent;
+        }
 
-			//Hide and lock cursor on game start
-			//Cursor.visible = false;
-			//Cursor.lockState = CursorLockMode.Locked;
+        private void OnInputEvent(UnityEngine.InputSystem.LowLevel.InputEventPtr eventPtr, InputDevice device)
+        {
+            if (device is Keyboard || device is Mouse)
+            {
+                isGamepadActive = false;
+            }
+            else if (device is Gamepad)
+            {
+                isGamepadActive = true;
+            }
+        }
 
-			//Check if old CameraMouseInput or CameraJoystickInput exists and replace with UnifiedCameraInput
-			CameraInput oldCameraInput = GetComponent<CameraInput>();
-			if(oldCameraInput != null && !(oldCameraInput is UnifiedCameraInput))
-			{
-				Debug.Log("Replacing legacy camera input (" + oldCameraInput.GetType().Name + ") with UnifiedCameraInput.");
-				//Remove old input handler
-				DestroyImmediate(oldCameraInput);
-				//Add new unified input handler
-				unifiedCameraInput = gameObject.AddComponent<UnifiedCameraInput>();
-			}
-			else if(oldCameraInput is UnifiedCameraInput)
-			{
-				unifiedCameraInput = (UnifiedCameraInput)oldCameraInput;
-			}
+        protected override void HandleCameraRotation ()
+        {
+            if(cameraInput == null)
+                return;
 
-			if(unifiedCameraInput != null)
-			{
-				playerInputs = unifiedCameraInput.PlayerInputsInstance;
+            float inputHorizontal = cameraInput.GetHorizontalCameraInput();
+            float inputVertical = cameraInput.GetVerticalCameraInput();
 
-				//Subscribe to RotateCamera action to detect which device is providing input
-				playerInputs.Gameplay.RotateCamera.performed += OnRotateCameraInput;
-				playerInputs.Gameplay.RotateCamera.canceled += OnRotateCameraInput;
-			}
-			else
-			{
-				Debug.LogWarning("Could not set up UnifiedCameraInput component. Device detection will not work properly.", this.gameObject);
-			}
+            float horizontalSensitivity = isGamepadActive ? gamepadHorizontalSensitivity : mouseHorizontalSensitivity;
+            float verticalSensitivity = isGamepadActive ? gamepadVerticalSensitivity : mouseVerticalSensitivity;
 
-			//Subscribe to device change events
-			InputSystem.onDeviceChange += OnDeviceChange;
+            inputHorizontal *= horizontalSensitivity;
+            inputVertical *= verticalSensitivity;
 
-			//Initial device state check
-			UpdateInputDeviceState();
-		}
+            if (!isGamepadActive)
+            {
+                // Cancel base Time.deltaTime multiplication for mouse input
+                if (Time.deltaTime > 0f)
+                {
+                    inputHorizontal /= Time.deltaTime;
+                    inputVertical /= Time.deltaTime;
+                }
 
-		private void OnDestroy()
-		{
-			//Unsubscribe from events
-			if(playerInputs != null)
-			{
-				playerInputs.Gameplay.RotateCamera.performed -= OnRotateCameraInput;
-				playerInputs.Gameplay.RotateCamera.canceled -= OnRotateCameraInput;
-			}
+                // Smooth mouse input to achieve a high-quality glide feel (Odyssey/BotW style)
+                if (useMouseSmoothing)
+                {
+                    smoothedHorizontalInput = Mathf.SmoothDamp(smoothedHorizontalInput, inputHorizontal, ref horizontalInputVelocity, mouseSmoothTime);
+                    smoothedVerticalInput = Mathf.SmoothDamp(smoothedVerticalInput, inputVertical, ref verticalInputVelocity, mouseSmoothTime);
+                }
+                else
+                {
+                    smoothedHorizontalInput = inputHorizontal;
+                    smoothedVerticalInput = inputVertical;
+                }
+            }
+            else
+            {
+                // Gamepads naturally have physical spring resistance, so we bypass extra smoothing
+                smoothedHorizontalInput = inputHorizontal;
+                smoothedVerticalInput = inputVertical;
+            }
 
-			InputSystem.onDeviceChange -= OnDeviceChange;
-		}
+            RotateCamera(smoothedHorizontalInput, smoothedVerticalInput);
 
-		private void OnRotateCameraInput(InputAction.CallbackContext context)
-		{
-			//Detect which device generated the input
-			if(context.control != null)
-			{
-				lastInputDevice = context.control.device;
-				UpdateInputDeviceState();
-			}
-		}
+            if(controller == null)
+                return;
 
-		private void OnDeviceChange(InputDevice device, InputDeviceChange change)
-		{
-			//Update device state when devices are added/removed/reconnected
-			if(change == InputDeviceChange.Added || change == InputDeviceChange.Removed || change == InputDeviceChange.Reconnected)
-			{
-				UpdateInputDeviceState();
-			}
-		}
+            // Only apply automatic camera rotation toward movement direction if gamepad is explicitly active
+            if(turnCameraTowardMovementDirection && isGamepadActive)
+            {
+                Vector3 controllerVelocity = controller.GetVelocity();
+                RotateTowardsVelocity(controllerVelocity, cameraTurnSpeed);
+            }
+        }
 
-		private void UpdateInputDeviceState()
-		{
-			//Check if gamepad is active based on last input device
-			isGamepadActive = CheckIfGamepadIsActive();
-		}
+        public void RotateTowardsVelocity(Vector3 velocity, float speed)
+        {
+            velocity = VectorMath.RemoveDotVector(velocity, GetUpDirection());
+            float angle = VectorMath.GetAngle(GetFacingDirection(), velocity, GetUpDirection());
+            float sign = Mathf.Sign(angle);
+            float finalAngle = Time.deltaTime * speed * sign * Mathf.Abs(angle / 90f);
 
-		private bool CheckIfGamepadIsActive()
-		{
-			//If we have tracked the last input device and it's a gamepad, gamepad is active
-			if(lastInputDevice is Gamepad)
-				return true;
+            if(Mathf.Abs(angle) > 90f)
+                finalAngle = Time.deltaTime * speed * sign * ((Mathf.Abs(180f - Mathf.Abs(angle))) / 90f);
 
-			//Check if a gamepad is currently connected
-			if(Gamepad.current == null)
-				return false;
+            if(Mathf.Abs(finalAngle) > Mathf.Abs(angle))
+                finalAngle = angle;
 
-			//If no input device has been tracked yet but gamepad exists, default to gamepad mode
-			return lastInputDevice == null;
-		}
-
-		protected override void HandleCameraRotation ()
-		{
-			//Get input from camera input handler
-			if(cameraInput == null)
-				return;
-
-			//Get raw input values
-			float _inputHorizontal = cameraInput.GetHorizontalCameraInput();
-			float _inputVertical = cameraInput.GetVerticalCameraInput();
-
-			//Apply sensitivity based on current input device
-			float horizontalSensitivity = isGamepadActive ? gamepadHorizontalSensitivity : mouseHorizontalSensitivity;
-			float verticalSensitivity = isGamepadActive ? gamepadVerticalSensitivity : mouseVerticalSensitivity;
-
-			_inputHorizontal *= horizontalSensitivity;
-			_inputVertical *= verticalSensitivity;
-
-			//Apply camera rotation with sensitivity-adjusted input
-			RotateCamera(_inputHorizontal, _inputVertical);
-
-			if(controller == null)
-				return;
-
-			//Only apply automatic camera rotation toward movement direction if gamepad is active
-			if(turnCameraTowardMovementDirection && controller != null && isGamepadActive)
-			{
-				//Get controller velocity;
-				Vector3 _controllerVelocity = controller.GetVelocity();
-
-				RotateTowardsVelocity(_controllerVelocity, cameraTurnSpeed);
-			}
-		}
-
-		//Rotate camera toward '_direction', at the rate of '_speed', around the upwards vector of this gameobject;
-		public void RotateTowardsVelocity(Vector3 _velocity, float _speed)
-		{
-			//Remove any unwanted components of direction;
-			_velocity = VectorMath.RemoveDotVector(_velocity, GetUpDirection());
-			
-			//Calculate angle difference of current direction and new direction;
-			float _angle = VectorMath.GetAngle(GetFacingDirection(), _velocity, GetUpDirection());
-
-			//Calculate sign of angle;
-			float _sign = Mathf.Sign (_angle);
-
-			//Calculate final angle difference;
-			float _finalAngle =  Time.deltaTime * _speed * _sign * Mathf.Abs(_angle/90f);
-
-			//If angle is greater than 90 degrees, recalculate final angle difference;
-			if(Mathf.Abs(_angle) > 90f)
-				_finalAngle = Time.deltaTime * _speed * _sign * ((Mathf.Abs (180f - Mathf.Abs(_angle)))/90f);
-
-			//Check if calculated angle overshoots;
-			if(Mathf.Abs (_finalAngle) > Mathf.Abs (_angle))
-				_finalAngle = _angle;
-
-			//Take movement speed into account by comparing it to 'maximumMovementSpeed';
-			_finalAngle *= Mathf.InverseLerp(0f, maximumMovementSpeed, _velocity.magnitude);
-		    
-            SetRotationAngles(GetCurrentXAngle(), GetCurrentYAngle() + _finalAngle);
-		}	
-	}
+            finalAngle *= Mathf.InverseLerp(0f, maximumMovementSpeed, velocity.magnitude);
+            
+            SetRotationAngles(GetCurrentXAngle(), GetCurrentYAngle() + finalAngle);
+        }   
+    }
 }

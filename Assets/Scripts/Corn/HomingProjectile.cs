@@ -132,7 +132,7 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
             }
             else
             {
-                Debug.LogWarning($"El objetivo {_target.name} no tiene TargetForCorn. Usando root.");
+                Debug.LogWarning($"Target {_target.name} has no TargetForCorn component. Falling back to root transform.");
                 _targetAnchor = _target.transform;
             }
         }
@@ -183,11 +183,8 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
             SetTarget(player);
             SetMovementMode(Mode.Homing, whoSends);
             
-            var enemyAI = enemy != null ? enemy.GetComponent<CornSpitterAI>() : null;
-            if (enemyAI != null && launchesNumber > 0 && !mobIsOgSender) 
-            {
-                 enemyAI.currentHp--;
-            }
+            // Health point reduction has been removed from here.
+            // Damage/Bounce costs are now fully handled on demand by CornSpitterAI.SingForCorn().
         }
     }
 

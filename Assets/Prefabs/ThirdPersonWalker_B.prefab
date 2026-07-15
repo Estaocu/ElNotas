@@ -729,17 +729,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upperVerticalLimit: 60
   lowerVerticalLimit: 89
-  cameraSpeed: 250
+  cameraSpeed: 50
   smoothCameraRotation: 0
   cameraSmoothingFactor: 25
   turnCameraTowardMovementDirection: 1
   controller: {fileID: 2028947995848929648}
   maximumMovementSpeed: 7
   cameraTurnSpeed: 120
-  mouseHorizontalSensitivity: 1.5
-  mouseVerticalSensitivity: 1.5
-  gamepadHorizontalSensitivity: 1
-  gamepadVerticalSensitivity: 1
+  mouseHorizontalSensitivity: 0.05
+  mouseVerticalSensitivity: 0.05
+  gamepadHorizontalSensitivity: 5
+  gamepadVerticalSensitivity: 5
+  useMouseSmoothing: 1
+  mouseSmoothTime: 0.05
 --- !u!114 &946704913020041117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -976,8 +978,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveAction: {fileID: -5475275977055151916, guid: 56c211aa1fdd20b43b909e36b9bafac1,
     type: 3}
-  jumpAction: {fileID: -8949079078191097760, guid: 56c211aa1fdd20b43b909e36b9bafac1,
-    type: 3}
 --- !u!114 &2980497290240750932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -990,7 +990,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3668034910bdd343b0b20ad8e8adc90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundwaveSpawnpoint: {fileID: 0}
+  soundwaveSpawnpoint: {fileID: 320628767219898693}
   cooldown: 0.2
 --- !u!114 &1645496335446225618
 MonoBehaviour:

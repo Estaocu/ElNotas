@@ -171,7 +171,7 @@ public class CornSpitterAI : MonoBehaviour
         if (proj.mobIsOgSender && proj.LaunchesNumber == 0) return;
         if (proj.Enemy != gameObject) return;
 
-        // If projectile is incoming and enemy health is depleted, do not sing to deflect it
+        // If HP is depleted, cannot sing to deflect anymore
         if (currentHp <= 0)
         {
             if (beatSinger != null) beatSinger.StopSinging();
@@ -189,7 +189,6 @@ public class CornSpitterAI : MonoBehaviour
             if (listener != null) ReadCornMelody(listener);
             currentEngagement = proj;
             
-            // Sing and consume health as a bounce cost
             SingForCorn();
             return;
         }
@@ -200,7 +199,6 @@ public class CornSpitterAI : MonoBehaviour
             deflectMode = DeflectMode.Homing;
             currentEngagement = proj;
             
-            // Sing and consume health as a bounce cost
             SingForCorn();
             return;
         }
@@ -211,7 +209,6 @@ public class CornSpitterAI : MonoBehaviour
         if (l != null) ReadCornMelody(l);
         currentEngagement = proj;
         
-        // Sing and consume health as a bounce cost
         SingForCorn();
     }
 
@@ -241,17 +238,12 @@ public class CornSpitterAI : MonoBehaviour
 
     public void OnEngagementCornExploded(HomingProjectile proj)
     {
-        if (currentHp <= 0)
-        {
-            Die();
-            return;
-        }
-
         if (state == SpitterState.Dead) return;
         incomingCorns.Remove(proj);
 
         state = SpitterState.Idle;
-        currentHp = maxHp;
+        
+        // HP is no longer restored when projectile explodes elsewhere
         cornSpawned = false;
         cornAlreadyRead = false;
         currentEngagement = null;
@@ -262,6 +254,11 @@ public class CornSpitterAI : MonoBehaviour
         {
             OnPlayerDetected();
         }
+    }
+
+    public void TakeDirectHit()
+    {
+        Die();
     }
 
     public void LaunchCorn(Collider collider)
@@ -290,7 +287,6 @@ public class CornSpitterAI : MonoBehaviour
             
             RandomizePattern();
             
-            // Initiative singing does not cost any health points
             beatSinger.Sing();
         }
     }

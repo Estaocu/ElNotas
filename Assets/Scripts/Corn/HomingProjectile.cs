@@ -182,9 +182,6 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
             sender = whoSends;
             SetTarget(player);
             SetMovementMode(Mode.Homing, whoSends);
-            
-            // Health point reduction has been removed from here.
-            // Damage/Bounce costs are now fully handled on demand by CornSpitterAI.SingForCorn().
         }
     }
 
@@ -204,6 +201,17 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
     void OnCollisionEnter(Collision collision)
     {
         if (sender != null && collision.transform.root.gameObject == sender) return;
+
+        // Check if the direct hit is on the targeted enemy
+        if (enemy != null && collision.transform.root.gameObject == enemy)
+        {
+            var ai = enemy.GetComponent<CornSpitterAI>();
+            if (ai != null)
+            {
+                ai.TakeDirectHit();
+            }
+        }
+
         Explode();
     }
 

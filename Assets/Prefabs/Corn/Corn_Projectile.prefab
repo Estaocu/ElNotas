@@ -251,6 +251,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b755f73732ce8374388ff1cc409b9047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentMode: 1
+  wantsToListen: 1
+  maxBufferLength: 2
+  clearOnFail: 1
+  OnNoteReceivedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMelodyMatchedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMelodyFailedEvent:
+    m_PersistentCalls:
+      m_Calls: []
   currentMelody: 0000000000000000
   externalMelody: 0000000000000000
   desiredMelody: 0000000000000000

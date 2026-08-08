@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using ElNotas.Input.Glyphs;
+using NaughtyAttributes;
+using Unity.VisualScripting;
 
 [RequireComponent(typeof(Collider))]
 public class BridgeTile : MonoBehaviour
@@ -11,10 +13,13 @@ public class BridgeTile : MonoBehaviour
     public notesEnum note; 
     public bool beingStepped = false;
 
-    [SerializeField] private Transform jumpTarget;
-    [SerializeField] private SingleNotesListener listener;
+    public Transform jumpTarget;
     [SerializeField] private Bridge bridge;
     [SerializeField] private BindingGlyphView glyphView;
+
+    public bool isEnd = false;
+    [ShowIf("isEnd")]
+    [SerializeField] private BridgeSpawn assignedSpawner;
 
     private InputActionReference currentActionRef;
 
@@ -30,20 +35,12 @@ public class BridgeTile : MonoBehaviour
 
     private void OnEnable()
     {
-        if (listener != null)
-        {
-            listener.OnNoteReceivedEvent.AddListener(OnNoteReceived);
-        }
-
         UpdateGlyphDisplay();
     }
 
     private void OnDisable()
     {
-        if (listener != null)
-        {
-            listener.OnNoteReceivedEvent.RemoveListener(OnNoteReceived);
-        }
+
     }
 
     private void Start()
@@ -58,13 +55,29 @@ public class BridgeTile : MonoBehaviour
     }
 
     public void SetAsCurrentTile()
+{
+    beingStepped = true;
+
+    // 1. PRIMERO notificamos al puente que hemos llegado a esta casilla (actualiza currentTile)
+    bridge.OnTileReached(this);
+
+    // 2. LUEGO comprobamos si es la casilla final para saltar al endpoint fuera del puente
+    if (isEnd)
     {
-        beingStepped = true;
+        if (assignedSpawner != bridge.currentSpawner)
+        {
+            bridge.JumpToEnd(assignedSpawner.jumpTarget);
+            bridge.EndBridge();
+            assignedSpawner.Bloom();
+        }
     }
+}
 
     public void OnEntityExited()
     {
         beingStepped = false;
+        note = default;
+        UpdateGlyphDisplay();
     }
 
     public void SetNoteAndGlyph(notesEnum newNote, InputActionReference actionRef)
@@ -89,22 +102,39 @@ public class BridgeTile : MonoBehaviour
         }
     }
 
-    private void OnNoteReceived(notesEnum receivedNote, Transform author)
+    public void OnNoteReceived(GameObject detectedObj)
     {
         if (bridge != null)
         {
-            bridge.ProcessTileNoteHit(this, receivedNote);
+            if (!beingStepped) return;
+
+            if (detectedObj.TryGetComponent<SingleNoteSoundwave>(out var noteWave))
+        {
+            ProcessNote(noteWave.myNote);
+            Debug.Log($"Nota {noteWave.myNote}");
+        }
+        else
+        {
+            Debug.LogWarning($"[BridgeSpawn] El objeto '{detectedObj.name}' no tiene el componente SingleNoteSoundwave.", this);
+        }
+
+        
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void ProcessNote(notesEnum incomingNote)
     {
-        if (other.CompareTag("Player") && !beingStepped)
-        {
-            if (bridge != null)
-            {
-                bridge.OnTileReached(this);
-            }
-        }
+        bridge.CompareNotes(incomingNote);
     }
+
+    // private void OnEntityEnter(Collider other)
+    // {
+    //     if (other.CompareTag("Player") && !beingStepped)
+    //     {
+    //         if (bridge != null)
+    //         {
+    //             bridge.OnTileReached(this);
+    //         }
+    //     }
+    // }
 }

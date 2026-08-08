@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using CMF;
+using Unity.VisualScripting;
 
 public class Bridge : MonoBehaviour
 {
     [Header("Bridge Sequence")]
     [SerializeField] private Transform spawnPoint;
+    public BridgeSpawn currentSpawner;
     [SerializeField] private BridgeTile previousTile;
     [SerializeField] private BridgeTile currentTile;
     [SerializeField] private BridgeTile nextTile;
@@ -20,6 +22,7 @@ public class Bridge : MonoBehaviour
     [Header("Player References")]
     [SerializeField] private AdvancedWalkerController walker;
     [SerializeField] private Mover mover;
+    [SerializeField] private ActionMapsManager actionMap;
 
     [Header("Trajectory Settings")]
     [SerializeField] private float apexHeight = 3f;
@@ -74,6 +77,8 @@ public class Bridge : MonoBehaviour
 
     public void InitializeBridgeFromSpawn(BridgeTile firstTile, Transform spawnJumpTarget)
     {
+        //playerInput.SwitchCurrentActionMap("Notes");
+        actionMap.SetNotesInput();
         spawnPoint = spawnJumpTarget;
         currentTile = null;
         previousTile = null;
@@ -129,44 +134,79 @@ public class Bridge : MonoBehaviour
 
     public void OnTileReached(BridgeTile reachedTile)
     {
-        if (previousTile != null)
-        {
-            previousTile.OnEntityExited();
-        }
 
         previousTile = currentTile;
         currentTile = reachedTile;
-        currentTile.SetAsCurrentTile();
+        spawnPoint = currentTile.jumpTarget;
 
         AssignNotesToTiles();
     }
 
     public void JumpToNextTile(Transform customStartPoint = null)
     {
-        if (nextTile == null || walker == null || mover == null)
+        if (nextTile == null)
         {
-            Debug.LogWarning("Bridge: Missing references to perform the jump.");
+            Debug.LogWarning("Bridge: Missing nextTile reference to perform the jump.");
             return;
         }
 
-        Transform pointA = currentTile != null ? currentTile.JumpTarget : customStartPoint;
-        Transform pointB = nextTile.JumpTarget;
-
-        if (pointA == null || pointB == null)
-        {
-            Debug.LogWarning("Bridge: Missing jump targets in tiles or spawn point.");
-            return;
-        }
-
-        walker.transform.position = pointA.position;
-
-        Physics.SyncTransforms();
-        mover.CheckForGround();
-
-        Vector3 launchVelocity = CalculateLaunchVelocity(pointA.position, pointB.position, walker.gravity);
-        walker.SetMomentum(Vector3.zero);
-        walker.SetMomentum(launchVelocity);
+        JumpToTarget(nextTile.JumpTarget, customStartPoint);
     }
+
+    /// <summary>
+    /// Realiza el salto parabólico directamente hacia el punto final fuera del puente.
+    /// </summary>
+    /// <summary>
+/// Realiza el salto parabólico directamente hacia el punto final fuera del puente.
+/// </summary>
+public void JumpToEnd(Transform endPoint)
+{
+    if (endPoint == null)
+    {
+        Debug.LogWarning("Bridge: Missing endPoint target to jump to end.");
+        return;
+    }
+
+    // El origen del salto es la casilla actual (la última tile que el jugador acaba de pisar)
+    Transform startPoint = currentTile != null ? currentTile.JumpTarget : null;
+
+    // Ejecuta el salto desde la última casilla hacia el punto final de salida
+    JumpToTarget(endPoint, startPoint);
+}
+
+/// <summary>
+/// Método central que ejecuta el cálculo de trayectoria y físicas de CMF desde un origen A hacia un destino B.
+/// </summary>
+public void JumpToTarget(Transform targetPoint, Transform customStartPoint = null)
+{
+    if (targetPoint == null || walker == null || mover == null)
+    {
+        Debug.LogWarning("Bridge: Missing references or target point to perform the jump.");
+        return;
+    }
+
+    // Si se le pasa un customStartPoint explícito tiene prioridad; si no, utiliza la casilla actual
+    Transform pointA = customStartPoint != null ? customStartPoint : (currentTile != null ? currentTile.JumpTarget : null);
+    Transform pointB = targetPoint;
+
+    if (pointA == null || pointB == null)
+    {
+        Debug.LogWarning("Bridge: Missing jump origin (Point A) or target (Point B).");
+        return;
+    }
+
+    // 1. Sincroniza la posición inicial con el motor de físicas de Unity
+    walker.transform.position = pointA.position;
+    Physics.SyncTransforms();
+    mover.CheckForGround();
+
+    // 2. Calcula la velocidad vectorial necesaria para la parábola
+    Vector3 launchVelocity = CalculateLaunchVelocity(pointA.position, pointB.position, walker.gravity);
+
+    // 3. Resetea e inyecta la inercia en el AdvancedWalkerController
+    walker.SetMomentum(Vector3.zero);
+    walker.SetMomentum(launchVelocity);
+}
 
     public void AssignNotesToTiles()
     {
@@ -347,5 +387,55 @@ public class Bridge : MonoBehaviour
     {
         DrawAllConnectedParabolas();
         TraceParabole();
+    }
+
+    public bool CompareNotes(notesEnum incomingNote)
+    {
+        // CASO 1: Aún no estamos en el puente
+        if (currentTile == null)
+        {
+            if (nextTile != null && nextTile.note == incomingNote)
+            {
+                JumpToNextTile(spawnPoint);
+                return true;
+            }
+            return false;
+        }
+
+        // CASO 2: Ya estamos posicionados sobre una casilla del puente
+        Vector2Int currentPos = new Vector2Int(currentTile.xCoord, currentTile.yCoord);
+
+        Vector2Int[] directions = new Vector2Int[]
+        {
+            new Vector2Int(0, 1),
+            new Vector2Int(0, -1),
+            new Vector2Int(1, 0),
+            new Vector2Int(-1, 0)
+        };
+
+        foreach (Vector2Int dir in directions)
+        {
+            Vector2Int checkPos = currentPos + dir;
+
+            if (tileGrid.TryGetValue(checkPos, out BridgeTile adjTile))
+            {
+                if (adjTile == null || !adjTile.gameObject.activeSelf) continue;
+
+                if (adjTile != previousTile && adjTile.note == incomingNote)
+                {
+                    nextTile = adjTile;
+                    JumpToNextTile();
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public void EndBridge()
+    {
+        actionMap.SetPlayerInput();
+        currentSpawner = null;
     }
 }

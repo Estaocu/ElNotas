@@ -21,8 +21,6 @@ public class DialogueManager : MonoBehaviour
             RemoveCurrentNPC(currentNPC);
             ActionMapsManager.SetActiveMaps(DefaultActionMap.Conversation);
         }
-        
-
     }
 
     public void SetNewNPC(NPC newNpc)
@@ -47,7 +45,4 @@ public class DialogueManager : MonoBehaviour
             ActionMapsManager.SetActiveMaps(DefaultActionMap.Gameplay);
         }
     }
-
-
-
 }

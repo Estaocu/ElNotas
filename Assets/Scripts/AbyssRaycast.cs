@@ -128,4 +128,14 @@ public class AbyssRaycast : MonoBehaviour
         Vector3 launch = body.up * vUp + body.forward * vForward;
         walker.SetMomentum(launch);
     }
+
+    public void PreventJump()
+    {
+        canJump = false;
+    }
+
+    public void EnableJump()
+    {
+        canJump = true;
+    }
 }

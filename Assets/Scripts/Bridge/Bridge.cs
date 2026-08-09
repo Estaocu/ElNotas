@@ -12,6 +12,7 @@ public class Bridge : MonoBehaviour
     [SerializeField] private BridgeTile previousTile;
     [SerializeField] private BridgeTile currentTile;
     [SerializeField] private BridgeTile nextTile;
+    public List<BridgeSpawn> spawners = new List<BridgeSpawn>();
 
     [Header("Note Actions")]
     [SerializeField] private InputActionReference note1Action;
@@ -23,6 +24,8 @@ public class Bridge : MonoBehaviour
     [SerializeField] private AdvancedWalkerController walker;
     [SerializeField] private Mover mover;
     [SerializeField] private ActionMapsManager actionMap;
+    [SerializeField] private AbyssRaycast playerJump;
+    
 
     [Header("Trajectory Settings")]
     [SerializeField] private float apexHeight = 3f;
@@ -30,12 +33,16 @@ public class Bridge : MonoBehaviour
     [SerializeField] private Color trajectoryColor = Color.green;
     [SerializeField] private Color gridGizmoColor = new Color(0f, 1f, 1f, 0.35f);
 
+    
+
     private Dictionary<Vector2Int, BridgeTile> tileGrid = new Dictionary<Vector2Int, BridgeTile>();
 
     private void Awake()
     {
         InitializeGrid();
-    }
+        spawners = new List<BridgeSpawn>(GetComponentsInChildren<BridgeSpawn>(true));
+   }
+   
 
     private void OnTransformChildrenChanged()
     {
@@ -46,6 +53,7 @@ public class Bridge : MonoBehaviour
     private void OnValidate()
     {
         InitializeGrid();
+        InitializeSpawners();
     }
 #endif
 
@@ -75,10 +83,17 @@ public class Bridge : MonoBehaviour
         }
     }
 
+    public void InitializeSpawners()
+    {
+        spawners = new List<BridgeSpawn>(GetComponentsInChildren<BridgeSpawn>(true));
+    }
+
     public void InitializeBridgeFromSpawn(BridgeTile firstTile, Transform spawnJumpTarget)
     {
         //playerInput.SwitchCurrentActionMap("Notes");
         actionMap.SetNotesInput();
+        playerJump.PreventJump();
+
         spawnPoint = spawnJumpTarget;
         currentTile = null;
         previousTile = null;
@@ -436,6 +451,20 @@ public void JumpToTarget(Transform targetPoint, Transform customStartPoint = nul
     public void EndBridge()
     {
         actionMap.SetPlayerInput();
+        playerJump.EnableJump();
         currentSpawner = null;
+
+        foreach(BridgeSpawn spawner in spawners)
+        {
+            spawner.EndBridge();
+        }
+
+        // BridgeTile[] allTiles = GetComponentsInChildren<BridgeTile>(true);
+
+        // foreach (BridgeTile tile in allTiles)
+        // {
+        //     tile.Disappear();
+        // }
+
     }
 }

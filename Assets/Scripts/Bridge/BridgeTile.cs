@@ -25,6 +25,8 @@ public class BridgeTile : MonoBehaviour
 
     public Transform JumpTarget => jumpTarget;
 
+    private BeatWaitHandle currentWaitHandle;
+
     private void Awake()
     {
         if (glyphView == null)
@@ -52,16 +54,23 @@ public class BridgeTile : MonoBehaviour
     {
         gameObject.SetActive(true);
         UpdateGlyphDisplay();
+
+        currentWaitHandle = RhythmBeatWaiter.WaitForSubBeats(16, BeatWaitMode.Immediate, Disappear);
+    }
+
+    public void Disappear()
+    {
+        gameObject.SetActive(false);
     }
 
     public void SetAsCurrentTile()
 {
     beingStepped = true;
 
-    // 1. PRIMERO notificamos al puente que hemos llegado a esta casilla (actualiza currentTile)
     bridge.OnTileReached(this);
 
-    // 2. LUEGO comprobamos si es la casilla final para saltar al endpoint fuera del puente
+    currentWaitHandle = RhythmBeatWaiter.WaitForSubBeats(8, BeatWaitMode.Immediate, Disappear);
+
     if (isEnd)
     {
         if (assignedSpawner != bridge.currentSpawner)
@@ -126,15 +135,4 @@ public class BridgeTile : MonoBehaviour
     {
         bridge.CompareNotes(incomingNote);
     }
-
-    // private void OnEntityEnter(Collider other)
-    // {
-    //     if (other.CompareTag("Player") && !beingStepped)
-    //     {
-    //         if (bridge != null)
-    //         {
-    //             bridge.OnTileReached(this);
-    //         }
-    //     }
-    // }
 }

@@ -1,65 +1,83 @@
 using UnityEngine;
-using UnityEngine.Localization.Components;
+using UnityEngine.Localization;
 using Febucci.TextAnimatorForUnity;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 public class DialogueTrigger : MonoBehaviour
 {
-    private LocalizeStringEvent localizeStringEvent;
+    [SerializeField] private LocalizedString localizedString;
     private TypewriterComponent typewriter;
-    private InputAction noteAction;
+    [SerializeField] private InputAction acceptAction;
 
     private string[] pages;
     private int currentPage;
     private bool waitingForInput;
 
+    public UnityEvent finishDialogue;
+
     void Awake()
     {
-        localizeStringEvent = GetComponent<LocalizeStringEvent>();
         typewriter = GetComponent<TypewriterComponent>();
 
-        if (localizeStringEvent == null)
-            Debug.LogError("DialogueTrigger: no se encontró LocalizeStringEvent en " + gameObject.name);
         if (typewriter == null)
             Debug.LogError("DialogueTrigger: no se encontró TypewriterComponent en " + gameObject.name);
-
-        // Obtener la acción "Note2" del PlayerInput
-        PlayerInput playerInput = FindObjectOfType<PlayerInput>();
-        if (playerInput != null)
-            noteAction = playerInput.actions["Note2"]; // Asegúrate que el nombre sea exacto
-        else
-            Debug.LogError("DialogueTrigger: no se encontró PlayerInput en la escena");
     }
 
     void OnEnable()
     {
-        localizeStringEvent.OnUpdateString.AddListener(StartDialogue);
-        typewriter.onTextShowed.AddListener(OnPageFinished);
+        if (localizedString != null)
+            localizedString.StringChanged += StartDialogue;
+
+        if (typewriter != null)
+            typewriter.onTextShowed.AddListener(OnPageFinished);
         
-        // Suscribirse a la acción "note 2"
-        if (noteAction != null)
-            noteAction.performed += OnNoteAction;
+        if (acceptAction != null)
+        {
+            acceptAction.Enable();
+            acceptAction.performed += OnAcceptAction;
+        }
     }
 
     void OnDisable()
     {
-        localizeStringEvent.OnUpdateString.RemoveListener(StartDialogue);
-        typewriter.onTextShowed.RemoveListener(OnPageFinished);
+        if (localizedString != null)
+            localizedString.StringChanged -= StartDialogue;
+
+        if (typewriter != null)
+            typewriter.onTextShowed.RemoveListener(OnPageFinished);
         
-        if (noteAction != null)
-            noteAction.performed -= OnNoteAction;
+        if (acceptAction != null)
+        {
+            acceptAction.performed -= OnAcceptAction;
+            acceptAction.Disable();
+        }
     }
 
-    void OnNoteAction(InputAction.CallbackContext context)
+    public void OnAcceptAction(InputAction.CallbackContext context)
     {
-        if (!waitingForInput)
-            typewriter.SkipTypewriter();
-        else
-            AdvancePage();
+        if (context.performed)
+        {
+            Debug.Log("Detected Accept key");
+            if (pages == null) return;
+
+            if (!waitingForInput)
+            {
+                typewriter.SkipTypewriter();
+                Debug.Log("Skip Typewriter");
+            }
+            else
+            {
+                AdvancePage();
+                Debug.Log("Advance Page");
+            }
+        }
     }
 
-    void StartDialogue(string localizedText)
+    public void StartDialogue(string localizedText)
     {
+        if (string.IsNullOrEmpty(localizedText)) return;
+
         pages = localizedText.Split('|');
         currentPage = 0;
         ShowCurrentPage();
@@ -67,6 +85,8 @@ public class DialogueTrigger : MonoBehaviour
 
     void ShowCurrentPage()
     {
+        if (pages == null || currentPage >= pages.Length) return;
+
         waitingForInput = false;
         typewriter.ShowText(pages[currentPage].Trim());
     }
@@ -76,8 +96,10 @@ public class DialogueTrigger : MonoBehaviour
         waitingForInput = true;
     }
 
-    void AdvancePage()
+    public void AdvancePage()
     {
+        if (pages == null || pages.Length == 0) return;
+
         currentPage++;
 
         if (currentPage < pages.Length)
@@ -88,6 +110,8 @@ public class DialogueTrigger : MonoBehaviour
 
     void EndDialogue()
     {
-        waitingForInput = false;
+        waitingForInput = true;
+        finishDialogue.Invoke(); 
+        Debug.Log("finished dialogue");
     }
 }

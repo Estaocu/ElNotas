@@ -1763,6 +1763,45 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Text"",
+            ""id"": ""63b6e5f4-c779-4316-8edf-67ef568ea152"",
+            ""actions"": [
+                {
+                    ""name"": ""Accept"",
+                    ""type"": ""Button"",
+                    ""id"": ""6c682884-c7d2-4150-b52b-50b7c765b435"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""b9ea9a50-3ebd-4409-88ad-f84b5bf8f518"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";KeyboardScheme"",
+                    ""action"": ""Accept"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1c31d230-8433-4160-b7ba-231cf1868f78"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";ControllerScheme"",
+                    ""action"": ""Accept"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1862,6 +1901,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         // RestrictedInput
         m_RestrictedInput = asset.FindActionMap("RestrictedInput", throwIfNotFound: true);
         m_RestrictedInput_Pause = m_RestrictedInput.FindAction("Pause", throwIfNotFound: true);
+        // Text
+        m_Text = asset.FindActionMap("Text", throwIfNotFound: true);
+        m_Text_Accept = m_Text.FindAction("Accept", throwIfNotFound: true);
     }
 
     ~@PlayerInputs()
@@ -1873,6 +1915,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_Notes.enabled, "This will cause a leak and performance issues, PlayerInputs.Notes.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_PauseMenu.enabled, "This will cause a leak and performance issues, PlayerInputs.PauseMenu.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_RestrictedInput.enabled, "This will cause a leak and performance issues, PlayerInputs.RestrictedInput.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Text.enabled, "This will cause a leak and performance issues, PlayerInputs.Text.Disable() has not been called.");
     }
 
     /// <summary>
@@ -3067,6 +3110,102 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="RestrictedInputActions" /> instance referencing this action map.
     /// </summary>
     public RestrictedInputActions @RestrictedInput => new RestrictedInputActions(this);
+
+    // Text
+    private readonly InputActionMap m_Text;
+    private List<ITextActions> m_TextActionsCallbackInterfaces = new List<ITextActions>();
+    private readonly InputAction m_Text_Accept;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Text".
+    /// </summary>
+    public struct TextActions
+    {
+        private @PlayerInputs m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public TextActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Text/Accept".
+        /// </summary>
+        public InputAction @Accept => m_Wrapper.m_Text_Accept;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Text; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="TextActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(TextActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="TextActions" />
+        public void AddCallbacks(ITextActions instance)
+        {
+            if (instance == null || m_Wrapper.m_TextActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_TextActionsCallbackInterfaces.Add(instance);
+            @Accept.started += instance.OnAccept;
+            @Accept.performed += instance.OnAccept;
+            @Accept.canceled += instance.OnAccept;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="TextActions" />
+        private void UnregisterCallbacks(ITextActions instance)
+        {
+            @Accept.started -= instance.OnAccept;
+            @Accept.performed -= instance.OnAccept;
+            @Accept.canceled -= instance.OnAccept;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="TextActions.UnregisterCallbacks(ITextActions)" />.
+        /// </summary>
+        /// <seealso cref="TextActions.UnregisterCallbacks(ITextActions)" />
+        public void RemoveCallbacks(ITextActions instance)
+        {
+            if (m_Wrapper.m_TextActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="TextActions.AddCallbacks(ITextActions)" />
+        /// <seealso cref="TextActions.RemoveCallbacks(ITextActions)" />
+        /// <seealso cref="TextActions.UnregisterCallbacks(ITextActions)" />
+        public void SetCallbacks(ITextActions instance)
+        {
+            foreach (var item in m_Wrapper.m_TextActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_TextActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="TextActions" /> instance referencing this action map.
+    /// </summary>
+    public TextActions @Text => new TextActions(this);
     private int m_ControllerSchemeSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -3484,5 +3623,20 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPause(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Text" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="TextActions.AddCallbacks(ITextActions)" />
+    /// <seealso cref="TextActions.RemoveCallbacks(ITextActions)" />
+    public interface ITextActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Accept" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAccept(InputAction.CallbackContext context);
     }
 }

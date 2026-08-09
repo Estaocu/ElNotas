@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace CMF
 {
-    public enum DefaultActionMap { Gameplay, Notebook, PauseMenu, RestrictedInput, Conversation }
+    public enum DefaultActionMap { Gameplay, Notebook, PauseMenu, RestrictedInput, Conversation, Text }
 
     public class ActionMapsManager : MonoBehaviour
     {
@@ -76,6 +76,7 @@ namespace CMF
         public void SetRestrictedInput() => SwapActionMap(DefaultActionMap.RestrictedInput);
         public void SetPlayerInput()     => SwapActionMap(DefaultActionMap.Gameplay);
         public void SetConversationInput()     => SwapActionMap(DefaultActionMap.Conversation);
+        public void SetTextInput()     => SwapActionMap(DefaultActionMap.Conversation);
 
         public void StoreCurrentMap()    => mapBeforePause = playerInput?.currentActionMap?.name;
 

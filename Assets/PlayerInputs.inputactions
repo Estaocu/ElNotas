@@ -1677,6 +1677,45 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Text",
+            "id": "63b6e5f4-c779-4316-8edf-67ef568ea152",
+            "actions": [
+                {
+                    "name": "Accept",
+                    "type": "Button",
+                    "id": "6c682884-c7d2-4150-b52b-50b7c765b435",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "b9ea9a50-3ebd-4409-88ad-f84b5bf8f518",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardScheme",
+                    "action": "Accept",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1c31d230-8433-4160-b7ba-231cf1868f78",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";ControllerScheme",
+                    "action": "Accept",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

@@ -2,15 +2,23 @@ using UnityEngine;
 using UnityEngine.Localization;
 using Febucci.TextAnimatorForUnity;
 using UnityEngine.InputSystem;
+using CMF;
 
 public class DialogueBehaviour : MonoBehaviour
 {
     [SerializeField] private LocalizedString dialogueLine;
     [SerializeField] private TypewriterComponent typewriter;
+    [SerializeField] private GameObject textCanvas;
+
 
     private string[] pages;
     private int currentPage;
     private bool waitingForInput;
+
+    public void SelectDialogue(LocalizedString dialogue)
+    {
+        dialogueLine = dialogue;
+    }
 
     void Start()
     {
@@ -44,20 +52,22 @@ public class DialogueBehaviour : MonoBehaviour
         waitingForInput = true;
     }
 
-    void Update()
+    // void Update()
+    // {
+    //     if (!waitingForInput) return;
+
+    //     // Cambia esto al input system que uses
+    //     if (Keyboard.current.spaceKey.wasPressedThisFrame || 
+    //         Keyboard.current.enterKey.wasPressedThisFrame)
+    //     {
+    //         AdvancePage();
+    //     }
+    // }
+
+    public void AdvancePage()
     {
         if (!waitingForInput) return;
 
-        // Cambia esto al input system que uses
-        if (Keyboard.current.spaceKey.wasPressedThisFrame || 
-            Keyboard.current.enterKey.wasPressedThisFrame)
-        {
-            AdvancePage();
-        }
-    }
-
-    void AdvancePage()
-    {
         currentPage++;
 
         if (currentPage < pages.Length)
@@ -75,4 +85,6 @@ public class DialogueBehaviour : MonoBehaviour
         waitingForInput = false;
         // Aquí: ocultar UI, notificar al sistema de juego, etc.
     }
+
+    
 }

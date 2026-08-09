@@ -10,16 +10,19 @@ public class DialogueManager : MonoBehaviour
     public bool canInteract = false;
     public NPC currentNPC;
     [SerializeField] private DictionaryUIManager dialogueUI;
+    [SerializeField] private DialogueBehaviour plainBubble;
+    [SerializeField] private GameObject textCanvas;
 
     public void EnterDialogue(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
             if (!canInteract) return;
-            dialogueUI.gameObject.SetActive(true);
-            dialogueUI.currentNpc = currentNPC;
-            RemoveCurrentNPC(currentNPC);
-            ActionMapsManager.SetActiveMaps(DefaultActionMap.Conversation);
+            ToggleTextCanvas(true);
+            //dialogueUI.gameObject.SetActive(true);
+            //dialogueUI.currentNpc = currentNPC;
+            ActionMapsManager.SetActiveMaps(DefaultActionMap.Text);
+            currentNPC.FindDialogue();
         }
     }
 
@@ -44,5 +47,10 @@ public class DialogueManager : MonoBehaviour
             RemoveCurrentNPC(currentNPC);
             ActionMapsManager.SetActiveMaps(DefaultActionMap.Gameplay);
         }
+    }
+
+    public void ToggleTextCanvas(bool desiredState)
+    {
+        textCanvas.SetActive(desiredState);
     }
 }

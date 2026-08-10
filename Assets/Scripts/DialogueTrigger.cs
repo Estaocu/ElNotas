@@ -116,4 +116,6 @@ public class DialogueTrigger : MonoBehaviour
         finishDialogue.Invoke(); 
         Debug.Log("End of dialogue");
     }
+
+    
 }

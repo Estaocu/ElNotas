@@ -4749,15 +4749,7 @@ MonoBehaviour:
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
-  acceptAction:
-    m_Name: Accept
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: e9c1a468-e243-44c4-a6e4-36226f4e11b1
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
+  tAnimator: {fileID: 524697324}
   finishDialogue:
     m_PersistentCalls:
       m_Calls:
@@ -4785,6 +4777,7 @@ MonoBehaviour:
           m_StringArgument: Gameplay
           m_BoolArgument: 0
         m_CallState: 2
+  tmp: {fileID: 524697325}
   references:
     version: 2
     RefIds: []
@@ -7987,7 +7980,7 @@ PrefabInstance:
     - target: {fileID: 2902904493212257918, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[48].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnacceptAction
+      value: OnAcceptAction
       objectReference: {fileID: 0}
     - target: {fileID: 2902904493212257918, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
@@ -12825,7 +12818,7 @@ GameObject:
   m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1489641077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16511,7 +16504,7 @@ GameObject:
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1862938082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16636,6 +16629,220 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1872334757
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1872334764}
+  - component: {fileID: 1872334763}
+  - component: {fileID: 1872334762}
+  - component: {fileID: 1872334761}
+  - component: {fileID: 1872334760}
+  - component: {fileID: 1872334759}
+  - component: {fileID: 1872334758}
+  m_Layer: 7
+  m_Name: NPC_Altozano
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1872334758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872334757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26ab7cafc369c5443aa65c6d132b0c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  requiredTag: 
+  triggerOnce: 0
+  debugLog: 0
+  OnDetected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 918859943}
+        m_TargetAssemblyTypeName: DialogueManager, Assembly-CSharp
+        m_MethodName: SetNewNPC
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1872334759}
+          m_ObjectArgumentAssemblyTypeName: NPC, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnLost:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 918859943}
+        m_TargetAssemblyTypeName: DialogueManager, Assembly-CSharp
+        m_MethodName: RemoveCurrentNPC
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1872334759}
+          m_ObjectArgumentAssemblyTypeName: NPC, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnGameObjectDetected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnGameObjectLost:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1872334759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872334757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe806eb3fa2906849954d6301953d581, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  npcName: Altozano
+  timesSpoken: 0
+  startMode: 1
+  manager: {fileID: 918859943}
+  master: {fileID: 524697328}
+  myDialogue:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  references:
+    version: 2
+    RefIds: []
+--- !u!135 &1872334760
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872334757}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 4
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &1872334761
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872334757}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1872334762
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872334757}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1872334763
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872334757}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1872334764
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872334757}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.13302274, z: -0, w: 0.99111307}
+  m_LocalPosition: {x: 210.39, y: -0.16, z: -85.23}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 15.289, z: 0}
 --- !u!1 &1887962945 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6507901977716847365, guid: ee6e4179ddffcde409cb79676e5bd625,
@@ -18524,7 +18731,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcName: Richard
-  startMode: 0
+  timesSpoken: 0
+  startMode: 1
   manager: {fileID: 918859943}
   master: {fileID: 524697328}
   myDialogue:
@@ -18822,6 +19030,7 @@ SceneRoots:
   - {fileID: 23114115}
   - {fileID: 1489641080}
   - {fileID: 2126708456}
+  - {fileID: 1872334764}
   - {fileID: 805793870}
   - {fileID: 1950268699}
   - {fileID: 730902645}

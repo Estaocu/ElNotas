@@ -3,18 +3,24 @@ using UnityEngine.Localization;
 using Febucci.TextAnimatorForUnity;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
+using Febucci.TextAnimatorForUnity.TextMeshPro;
+using TMPro;
 
 public class DialogueTrigger : MonoBehaviour
 {
+    [HideInInspector]
     [SerializeField] private LocalizedString localizedString;
     private TypewriterComponent typewriter;
-    [SerializeField] private InputAction acceptAction;
 
     private string[] pages;
     private int currentPage;
     private bool waitingForInput;
 
+    public TextAnimator_TMP tAnimator;
+
     public UnityEvent finishDialogue;
+
+    public TextMeshProUGUI tmp;
 
     void Awake()
     {
@@ -31,12 +37,6 @@ public class DialogueTrigger : MonoBehaviour
 
         if (typewriter != null)
             typewriter.onTextShowed.AddListener(OnPageFinished);
-        
-        if (acceptAction != null)
-        {
-            acceptAction.Enable();
-            acceptAction.performed += OnAcceptAction;
-        }
     }
 
     void OnDisable()
@@ -46,12 +46,6 @@ public class DialogueTrigger : MonoBehaviour
 
         if (typewriter != null)
             typewriter.onTextShowed.RemoveListener(OnPageFinished);
-        
-        if (acceptAction != null)
-        {
-            acceptAction.performed -= OnAcceptAction;
-            acceptAction.Disable();
-        }
     }
 
     public void OnAcceptAction(InputAction.CallbackContext context)
@@ -80,7 +74,7 @@ public class DialogueTrigger : MonoBehaviour
 
         pages = localizedText.Split('|');
         currentPage = 0;
-        ShowCurrentPage();
+        ShowCurrentPage();    
     }
 
     void ShowCurrentPage()
@@ -89,6 +83,8 @@ public class DialogueTrigger : MonoBehaviour
 
         waitingForInput = false;
         typewriter.ShowText(pages[currentPage].Trim());
+        tAnimator.SetText(pages[currentPage].Trim());
+        typewriter.StartShowingText(true);
     }
 
     void OnPageFinished()
@@ -108,10 +104,16 @@ public class DialogueTrigger : MonoBehaviour
             EndDialogue();
     }
 
+    public void RestartText()
+    {   
+        tAnimator.SetText(tmp.text);          // re-aplica el texto al TextAnimator
+        typewriter.StartShowingText(true);    // true = empezar desde el principio
+    }
+
     void EndDialogue()
     {
         waitingForInput = true;
         finishDialogue.Invoke(); 
-        Debug.Log("finished dialogue");
+        Debug.Log("End of dialogue");
     }
 }

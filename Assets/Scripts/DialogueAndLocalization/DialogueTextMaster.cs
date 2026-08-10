@@ -58,8 +58,6 @@ public class DialogueTextMaster : MonoBehaviour
     if (tAnimator == null) { Debug.LogError("tAnimator no asignado en DialogueTextMaster"); return; }
 
     trigger.StartDialogue(text);
-    tAnimator.SetText(text);
-    typewriter.StartShowingText(true);
     Debug.Log($"Diálogo usado: {usedId ?? "fallback"}");
     }
 

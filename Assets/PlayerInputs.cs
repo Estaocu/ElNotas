@@ -1394,6 +1394,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""c25f43c5-c8ab-47fd-a121-a4d2dd6e14ce"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1482,6 +1491,28 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";KeyboardScheme"",
                     ""action"": ""Note4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7288bb11-ede6-4139-88d2-33ffd05a1a70"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";KeyboardScheme"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d0a09667-7c5b-4b32-b3bc-4bef9188e5ed"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";ControllerScheme"",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1890,6 +1921,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Notes_Note2 = m_Notes.FindAction("Note2", throwIfNotFound: true);
         m_Notes_Note3 = m_Notes.FindAction("Note3", throwIfNotFound: true);
         m_Notes_Note4 = m_Notes.FindAction("Note4", throwIfNotFound: true);
+        m_Notes_Pause = m_Notes.FindAction("Pause", throwIfNotFound: true);
         // PauseMenu
         m_PauseMenu = asset.FindActionMap("PauseMenu", throwIfNotFound: true);
         m_PauseMenu_Up = m_PauseMenu.FindAction("Up", throwIfNotFound: true);
@@ -2742,6 +2774,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Notes_Note2;
     private readonly InputAction m_Notes_Note3;
     private readonly InputAction m_Notes_Note4;
+    private readonly InputAction m_Notes_Pause;
     /// <summary>
     /// Provides access to input actions defined in input action map "Notes".
     /// </summary>
@@ -2769,6 +2802,10 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Notes/Note4".
         /// </summary>
         public InputAction @Note4 => m_Wrapper.m_Notes_Note4;
+        /// <summary>
+        /// Provides access to the underlying input action "Notes/Pause".
+        /// </summary>
+        public InputAction @Pause => m_Wrapper.m_Notes_Pause;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -2807,6 +2844,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Note4.started += instance.OnNote4;
             @Note4.performed += instance.OnNote4;
             @Note4.canceled += instance.OnNote4;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         /// <summary>
@@ -2830,6 +2870,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Note4.started -= instance.OnNote4;
             @Note4.performed -= instance.OnNote4;
             @Note4.canceled -= instance.OnNote4;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         /// <summary>
@@ -3558,6 +3601,13 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnNote4(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Pause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPause(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PauseMenu" which allows adding and removing callbacks.

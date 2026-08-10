@@ -76,6 +76,7 @@ namespace CMF
         public void SetRestrictedInput() => SwapActionMap(DefaultActionMap.RestrictedInput);
         public void SetPlayerInput()     => SwapActionMap(DefaultActionMap.Gameplay);
         public void SetConversationInput()     => SwapActionMap(DefaultActionMap.Conversation);
+        public void SetNotesInput()     => SwapActionMap(DefaultActionMap.Notes);
         public void SetTextInput()     => SwapActionMap(DefaultActionMap.Conversation);
 
         public void StoreCurrentMap()    => mapBeforePause = playerInput?.currentActionMap?.name;

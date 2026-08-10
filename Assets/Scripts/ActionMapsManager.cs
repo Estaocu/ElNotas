@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace CMF
 {
-    public enum DefaultActionMap { Gameplay, Notebook, PauseMenu, RestrictedInput, Conversation, Text }
+    public enum DefaultActionMap { Gameplay, Notebook, PauseMenu, RestrictedInput, Conversation, Text, Notes }
 
     public class ActionMapsManager : MonoBehaviour
     {

@@ -2,9 +2,9 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
-
 using CarterGames.Assets.SaveManager; 
-using Save; 
+using Save;
+using Unity.VisualScripting;
 
 public enum DialogueMode { Intro, Monologue, Answer, Question };
 
@@ -13,10 +13,11 @@ public class NPC : MonoBehaviour
     public string npcName;
     public int timesSpoken;
 
-    public DialogueMode startMode;
+    public DialogueMode currentMode;
     
     [SerializeField] private DialogueManager manager;
     [SerializeField] private DialogueTextMaster master;
+    [SerializeField] private DialogueTrigger trigger;
 
     [HideInInspector] 
     public LocalizedString myDialogue;
@@ -25,10 +26,8 @@ public class NPC : MonoBehaviour
 
     private void Start()
     {
-        // 1. Intentamos obtener el objeto de guardado global al inicio
         if (SaveManager.TryGetGlobalSaveObject<NpcsSaveObject>(out npcSaveObject))
         {
-            // 2. Comprobamos si este NPC ya tiene datos registrados utilizando el método helper
             if (npcSaveObject.ContainsKey(npcName))
             {
                 timesSpoken = npcSaveObject.GetTimesSpoken(npcName);
@@ -36,7 +35,6 @@ public class NPC : MonoBehaviour
             }
             else
             {
-                // Si es la primera vez que interactuamos con él, lo registramos con 0
                 npcSaveObject.SetTimesSpoken(npcName, 0);
                 timesSpoken = 0;
             }
@@ -47,14 +45,30 @@ public class NPC : MonoBehaviour
         }
     }
 
-    public void BeTheOne() => manager.SetNewNPC(this);
+    public void BeTheOne()
+{
+    if (currentMode == DialogueMode.Answer || currentMode == DialogueMode.Question) manager.canInteract = false;
+    else manager.canInteract = true;
+    Debug.Log($"can interact: {manager.canInteract}");
+    if (manager != null && manager.canInteract)
+    {
+        manager.SetNewNPC(this);
+    }
+}
 
     public void FindDialogue()
     {
-        switch (startMode)
+        switch (currentMode)
         {
             case DialogueMode.Intro:
                 string intro = $"npc_{npcName.ToLower()}_intro";
+
+                // Enqueues tag <?setMode=Answer> to be added at the end of the last page
+                if (trigger != null)
+                {
+                    trigger.AddEndTagToNextDialogue("setMode", DialogueMode.Answer.ToString());
+                }
+
                 master.AssignNewDialogue(intro);
                 Debug.Log($"<color=#C5FF10>Assigned dialogue {intro}</color>");
                 break;
@@ -67,8 +81,25 @@ public class NPC : MonoBehaviour
                 break;
 
             default:
-                Debug.LogWarning($"<color=#FF4310>NPC {npcName} no tiene Start Mode definido.</color>");
+                Debug.LogWarning($"<color=#FF4310>NPC {npcName} ha intentado buscar un diálogo NO estando en Intro ni Monologue.</color>");
                 break;
+        }
+    }
+
+    // Public method invoked exclusively by DialogueManager for the active NPC
+    public void HandleDialogueEvent(string eventName, string[] parameters)
+    {
+        if (eventName.Equals("setMode", System.StringComparison.OrdinalIgnoreCase))
+        {
+            if (parameters != null && parameters.Length > 0)
+            {
+                if (System.Enum.TryParse(parameters[0], out DialogueMode newMode))
+                {
+                    Debug.Log($"<color=#34ebcf>[{npcName}] => Mode.Answer</color>");
+                    //currentMode = newMode;
+                    //Debug.Log($"[NPC] {npcName} switched mode to: <color=#C5FF10>{currentMode}</color>");
+                }
+            }
         }
     }
 
@@ -91,13 +122,22 @@ public class NPC : MonoBehaviour
     {
         timesSpoken = Mathf.Min(timesSpoken + 1, GetMaxMonologues());
 
-        // 3. Guardamos el nuevo valor en nuestro SaveObject global
         if (npcSaveObject != null)
         {
             npcSaveObject.SetTimesSpoken(npcName, timesSpoken);
-
-            // Guardamos inmediatamente en el almacenamiento persistente
             SaveManager.SaveGame();
         }
+    }
+
+    public void ChangeDialogueMode(DialogueMode newMode)
+    {
+        currentMode = newMode;
+        Debug.Log($"[NPC] {npcName} switched mode to: <color=#C5FF10>{currentMode}</color>");
+
+        //to do: en caso de cambiar a answer:
+        //Visual operations to bubble
+        //Enable Q&A UI
+        //Change player controls to dialogue
+
     }
 }

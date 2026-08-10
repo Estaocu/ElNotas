@@ -12,6 +12,32 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private DictionaryUIManager dialogueUI;
     [SerializeField] private DialogueBehaviour plainBubble;
     [SerializeField] private GameObject textCanvas;
+    [SerializeField] private DialogueTrigger trigger;
+
+    private void OnEnable()
+    {
+        if (trigger != null)
+        {
+            trigger.onEventMarkerReceived.AddListener(OnEventMarkerReceived);
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (trigger != null)
+        {
+            trigger.onEventMarkerReceived.RemoveListener(OnEventMarkerReceived);
+        }
+    }
+
+    // Listens to DialogueTrigger events and routes them only to currentNPC
+    private void OnEventMarkerReceived(string eventName, string[] parameters)
+    {
+        if (currentNPC != null)
+        {
+            currentNPC.HandleDialogueEvent(eventName, parameters);
+        }
+    }
 
     public void EnterDialogue(InputAction.CallbackContext context)
     {
@@ -34,7 +60,7 @@ public class DialogueManager : MonoBehaviour
 
     public void RemoveCurrentNPC(NPC newNpc) //Al exitear collider de npc
     {
-        if (newNpc != null && newNpc !=currentNPC) return;
+        if (newNpc != null && newNpc != currentNPC) return;
         currentNPC = null;
         canInteract = false;
     }

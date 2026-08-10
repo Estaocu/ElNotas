@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Localization;
 using Febucci.TextAnimatorForUnity;
+using Febucci.TextAnimatorCore.Typing;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 using Febucci.TextAnimatorForUnity.TextMeshPro;
@@ -19,8 +21,17 @@ public class DialogueTrigger : MonoBehaviour
     public TextAnimator_TMP tAnimator;
 
     public UnityEvent finishDialogue;
+    
+    // UnityEvent to forward Text Animator messages to external scripts
+    public UnityEvent<string, string[]> onEventMarkerReceived;
 
     public TextMeshProUGUI tmp;
+
+    // Queue of tags to be appended to the last page of the next dialogue string
+    private readonly List<string> pendingEndTags = new List<string>();
+    
+    // Structure to store pending end actions for guaranteed execution on skip
+    private readonly List<(string name, string[] parameters)> pendingEndEvents = new List<(string, string[])>();
 
     void Awake()
     {
@@ -36,7 +47,10 @@ public class DialogueTrigger : MonoBehaviour
             localizedString.StringChanged += StartDialogue;
 
         if (typewriter != null)
+        {
             typewriter.onTextShowed.AddListener(OnPageFinished);
+            typewriter.onMessage.AddListener(OnMessageReceived);
+        }
     }
 
     void OnDisable()
@@ -45,25 +59,37 @@ public class DialogueTrigger : MonoBehaviour
             localizedString.StringChanged -= StartDialogue;
 
         if (typewriter != null)
+        {
             typewriter.onTextShowed.RemoveListener(OnPageFinished);
+            typewriter.onMessage.RemoveListener(OnMessageReceived);
+        }
+    }
+
+    public void AddEndTagToNextDialogue(string eventName, params string[] parameters)
+    {
+        string tag = TextAnimatorTagUtility.BuildEventTag(eventName, parameters);
+        if (!string.IsNullOrEmpty(tag))
+        {
+            pendingEndTags.Add(tag);
+            pendingEndEvents.Add((eventName, parameters));
+        }
     }
 
     public void OnAcceptAction(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
-            Debug.Log("Detected Accept key");
             if (pages == null) return;
 
             if (!waitingForInput)
             {
                 typewriter.SkipTypewriter();
-                Debug.Log("Skip Typewriter");
+                // Ensures end events are triggered even if TextAnimator skips the marker
+                ExecutePendingEndEvents();
             }
             else
             {
                 AdvancePage();
-                Debug.Log("Advance Page");
             }
         }
     }
@@ -73,6 +99,17 @@ public class DialogueTrigger : MonoBehaviour
         if (string.IsNullOrEmpty(localizedText)) return;
 
         pages = localizedText.Split('|');
+
+        if (pendingEndTags.Count > 0 && pages.Length > 0)
+        {
+            int lastPageIndex = pages.Length - 1;
+            foreach (string tag in pendingEndTags)
+            {
+                pages[lastPageIndex] += tag;
+            }
+            pendingEndTags.Clear();
+        }
+
         currentPage = 0;
         ShowCurrentPage();    
     }
@@ -90,6 +127,32 @@ public class DialogueTrigger : MonoBehaviour
     void OnPageFinished()
     {
         waitingForInput = true;
+        // If we reached the last page and it finished naturally, flush any pending end events
+        if (pages != null && currentPage == pages.Length - 1)
+        {
+            ExecutePendingEndEvents();
+        }
+    }
+
+    private void OnMessageReceived(EventMarker marker)
+    {
+        // Remove from pending list if received naturally through TextAnimator
+        pendingEndEvents.RemoveAll(e => e.name.Equals(marker.name, System.StringComparison.OrdinalIgnoreCase));
+        onEventMarkerReceived?.Invoke(marker.name, marker.parameters);
+    }
+
+    private void ExecutePendingEndEvents()
+    {
+        // Executes any end event that hasn't been triggered yet (e.g. during skip)
+        if (pages != null && currentPage == pages.Length - 1 && pendingEndEvents.Count > 0)
+        {
+            for (int i = pendingEndEvents.Count - 1; i >= 0; i--)
+            {
+                var evt = pendingEndEvents[i];
+                onEventMarkerReceived?.Invoke(evt.name, evt.parameters);
+            }
+            pendingEndEvents.Clear();
+        }
     }
 
     public void AdvancePage()
@@ -106,16 +169,15 @@ public class DialogueTrigger : MonoBehaviour
 
     public void RestartText()
     {   
-        tAnimator.SetText(tmp.text);          // re-aplica el texto al TextAnimator
-        typewriter.StartShowingText(true);    // true = empezar desde el principio
+        tAnimator.SetText(tmp.text);
+        typewriter.StartShowingText(true);
     }
 
     void EndDialogue()
     {
+        ExecutePendingEndEvents();
         waitingForInput = true;
         finishDialogue.Invoke(); 
         Debug.Log("End of dialogue");
     }
-
-    
 }

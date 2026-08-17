@@ -16,7 +16,7 @@ public class DialogueTextMaster : MonoBehaviour
     public LocalizeStringEvent locString;
     public TypewriterComponent typewriter;
     public TextAnimator_TMP tAnimator;
-    public DialogueTrigger trigger;
+    public DialogueBehaviour trigger;
     public string tableName = "NPCS";
 
     public void RestartText()

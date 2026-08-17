@@ -1174,10 +1174,6 @@ MonoBehaviour:
     m_ActionName: Gameplay/DebugSpawnSoundwave[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 897b77e5-14ae-4255-ba35-de7c8f8b9dfb
-    m_ActionName: Gameplay/Jump[/Keyboard/space]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: 36546575-fd7e-4738-919d-90dd8c545869
     m_ActionName: DebugAndTesting/TP_0[/Keyboard/numpad0]
   - m_PersistentCalls:
@@ -1348,6 +1344,14 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: b1457f1b-91f2-4fbb-a191-72ed66a66172
     m_ActionName: Gameplay/Interact[/Keyboard/e,/XInputControllerWindows/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c25f43c5-c8ab-47fd-a121-a4d2dd6e14ce
+    m_ActionName: Notes/Pause[/Keyboard/escape,/XInputControllerWindows/start,/XInputControllerWindows1/start]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6c682884-c7d2-4150-b52b-50b7c765b435
+    m_ActionName: Text/Accept[/Keyboard/e,/XInputControllerWindows/buttonEast,/XInputControllerWindows1/buttonEast]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Gameplay

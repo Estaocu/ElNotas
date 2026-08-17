@@ -509,8 +509,35 @@ MonoBehaviour:
   bgWord: {fileID: 4790191582503926671}
   bgMelody: {fileID: 1971729973577137108}
   wordText: {fileID: 4095659235357251124}
-  melodyString: {fileID: 4792983413388925950}
-  isSelected: 0
+  currentSlot: 0
+  word: {fileID: 0}
+  rotationTime: 0
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  minSlot: 0
+  maxSlot: 0
 --- !u!1 &5850593121648585236
 GameObject:
   m_ObjectHideFlags: 0

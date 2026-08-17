@@ -8,7 +8,8 @@ public class SingleNotesListener : MonoBehaviour, IPoolable
     public enum ListenerMode
     {
         PredefinedMelodies,
-        RecordAndBounce
+        RecordAndBounce,
+        RecentBuffer
     }
 
     [Header("General Settings")]
@@ -28,7 +29,7 @@ public class SingleNotesListener : MonoBehaviour, IPoolable
     public UnityEvent<notesEnum[], Transform> OnMelodyMatchedEvent;
     public UnityEvent<Transform> OnMelodyFailedEvent;
 
-    [Header("Legacy Settings (Record & Bounce)")]
+    [Header("Legacy Settings (Record & Bounce) & Recent Buffer")]
     [SerializeField] private notesEnum[] currentMelody = new notesEnum[2];
     [SerializeField] private notesEnum[] externalMelody = new notesEnum[2];
     public notesEnum[] desiredMelody = new notesEnum[2];
@@ -105,6 +106,10 @@ public class SingleNotesListener : MonoBehaviour, IPoolable
         {
             HandlePredefinedMelodiesLogic(sw);
         }
+        else if (currentMode == ListenerMode.RecentBuffer)
+        {
+            HandleRecentBufferLogic(sw);
+        }
     }
 
     private void HandlePredefinedMelodiesLogic(SingleNoteSoundwave sw)
@@ -114,9 +119,37 @@ public class SingleNotesListener : MonoBehaviour, IPoolable
         OnNoteReceivedEvent?.Invoke(sw.myNote, authorTransform);
         currentBuffer.Add(sw.myNote);
 
+        // Keep only the last maxBufferLength notes (sliding window)
+        if (currentBuffer.Count > maxBufferLength)
+        {
+            currentBuffer.RemoveAt(0);
+        }
+
         if (currentBuffer.Count >= maxBufferLength)
         {
             CheckBufferAgainstTargetMelodies(authorTransform);
+        }
+    }
+
+    private void HandleRecentBufferLogic(SingleNoteSoundwave sw)
+    {
+        Transform authorTransform = sw.author != null ? sw.author.transform : transform;
+        
+        OnNoteReceivedEvent?.Invoke(sw.myNote, authorTransform);
+        currentBuffer.Add(sw.myNote);
+
+        int targetLength = desiredMelody != null ? desiredMelody.Length : 0;
+        if (targetLength <= 0) return;
+
+        // Keep only the last targetLength notes (sliding window)
+        if (currentBuffer.Count > targetLength)
+        {
+            currentBuffer.RemoveAt(0);
+        }
+
+        if (currentBuffer.Count >= targetLength)
+        {
+            CheckRecentBufferAgainstDesiredMelody(authorTransform);
         }
     }
 
@@ -143,10 +176,21 @@ public class SingleNotesListener : MonoBehaviour, IPoolable
         else
         {
             OnMelodyFailedEvent?.Invoke(author);
-            if (clearOnFail)
-            {
-                currentBuffer.Clear();
-            }
+        }
+    }
+
+    private void CheckRecentBufferAgainstDesiredMelody(Transform author)
+    {
+        if (desiredMelody == null || desiredMelody.Length == 0) return;
+
+        if (CompareArrays(currentBuffer.ToArray(), desiredMelody))
+        {
+            OnMelodyMatchedEvent?.Invoke(desiredMelody, author);
+            currentBuffer.Clear();
+        }
+        else
+        {
+            OnMelodyFailedEvent?.Invoke(author);
         }
     }
 
@@ -229,9 +273,9 @@ public class SingleNotesListener : MonoBehaviour, IPoolable
             if (lastNoteIndex == 1)
             {
                 if (homingProjectile != null && author != null) homingProjectile.Launch(author);
-                RearrangeMelody(desiredMelody);
-                ClearExternalMelody();
             }
+            RearrangeMelody(desiredMelody);
+            ClearExternalMelody();
         }
         else
         {

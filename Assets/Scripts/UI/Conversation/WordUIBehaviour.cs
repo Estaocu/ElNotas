@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.UI;
 using System.Linq;
+using UnityEngine.Localization.Components;
 
 
 public class WordUIBehaviour : MonoBehaviour
@@ -13,26 +14,17 @@ public class WordUIBehaviour : MonoBehaviour
     public Image bgWord;
     public Image bgMelody;
     public TextMeshProUGUI wordText;
-    public TextMeshProUGUI melodyString;
-    // public bool isSelected; REDUNDANTE, SI ES SLOT 3 (o 2 segun como cuentes) ESTÁ SELECTED SIEMPRE
     public int currentSlot;
     public Word word;
-    [SerializeField] private float rotationTime;
-    [SerializeField] private AnimationCurve curve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
     private RectTransform rectTransform;
-    public float startAngle;
-    public float endAngle;
+
+    public int minSlot = 0;
+    public int maxSlot = 4;
 
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
-    }
-
-
-    void Start()
-    {
         UpdateVisuals();
-        DisplayNewWord();
     }
 
     public void SetWordText(LocalizedString sourceText)
@@ -40,139 +32,57 @@ public class WordUIBehaviour : MonoBehaviour
         wordText.SetText(sourceText.GetLocalizedString());
     }
 
-    public void SetMelodyString(string sourceText)
+    public void ToggleMelodyBg(bool state)
     {
-        melodyString.SetText(sourceText);
-    }
-
-    public void HideMelody()
-    {
-        bgMelody.GetComponent<Image>().enabled = false;
-        melodyString.enabled = false;
-    }
-    public void ShowMelody()
-    {
-        bgMelody.GetComponent<Image>().enabled = true;
-        melodyString.enabled = true;
+        bgMelody.enabled = state;
     }
     public void RotateSlot(int dpadValue)
     {
         if (dpadValue == 0) return;
-        //Rotation time debe ser igual? independ. de qué operación se va a hacer, mismo tiempo con  30º que 360º
-        //SetEndAngle(false, dpadValue, slotAmount);
 
-        if (dpadValue == -1)
-        {
-            gameObject.transform.Rotate(0f, 0f, -30f);
-            Debug.Log("Rotated parriba");
-        }
-        else gameObject.transform.Rotate(0f, 0f, 30f);
-        Debug.Log("Rotated pabajo");
+        rectTransform.transform.Rotate(0f, 0f, dpadValue * 30f);
 
-        OnWheelRotated(dpadValue);
     }
 
-    private IEnumerator RotateSlotRoutine()
+    public void UpdateVisuals()
     {
-        float elapsedTime = 0f;
-
-        while (elapsedTime < rotationTime)
+        if (currentSlot == minSlot || currentSlot == maxSlot)
         {
-            elapsedTime += Time.deltaTime;
-
-            float linearT = Mathf.Clamp01(elapsedTime / rotationTime);
-
-            float curveT = curve.Evaluate(linearT);
-
-            float currentAngle = Mathf.Lerp(startAngle, endAngle, curveT);
-
-            rectTransform.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
-
-            yield return null;
+            //bgWord.color = Color.black;
+            //ToggleVisibility(false);
+            ToggleMelodyBg(false);  
+            return;
         }
 
-        rectTransform.localRotation = Quaternion.Euler(0f, 0f, endAngle);
-    }
-
-    public void SetEndAngle(bool regularRotation, int slotAmount, int dpadValue = 0)
-    {
-        if (dpadValue == 0) return;
-
-        startAngle = rectTransform.localRotation.z;
-
-        if (regularRotation)
+        if (currentSlot == 2)
         {
-            endAngle = 1;
-
-
+            //bgWord.color = Color.cyan;
+            ToggleMelodyBg(true);
+            return;
         }
-        else
 
-        endAngle = startAngle + (360-(slotAmount*30)*dpadValue);
+        ToggleVisibility(true);
+        //bgWord.color = Color.blue;
+        ToggleMelodyBg(false);
     }
 
-    public void OnWheelRotated(int dpadValue)
+    public void TeleportExtremes(int polarity)
     {
-        currentSlot = currentSlot - dpadValue;
-        UpdateVisuals(dpadValue);
-        //TeleportExtremes();
-    }
+        if (polarity == 1 && currentSlot == maxSlot)
+    {
+        rectTransform.localRotation = Quaternion.Euler(0f, 0f, -45f);
+        }
 
-    public void UpdateVisuals(int dpadValue = 0)
-    {
-        //SetWordText(currentSlot.ToString());
-        switch (currentSlot)
+        else if (polarity == -1 && currentSlot == minSlot)
         {
-            case 0:
-            case 4:
-            bgWord.color = Color.black;
-            //bgWord.enabled = false;
-            //wordText.enabled = false;
-            ToggleVisibility(false);
-            TeleportExtremes();
-            HideMelody();    
-            DisplayNewWord();
-
-            break;
-
-            case 1:
-            case 3:
-            ToggleVisibility(true);
-            bgWord.color = Color.blue;
-            HideMelody();
-            break;
-
-            case 2:
-            bgWord.color = Color.cyan;
-            ShowMelody();
-            break;
-
-            default:
-            Debug.Log("Default in Switch!");
-            break;
-
-        }
+        rectTransform.localRotation = Quaternion.Euler(0f, 0f, 75f);
+        }   
     }
 
-    public void TeleportExtremes()
+    public void DisplayNewWord(Word targetWord)
     {
-        if (currentSlot != 0 || currentSlot != 4) return;
-        if (currentSlot == 0)
-        {
-            gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 75f);
-        }
-        else
-        {
-            gameObject.transform.rotation = Quaternion.Euler(0f, 0f, -45f);
-        }
-    }
-
-    public void DisplayNewWord()
-    {
+        word = targetWord;
         SetWordText(word.displayName);
-        string melodyText = string.Concat(word.melody.Select(n => ((int)n + 1).ToString()));
-        //melodyString.SetText(melodyText);
-        melodyString.SetText(currentSlot.ToString());
     }
 
     public void ToggleVisibility(bool isVisible)
@@ -187,4 +97,26 @@ public class WordUIBehaviour : MonoBehaviour
             bgWord.enabled = isVisible;
         }
     }
+
+    public void SetMaxSlots(int min, int max)
+    {
+        minSlot = min; maxSlot = max;
+    }
+
+    public void RecalculateSlotPosition()
+{
+    float zAngle = Mathf.DeltaAngle(0f, rectTransform.localEulerAngles.z);
+
+    // 1. Cálculo de tu fórmula
+    float nf = (75f - zAngle) / 30f;
+    int rawSlot = Mathf.RoundToInt(nf);
+
+    // 2. Total de slots (ej: 4 - 0 + 1 = 5 slots)
+    int totalSlots = (maxSlot - minSlot) + 1;
+
+    // 3. Módulo cíclico seguro: si rawSlot es -1 pasa a ser 4 (maxSlot), si es 5 pasa a ser 0 (minSlot)
+    currentSlot = minSlot + ((rawSlot - minSlot) % totalSlots + totalSlots) % totalSlots;
+
+    Debug.Log($"Rotation: {zAngle}° | Slot: [{currentSlot}]");
+}
 }

@@ -203,8 +203,18 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
         GameObject hitRoot = collision.transform.root.gameObject;
 
         // Ignorar al emisor del proyectil.
-        if (sender != null && hitRoot == sender)
+        if (sender != null && hitRoot == sender) return;
+
+
+        // If ruin impacted:
+        RuinBehaviour ruin = collision.collider.GetComponentInParent<RuinBehaviour>();
+
+        if (ruin != null)
+        {
+            ruin.OnProjectileHit();
+            Explode();
             return;
+        }
 
         CornSpitterAI hitAI = collision.collider.GetComponentInParent<CornSpitterAI>();
 

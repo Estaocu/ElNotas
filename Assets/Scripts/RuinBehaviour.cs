@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RuinBehaviour : MonoBehaviour, IReactToMelody
 {
-    private enum RuinState
+    public enum RuinState
     {
         Fallen,
         Risen
@@ -83,7 +83,7 @@ public class RuinBehaviour : MonoBehaviour, IReactToMelody
         }
     }
 
-    private void ChangeRuinState(RuinState newState)
+    public void ChangeRuinState(RuinState newState)
     {
         myRuinState = newState;
         UpdateRuinVisuals();
@@ -92,7 +92,7 @@ public class RuinBehaviour : MonoBehaviour, IReactToMelody
 
     private void UpdateRuinVisuals()
     {
-        bool isRisen = (myRuinState == RuinState.Risen);
+        bool isRisen = myRuinState == RuinState.Risen;
 
         if (risenRuin != null)
         {
@@ -109,5 +109,11 @@ public class RuinBehaviour : MonoBehaviour, IReactToMelody
     {
         // Evita callbacks huérfanos o errores si el objeto se desactiva/destruye durante la cuenta atrás
         CancelPendingReset();
+    }
+
+    public void OnProjectileHit()
+    {
+        if(initialRuinState == RuinState.Risen) ApplyTemporaryState(RuinState.Fallen);
+        if(initialRuinState == RuinState.Fallen) ChangeRuinState(RuinState.Fallen);
     }
 }

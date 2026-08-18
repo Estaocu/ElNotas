@@ -9,9 +9,9 @@ public class DialogueManager : MonoBehaviour
     public NPC currentNPC;
     
     [SerializeField] private ConversationManager conversation;
-    [SerializeField] private DialogueBehaviour plainBubble;
     [SerializeField] private GameObject textCanvas;
-    [SerializeField] private DialogueBehaviour trigger;
+    [SerializeField] private DialogueBehaviour trigger; 
+
     private bool flagConv;
 
     private void OnEnable()
@@ -75,6 +75,8 @@ public class DialogueManager : MonoBehaviour
     public void ExitConversation(InputAction.CallbackContext context) // Exit answer-question ui
     {
         if (!context.performed) return;
+
+        trigger.ToggleInConv(false);
         
         conversation.SetUIActive(false);
 
@@ -107,6 +109,7 @@ public class DialogueManager : MonoBehaviour
                     {
                         BeginConversation();
                         flagConv = true;
+                        trigger.inConv = true;
                         return;
 
                     }
@@ -122,9 +125,13 @@ public class DialogueManager : MonoBehaviour
 
                 break;
 
+
+                case DialogueMode.Monologue:
                 case DialogueMode.Goodbye:
                 ActionMapsManager.SetActiveMaps(DefaultActionMap.Gameplay);
                 RemoveCurrentNPC(currentNPC);
+                trigger.inConv = false;
+                flagConv = false;
 
                 break;  
             }

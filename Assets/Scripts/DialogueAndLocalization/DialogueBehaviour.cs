@@ -22,7 +22,10 @@ public class DialogueBehaviour : MonoBehaviour
     public TextAnimator_TMP tAnimator;
     public TextMeshProUGUI tmp;
 
+    public bool inConv;
+
     public UnityEvent finishDialogue;
+    public UnityEvent returnToConv;
     
     // UnityEvent to forward Text Animator messages to external scripts
     public UnityEvent<string, string[]> onEventMarkerReceived;
@@ -196,7 +199,19 @@ public class DialogueBehaviour : MonoBehaviour
         pendingCloseCallbacks.Clear();
 
         waitingForInput = true;
-        finishDialogue?.Invoke(); 
+        if (!inConv)
+        finishDialogue?.Invoke();
+        
+
+        if (inConv)
+        returnToConv?.Invoke();
+
+
+    }
+
+    public void ToggleInConv(bool state)
+    {
+        inConv = state;
     }
 
     

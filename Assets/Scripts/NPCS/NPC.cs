@@ -36,10 +36,13 @@ public class NPC : MonoBehaviour
     [HideInInspector] public int timesSpoken;
 
     private NpcsSaveObject npcSaveObject;
+    private bool wantsNotes;
 
     private void Start()
     {
         ogMode = currentMode;
+
+        wantsNotes = true;
 
         List<notesEnum[]> melodies = new List<notesEnum[]>();
         notesEnum[] greeting = new notesEnum[]{notesEnum.Note4, notesEnum.Note3};
@@ -87,12 +90,14 @@ public class NPC : MonoBehaviour
         switch (currentMode)
         {
             case DialogueMode.Intro:
+                if (!wantsNotes) return;
                 string intro = $"npc_{npcName.ToLower()}_intro";
                 master.AssignNewDialogue(intro);
                 Debug.Log($"<color=#C5FF10>Assigned dialogue {intro}</color>");
                 break;
 
             case DialogueMode.Monologue:
+                master.trigger.ToggleInConv(false);
                 string monologue = $"npc_{npcName.ToLower()}_monologue{timesSpoken}";
                 master.AssignNewDialogue(monologue);
                 Debug.Log($"<color=#C5FF10>Assigned dialogue {monologue}</color>");

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CarterGames.Assets.SaveManager.Slots;
+using CMF;
 using TMPro;
 using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
@@ -64,6 +65,10 @@ public class ConversationManager : MonoBehaviour
         AssignWordsToSlots();
         Debug.Log("CONVERSATION (re)/enabled");
         IndexToWord();
+        npcText.transform.root.gameObject.SetActive(true);
+
+        string txt = $"npc_{currentNpc.npcName.ToLower()}_answer0";
+        npcText.AssignNewDialogue(txt);
     }
 
     private void ClampCategoryToAvailable()
@@ -240,6 +245,8 @@ public class ConversationManager : MonoBehaviour
 
     public void FindAnswer()
     {
+        npcText.trigger.ToggleInConv(true);
+
         string a = bubbleWords[0].word.name.ToLower();
         string b = bubbleWords[1].word.name.ToLower();
         string npc = currentNpc.npcName.ToLower();
@@ -253,6 +260,10 @@ public class ConversationManager : MonoBehaviour
         Debug.Log("Finding dialogue: " + primaryId);
 
         npcText.AssignNewDialogue(primaryId, swappedId);
+        
+
+        ActionMapsManager.SetActiveMaps(DefaultActionMap.Text);
+
     }
 
     public void UpdateCategoryLength()
@@ -313,6 +324,20 @@ public class ConversationManager : MonoBehaviour
 
         debugWord.DisplayNewWord(selectedWord);
 }
+
+    public void ReturnConversation()
+        {
+
+        foreach (PlayerBubbleWordBehaviour bubble in bubbleWords)
+        {
+            bubble.EraseWord();
+        }
+
+        ActionMapsManager.SetActiveMaps(DefaultActionMap.Conversation);
+        string txt = $"npc_{currentNpc.npcName.ToLower()}_answer1";
+
+        npcText.AssignNewDialogue(txt);
+        }
 
             
 

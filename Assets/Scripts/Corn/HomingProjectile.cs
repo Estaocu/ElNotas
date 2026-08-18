@@ -200,16 +200,19 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
 
     void OnCollisionEnter(Collision collision)
     {
-        if (sender != null && collision.transform.root.gameObject == sender) return;
+        GameObject hitRoot = collision.transform.root.gameObject;
 
-        // Check if the direct hit is on the targeted enemy
-        if (enemy != null && collision.transform.root.gameObject == enemy)
+        // Ignorar al emisor del proyectil.
+        if (sender != null && hitRoot == sender)
+            return;
+
+        CornSpitterAI hitAI = collision.collider.GetComponentInParent<CornSpitterAI>();
+
+        if (hitAI != null)
         {
-            var ai = enemy.GetComponent<CornSpitterAI>();
-            if (ai != null)
-            {
-                ai.TakeDirectHit();
-            }
+            hitAI.TakeDirectHit();
+            Explode();
+            return;
         }
 
         Explode();

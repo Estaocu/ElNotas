@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnityEngine;
+using CarterGames.Assets.SaveManager;
+using Save;
 
 [CreateAssetMenu(fileName = "LearnedWords", menuName = "ScriptableObjects/Learned Words", order = 3)]
 public class LearnedWords : ScriptableObject
@@ -20,16 +21,23 @@ public class LearnedWords : ScriptableObject
     public event Action<Word> OnWordLearned;
     public event Action<WordCategory> OnCategoryLearned;
 
-    private const string SaveFileName = "learned_words.json";
-    private static string SavePath => Path.Combine(Application.persistentDataPath, SaveFileName);
-
     private bool isLoading;
 
     private void OnEnable()
     {
         if (!Application.isPlaying) return;
-
+        
         ResetProgress();
+    }
+
+    private void OnDisable()
+    {
+        if (!Application.isPlaying) return;
+    }
+
+    private void OnSaveLoaded()
+    {
+        // Se ejecuta automáticamente en cuanto SaveManager termina de cargar
         LoadFromDisk();
     }
 
@@ -109,69 +117,53 @@ public class LearnedWords : ScriptableObject
         learnedCategories.Clear();
     }
 
-    public string ToJson()
-    {
-        var save = new LearnedWordsSave
-        {
-            version = 1,
-            wordIDs = learnedWordList.Select(w => w.wordID).ToList()
-        };
-        return JsonUtility.ToJson(save, prettyPrint: true);
-    }
-
-    public void LoadFromJson(string json)
-    {
-        if (string.IsNullOrEmpty(json) || totalWords == null) return;
-
-        var save = JsonUtility.FromJson<LearnedWordsSave>(json);
-        if (save == null || save.wordIDs == null) return;
-
-        ResetProgress();
-
-        isLoading = true;
-        try
-        {
-            foreach (string id in save.wordIDs)
-            {
-                Word w = totalWords.TotalWords.FirstOrDefault(x => x != null && x.wordID == id);
-                if (w != null) LearnWord(w);
-            }
-        }
-        finally
-        {
-            isLoading = false;
-        }
-    }
-
     public void SaveToDisk()
     {
-        try
+        if (SaveManager.TryGetGlobalSaveObject<NotebookSaveObject>(out var saveObj))
         {
-            File.WriteAllText(SavePath, ToJson());
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"LearnedWords: failed to save to '{SavePath}'. {e.Message}");
+            saveObj.LearnedWordIDs.Value = learnedWordList.Select(w => w.wordID).ToList();
+            SaveManager.SaveGame();
         }
     }
 
     public void LoadFromDisk()
     {
-        try
+        // Reseteamos el estado actual antes de volcar lo que haya en SaveManager
+        ResetProgress();
+
+        if (totalWords == null) return;
+
+        if (SaveManager.TryGetGlobalSaveObject<NotebookSaveObject>(out var saveObj))
         {
-            if (!File.Exists(SavePath)) return;
-            LoadFromJson(File.ReadAllText(SavePath));
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"LearnedWords: failed to load from '{SavePath}'. {e.Message}");
+            List<string> savedIDs = saveObj.LearnedWordIDs.Value;
+
+            // Si el Save Editor está vacío (0 palabras), la lista en ejecución se quedará vacía (0 palabras)
+            if (savedIDs == null || savedIDs.Count == 0) return;
+
+            isLoading = true;
+            try
+            {
+                foreach (string id in savedIDs)
+                {
+                    Word w = totalWords.TotalWords.FirstOrDefault(x => x != null && x.wordID == id);
+                    if (w != null) LearnWord(w);
+                }
+            }
+            finally
+            {
+                isLoading = false;
+            }
         }
     }
 
     [ContextMenu("Debug/Delete Save File")]
     private void DeleteSaveFile()
     {
-        if (File.Exists(SavePath)) File.Delete(SavePath);
+        if (SaveManager.TryGetGlobalSaveObject<NotebookSaveObject>(out var saveObj))
+        {
+            saveObj.LearnedWordIDs.ResetValue();
+            SaveManager.SaveGame();
+        }
         ResetProgress();
     }
 }

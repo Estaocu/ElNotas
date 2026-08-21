@@ -129,42 +129,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Note1"",
-                    ""type"": ""Button"",
-                    ""id"": ""1fbb581a-68d3-4754-b32b-331f9a90e9cd"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Note2"",
-                    ""type"": ""Button"",
-                    ""id"": ""4a1302b2-636c-4c8a-ade0-5ae55c81698d"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Note3"",
-                    ""type"": ""Button"",
-                    ""id"": ""32d9cfb3-2386-4b8f-b020-62138b814e87"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Note4"",
-                    ""type"": ""Button"",
-                    ""id"": ""759e1872-6ecb-42d3-be5f-2872937f0c4e"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Exit"",
                     ""type"": ""Button"",
                     ""id"": ""8822781f-974e-4660-bcd0-46055adc8e29"",
@@ -175,94 +139,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""f04b7d5a-7216-41f7-9c68-f8979fa8aee5"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";ControllerScheme"",
-                    ""action"": ""Note1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3ed8693f-6f28-4019-8d06-2d2260ea8469"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";KeyboardScheme"",
-                    ""action"": ""Note1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8b0f4785-620b-470a-8834-d1e7071ac0c6"",
-                    ""path"": ""<Gamepad>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";ControllerScheme"",
-                    ""action"": ""Note2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1e78408e-1a47-409d-a26e-3bf378847ec7"",
-                    ""path"": ""<Keyboard>/r"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";KeyboardScheme"",
-                    ""action"": ""Note2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8065ec8d-a2e3-4672-8a60-01ee259970d4"",
-                    ""path"": ""<Gamepad>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";ControllerScheme"",
-                    ""action"": ""Note3"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""264241ff-bd08-4f30-a4ca-33419b6ada05"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";KeyboardScheme"",
-                    ""action"": ""Note3"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""292a4108-b877-4684-8092-44ac5331383d"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";ControllerScheme"",
-                    ""action"": ""Note4"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f108bba4-4d17-442c-a86f-bbe4397e443c"",
-                    ""path"": ""<Keyboard>/c"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";ControllerScheme"",
-                    ""action"": ""Note4"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""65666d3e-4cec-4d01-af8e-e61f28abc3b4"",
@@ -1794,6 +1670,45 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Text"",
+            ""id"": ""63b6e5f4-c779-4316-8edf-67ef568ea152"",
+            ""actions"": [
+                {
+                    ""name"": ""Accept"",
+                    ""type"": ""Button"",
+                    ""id"": ""6c682884-c7d2-4150-b52b-50b7c765b435"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""b9ea9a50-3ebd-4409-88ad-f84b5bf8f518"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";KeyboardScheme"",
+                    ""action"": ""Accept"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1c31d230-8433-4160-b7ba-231cf1868f78"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";ControllerScheme"",
+                    ""action"": ""Accept"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1837,10 +1752,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Conversation_NavigateCategories = m_Conversation.FindAction("NavigateCategories", throwIfNotFound: true);
         m_Conversation_AcceptWord = m_Conversation.FindAction("AcceptWord", throwIfNotFound: true);
         m_Conversation_EraseWord = m_Conversation.FindAction("EraseWord", throwIfNotFound: true);
-        m_Conversation_Note1 = m_Conversation.FindAction("Note1", throwIfNotFound: true);
-        m_Conversation_Note2 = m_Conversation.FindAction("Note2", throwIfNotFound: true);
-        m_Conversation_Note3 = m_Conversation.FindAction("Note3", throwIfNotFound: true);
-        m_Conversation_Note4 = m_Conversation.FindAction("Note4", throwIfNotFound: true);
         m_Conversation_Exit = m_Conversation.FindAction("Exit", throwIfNotFound: true);
         // DebugAndTesting
         m_DebugAndTesting = asset.FindActionMap("DebugAndTesting", throwIfNotFound: true);
@@ -1894,6 +1805,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         // RestrictedInput
         m_RestrictedInput = asset.FindActionMap("RestrictedInput", throwIfNotFound: true);
         m_RestrictedInput_Pause = m_RestrictedInput.FindAction("Pause", throwIfNotFound: true);
+        // Text
+        m_Text = asset.FindActionMap("Text", throwIfNotFound: true);
+        m_Text_Accept = m_Text.FindAction("Accept", throwIfNotFound: true);
     }
 
     ~@PlayerInputs()
@@ -1905,6 +1819,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_Notes.enabled, "This will cause a leak and performance issues, PlayerInputs.Notes.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_PauseMenu.enabled, "This will cause a leak and performance issues, PlayerInputs.PauseMenu.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_RestrictedInput.enabled, "This will cause a leak and performance issues, PlayerInputs.RestrictedInput.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Text.enabled, "This will cause a leak and performance issues, PlayerInputs.Text.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1984,10 +1899,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Conversation_NavigateCategories;
     private readonly InputAction m_Conversation_AcceptWord;
     private readonly InputAction m_Conversation_EraseWord;
-    private readonly InputAction m_Conversation_Note1;
-    private readonly InputAction m_Conversation_Note2;
-    private readonly InputAction m_Conversation_Note3;
-    private readonly InputAction m_Conversation_Note4;
     private readonly InputAction m_Conversation_Exit;
     /// <summary>
     /// Provides access to input actions defined in input action map "Conversation".
@@ -2016,22 +1927,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Conversation/EraseWord".
         /// </summary>
         public InputAction @EraseWord => m_Wrapper.m_Conversation_EraseWord;
-        /// <summary>
-        /// Provides access to the underlying input action "Conversation/Note1".
-        /// </summary>
-        public InputAction @Note1 => m_Wrapper.m_Conversation_Note1;
-        /// <summary>
-        /// Provides access to the underlying input action "Conversation/Note2".
-        /// </summary>
-        public InputAction @Note2 => m_Wrapper.m_Conversation_Note2;
-        /// <summary>
-        /// Provides access to the underlying input action "Conversation/Note3".
-        /// </summary>
-        public InputAction @Note3 => m_Wrapper.m_Conversation_Note3;
-        /// <summary>
-        /// Provides access to the underlying input action "Conversation/Note4".
-        /// </summary>
-        public InputAction @Note4 => m_Wrapper.m_Conversation_Note4;
         /// <summary>
         /// Provides access to the underlying input action "Conversation/Exit".
         /// </summary>
@@ -2074,18 +1969,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @EraseWord.started += instance.OnEraseWord;
             @EraseWord.performed += instance.OnEraseWord;
             @EraseWord.canceled += instance.OnEraseWord;
-            @Note1.started += instance.OnNote1;
-            @Note1.performed += instance.OnNote1;
-            @Note1.canceled += instance.OnNote1;
-            @Note2.started += instance.OnNote2;
-            @Note2.performed += instance.OnNote2;
-            @Note2.canceled += instance.OnNote2;
-            @Note3.started += instance.OnNote3;
-            @Note3.performed += instance.OnNote3;
-            @Note3.canceled += instance.OnNote3;
-            @Note4.started += instance.OnNote4;
-            @Note4.performed += instance.OnNote4;
-            @Note4.canceled += instance.OnNote4;
             @Exit.started += instance.OnExit;
             @Exit.performed += instance.OnExit;
             @Exit.canceled += instance.OnExit;
@@ -2112,18 +1995,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @EraseWord.started -= instance.OnEraseWord;
             @EraseWord.performed -= instance.OnEraseWord;
             @EraseWord.canceled -= instance.OnEraseWord;
-            @Note1.started -= instance.OnNote1;
-            @Note1.performed -= instance.OnNote1;
-            @Note1.canceled -= instance.OnNote1;
-            @Note2.started -= instance.OnNote2;
-            @Note2.performed -= instance.OnNote2;
-            @Note2.canceled -= instance.OnNote2;
-            @Note3.started -= instance.OnNote3;
-            @Note3.performed -= instance.OnNote3;
-            @Note3.canceled -= instance.OnNote3;
-            @Note4.started -= instance.OnNote4;
-            @Note4.performed -= instance.OnNote4;
-            @Note4.canceled -= instance.OnNote4;
             @Exit.started -= instance.OnExit;
             @Exit.performed -= instance.OnExit;
             @Exit.canceled -= instance.OnExit;
@@ -3110,6 +2981,102 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="RestrictedInputActions" /> instance referencing this action map.
     /// </summary>
     public RestrictedInputActions @RestrictedInput => new RestrictedInputActions(this);
+
+    // Text
+    private readonly InputActionMap m_Text;
+    private List<ITextActions> m_TextActionsCallbackInterfaces = new List<ITextActions>();
+    private readonly InputAction m_Text_Accept;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Text".
+    /// </summary>
+    public struct TextActions
+    {
+        private @PlayerInputs m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public TextActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Text/Accept".
+        /// </summary>
+        public InputAction @Accept => m_Wrapper.m_Text_Accept;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Text; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="TextActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(TextActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="TextActions" />
+        public void AddCallbacks(ITextActions instance)
+        {
+            if (instance == null || m_Wrapper.m_TextActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_TextActionsCallbackInterfaces.Add(instance);
+            @Accept.started += instance.OnAccept;
+            @Accept.performed += instance.OnAccept;
+            @Accept.canceled += instance.OnAccept;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="TextActions" />
+        private void UnregisterCallbacks(ITextActions instance)
+        {
+            @Accept.started -= instance.OnAccept;
+            @Accept.performed -= instance.OnAccept;
+            @Accept.canceled -= instance.OnAccept;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="TextActions.UnregisterCallbacks(ITextActions)" />.
+        /// </summary>
+        /// <seealso cref="TextActions.UnregisterCallbacks(ITextActions)" />
+        public void RemoveCallbacks(ITextActions instance)
+        {
+            if (m_Wrapper.m_TextActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="TextActions.AddCallbacks(ITextActions)" />
+        /// <seealso cref="TextActions.RemoveCallbacks(ITextActions)" />
+        /// <seealso cref="TextActions.UnregisterCallbacks(ITextActions)" />
+        public void SetCallbacks(ITextActions instance)
+        {
+            foreach (var item in m_Wrapper.m_TextActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_TextActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="TextActions" /> instance referencing this action map.
+    /// </summary>
+    public TextActions @Text => new TextActions(this);
     private int m_ControllerSchemeSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -3171,34 +3138,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnEraseWord(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Note1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnNote1(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Note2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnNote2(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Note3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnNote3(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Note4" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnNote4(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Exit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
@@ -3534,5 +3473,20 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPause(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Text" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="TextActions.AddCallbacks(ITextActions)" />
+    /// <seealso cref="TextActions.RemoveCallbacks(ITextActions)" />
+    public interface ITextActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Accept" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAccept(InputAction.CallbackContext context);
     }
 }

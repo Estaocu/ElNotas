@@ -709,7 +709,7 @@ MonoBehaviour:
   castType: 1
   layerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 524151
   ignoreList:
   - {fileID: 851522681646524344}
   minimumDistanceFromObstacles: 0.3
@@ -1219,7 +1219,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: DictionaryUIManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: DictionaryUIManager2, Assembly-CSharp
         m_MethodName: SelectWord
         m_Mode: 0
         m_Arguments:
@@ -1235,7 +1235,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: DictionaryUIManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: DictionaryUIManager2, Assembly-CSharp
         m_MethodName: EraseWord
         m_Mode: 0
         m_Arguments:
@@ -1249,26 +1249,10 @@ MonoBehaviour:
     m_ActionId: 2a4abf00-6556-4d16-8f84-d44a40f50122
     m_ActionName: Conversation/EraseWord[/XInputControllerWindows/leftTrigger]
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 1fbb581a-68d3-4754-b32b-331f9a90e9cd
-    m_ActionName: Conversation/Note1[/XInputControllerWindows/buttonSouth,/Keyboard/e]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 4a1302b2-636c-4c8a-ade0-5ae55c81698d
-    m_ActionName: Conversation/Note2[/XInputControllerWindows/buttonEast,/Keyboard/r]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 32d9cfb3-2386-4b8f-b020-62138b814e87
-    m_ActionName: Conversation/Note3[/XInputControllerWindows/buttonWest,/Keyboard/f]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 759e1872-6ecb-42d3-be5f-2872937f0c4e
-    m_ActionName: Conversation/Note4[/XInputControllerWindows/buttonNorth,/Keyboard/c]
-  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DialogueManager, Assembly-CSharp
-        m_MethodName: ExitDialogue
+        m_MethodName: ExitConversation
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1283,7 +1267,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: DictionaryUIManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: DictionaryUIManager2, Assembly-CSharp
         m_MethodName: NavigateWords
         m_Mode: 0
         m_Arguments:
@@ -1299,7 +1283,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: DictionaryUIManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: DictionaryUIManager2, Assembly-CSharp
         m_MethodName: NavigateCategory
         m_Mode: 0
         m_Arguments:
@@ -1329,10 +1313,14 @@ MonoBehaviour:
     m_ActionId: 1cc17a5c-c853-4cf8-9da6-f2beb5cbdaff
     m_ActionName: Notes/Note4[/XInputControllerWindows/buttonNorth,/Keyboard/c]
   - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b1457f1b-91f2-4fbb-a191-72ed66a66172
+    m_ActionName: Gameplay/Interact[/Keyboard/e,/XInputControllerWindows/buttonEast]
+  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: DialogueManager, Assembly-CSharp
-        m_MethodName: EnterDialogue
+        m_TargetAssemblyTypeName: DialogueBehaviour, Assembly-CSharp
+        m_MethodName: OnAcceptAction
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1342,8 +1330,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: b1457f1b-91f2-4fbb-a191-72ed66a66172
-    m_ActionName: Gameplay/Interact[/Keyboard/e,/XInputControllerWindows/buttonEast]
+    m_ActionId: 6c682884-c7d2-4150-b52b-50b7c765b435
+    m_ActionName: Text/Accept[/Keyboard/e,/XInputControllerWindows/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c25f43c5-c8ab-47fd-a121-a4d2dd6e14ce
+    m_ActionName: Notes/Pause[/Keyboard/escape,/XInputControllerWindows/start]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Gameplay

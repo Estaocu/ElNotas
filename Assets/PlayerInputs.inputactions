@@ -43,42 +43,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Note1",
-                    "type": "Button",
-                    "id": "1fbb581a-68d3-4754-b32b-331f9a90e9cd",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Note2",
-                    "type": "Button",
-                    "id": "4a1302b2-636c-4c8a-ade0-5ae55c81698d",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Note3",
-                    "type": "Button",
-                    "id": "32d9cfb3-2386-4b8f-b020-62138b814e87",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Note4",
-                    "type": "Button",
-                    "id": "759e1872-6ecb-42d3-be5f-2872937f0c4e",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Exit",
                     "type": "Button",
                     "id": "8822781f-974e-4660-bcd0-46055adc8e29",
@@ -89,94 +53,6 @@
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "f04b7d5a-7216-41f7-9c68-f8979fa8aee5",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";ControllerScheme",
-                    "action": "Note1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3ed8693f-6f28-4019-8d06-2d2260ea8469",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";KeyboardScheme",
-                    "action": "Note1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8b0f4785-620b-470a-8834-d1e7071ac0c6",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";ControllerScheme",
-                    "action": "Note2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1e78408e-1a47-409d-a26e-3bf378847ec7",
-                    "path": "<Keyboard>/r",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";KeyboardScheme",
-                    "action": "Note2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8065ec8d-a2e3-4672-8a60-01ee259970d4",
-                    "path": "<Gamepad>/buttonWest",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";ControllerScheme",
-                    "action": "Note3",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "264241ff-bd08-4f30-a4ca-33419b6ada05",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";KeyboardScheme",
-                    "action": "Note3",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "292a4108-b877-4684-8092-44ac5331383d",
-                    "path": "<Gamepad>/buttonNorth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";ControllerScheme",
-                    "action": "Note4",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "f108bba4-4d17-442c-a86f-bbe4397e443c",
-                    "path": "<Keyboard>/c",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";ControllerScheme",
-                    "action": "Note4",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "",
                     "id": "65666d3e-4cec-4d01-af8e-e61f28abc3b4",
@@ -1704,6 +1580,45 @@
                     "processors": "",
                     "groups": "",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Text",
+            "id": "63b6e5f4-c779-4316-8edf-67ef568ea152",
+            "actions": [
+                {
+                    "name": "Accept",
+                    "type": "Button",
+                    "id": "6c682884-c7d2-4150-b52b-50b7c765b435",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "b9ea9a50-3ebd-4409-88ad-f84b5bf8f518",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardScheme",
+                    "action": "Accept",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1c31d230-8433-4160-b7ba-231cf1868f78",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";ControllerScheme",
+                    "action": "Accept",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

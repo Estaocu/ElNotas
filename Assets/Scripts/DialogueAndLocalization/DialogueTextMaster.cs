@@ -16,8 +16,8 @@ public class DialogueTextMaster : MonoBehaviour
     public LocalizeStringEvent locString;
     public TypewriterComponent typewriter;
     public TextAnimator_TMP tAnimator;
-    public DialogueTrigger trigger;
-    [SerializeField] private string tableName = "NPCS";
+    public DialogueBehaviour trigger;
+    public string tableName = "NPCS";
 
     public void RestartText()
     {   
@@ -26,10 +26,7 @@ public class DialogueTextMaster : MonoBehaviour
     }
 
     public void AssignNewDialogue(params string[] candidateIds)
-{
-    
-
-    
+    {
     string text = null;
     string usedId = null;
 
@@ -60,10 +57,9 @@ public class DialogueTextMaster : MonoBehaviour
 
     if (tAnimator == null) { Debug.LogError("tAnimator no asignado en DialogueTextMaster"); return; }
 
-    tAnimator.SetText(text);
-    typewriter.StartShowingText(true);
+    trigger.StartDialogue(text);
     Debug.Log($"Diálogo usado: {usedId ?? "fallback"}");
-}
+    }
 
 
 }

@@ -9,7 +9,7 @@ onBoardingDoNotAskAgain = true
 showPackageIndexes = false
 showStatusBar = false
 scopes = {
-	"last_search.66F56946" = "action map"
+	"last_search.66F56946" = "receive"
 	"OpenInspectorPreview.66F56946" = "0"
 	"currentGroup.66F56946" = "menu"
 }
@@ -59,10 +59,21 @@ providers = {
 		priority = 210
 		defaultAction = null
 	}
+	at = {
+		active = true
+		priority = 100
+		defaultAction = null
+	}
+	st = {
+		active = true
+		priority = 100
+		defaultAction = null
+	}
 }
 objectSelectors = {
 }
 recentSearches = [
+	"r"
 	"inp"
 	"inimpiuts"
 	"action ma"

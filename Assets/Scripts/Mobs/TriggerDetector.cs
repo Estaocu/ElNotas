@@ -103,8 +103,8 @@ public class TriggerDetector : MonoBehaviour, IPoolable
     private void OnValidate()
     {
         Collider col = GetComponent<Collider>();
-        if (col != null && !col.isTrigger)
-            Debug.LogWarning($"[TriggerDetector] Collider on '{name}' is not set as Trigger.", this);
+        // if (col != null && !col.isTrigger)
+        //     Debug.LogWarning($"[TriggerDetector] Collider on '{name}' is not set as Trigger.", this);
         if (layerMask.value == 0)
             Debug.LogWarning($"[TriggerDetector] LayerMask on '{name}' is empty — nothing will be detected.", this);
     }

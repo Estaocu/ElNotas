@@ -29,35 +29,50 @@ public class ClimbingRaycast : MonoBehaviour
     [Header("Climb height tiers")]
     [Tooltip("Upper bound (in meters) of each climb tier. A climb taller than the highest threshold is considered too high to climb.")]
     public float lowClimbThreshold = 0.5f;
+
     public float midClimbThreshold = 2f;
     public float highClimbThreshold = 3f;
 
+    [Header("Climb input")]
     [SerializeField] private InputActionReference moveAction;
-    [SerializeField] private float durationToCheck = 3.0f;
-    private float timer = 0.0f;
+
+    [Tooltip("How long the player must continuously hold movement toward the wall.")]
+    [SerializeField] private float durationToCheck = 3f;
+
+    [Tooltip("Minimum input direction alignment required to climb. 1 = exactly toward the wall, 0 = any direction.")]
+    [Range(0f, 1f)]
+    [SerializeField] private float climbInputThreshold = 0.5f;
+
+    private float timer = 0f;
     private bool isChecking = false;
-    private bool inputFailed = false;
     private Vector3 targetClimbPoint = Vector3.zero;
+    private Vector3 climbInputDirection = Vector3.zero;
 
     [SerializeField] private AbyssRaycast abyssCast;
 
-    public enum ClimbTier { Low, Mid, High, TooHigh }
+    public enum ClimbTier
+    {
+        Low,
+        Mid,
+        High,
+        TooHigh
+    }
 
-    // Distance from the up ray spawn (ground level) to its hit point, i.e. the height of the current climb;
+    // Distance from the up ray spawn (ground level) to its hit point, i.e. the height of the current climb.
     [SerializeField] private float climbHeight;
 
-    // Length used only to draw the 'infinite' up ray as a gizmo/debug line;
-    const float upRayGizmoLength = 1000f;
+    // Length used only to draw the 'infinite' up ray as a gizmo/debug line.
+    private const float upRayGizmoLength = 1000f;
 
-    // One-shot guard: re-arms only when the up ray stops hitting, so we don't teleport every physics frame;
-    bool canTeleport = true;
+    // One-shot guard: re-arms only when the up ray stops hitting, so we don't teleport every physics frame.
+    private bool canTeleport = true;
 
     void Update()
     {
         if (isChecking)
         {
             UpdateInputCheck();
-        }  
+        }
     }
 
     void OnDrawGizmos()
@@ -70,11 +85,21 @@ public class ClimbingRaycast : MonoBehaviour
         Vector3 worldEyeRayStart = transform.parent.TransformPoint(eyeRayStart);
         Vector3 forward = transform.parent.forward;
 
-        // Eye ray (forward);
-        bool eyeHitSomething = Physics.Raycast(worldEyeRayStart, forward, out RaycastHit eyeHit, eyeRayLength, groundMask, QueryTriggerInteraction.Ignore);
+        // Eye ray
+        bool eyeHitSomething = Physics.Raycast(
+            worldEyeRayStart,
+            forward,
+            out RaycastHit eyeHit,
+            eyeRayLength,
+            groundMask,
+            QueryTriggerInteraction.Ignore
+        );
 
         Gizmos.color = Color.green;
-        Gizmos.DrawLine(worldEyeRayStart, worldEyeRayStart + forward * eyeRayLength);
+        Gizmos.DrawLine(
+            worldEyeRayStart,
+            worldEyeRayStart + forward * eyeRayLength
+        );
 
         if (!eyeHitSomething)
         {
@@ -83,17 +108,30 @@ public class ClimbingRaycast : MonoBehaviour
 
         Gizmos.DrawSphere(eyeHit.point, 0.05f);
 
-        // Up ray: starts a bit ahead of the eye impact point but at ground/foot level (not eye level), and goes infinitely up until it hits something;
-        // Temporarily enable backface queries so it also hits mesh faces whose normals are flipped away from the ray;
+        // Up ray: starts a bit ahead of the eye impact point but at ground/foot level.
+        // Temporarily enable backface queries so it also hits mesh faces whose normals are flipped away from the ray.
         Vector3 worldUpRayStart = eyeHit.point + forward * upRayForwardOffset;
         worldUpRayStart.y = transform.position.y;
-        bool prevQueriesHitBackfaces = Physics.queriesHitBackfaces;
+
+        bool previousQueriesHitBackfaces = Physics.queriesHitBackfaces;
         Physics.queriesHitBackfaces = true;
-        bool upHitSomething = Physics.Raycast(worldUpRayStart, Vector3.up, out RaycastHit upHit, Mathf.Infinity, groundMask, QueryTriggerInteraction.Ignore);
-        Physics.queriesHitBackfaces = prevQueriesHitBackfaces;
+
+        bool upHitSomething = Physics.Raycast(
+            worldUpRayStart,
+            Vector3.up,
+            out RaycastHit upHit,
+            Mathf.Infinity,
+            groundMask,
+            QueryTriggerInteraction.Ignore
+        );
+
+        Physics.queriesHitBackfaces = previousQueriesHitBackfaces;
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(worldUpRayStart, worldUpRayStart + Vector3.up * upRayGizmoLength);
+        Gizmos.DrawLine(
+            worldUpRayStart,
+            worldUpRayStart + Vector3.up * upRayGizmoLength
+        );
 
         if (upHitSomething)
         {
@@ -111,62 +149,103 @@ public class ClimbingRaycast : MonoBehaviour
         Vector3 worldEyeRayStart = transform.parent.TransformPoint(eyeRayStart);
         Vector3 forward = transform.parent.forward;
 
-        // Eye ray (forward);
-        bool eyeHitSomething = Physics.Raycast(worldEyeRayStart, forward, out RaycastHit eyeHit, eyeRayLength, groundMask, QueryTriggerInteraction.Ignore);
+        // Eye ray
+        bool eyeHitSomething = Physics.Raycast(
+            worldEyeRayStart,
+            forward,
+            out RaycastHit eyeHit,
+            eyeRayLength,
+            groundMask,
+            QueryTriggerInteraction.Ignore
+        );
 
         bool upHitSomething = false;
         RaycastHit upHit = default;
 
         if (eyeHitSomething)
         {
-            Debug.DrawRay(worldEyeRayStart, forward * eyeRayLength, Color.green);
+            Debug.DrawRay(
+                worldEyeRayStart,
+                forward * eyeRayLength,
+                Color.green
+            );
 
-            // Up ray: starts a bit ahead of the eye impact point but at ground/foot level (not eye level), and goes infinitely up until it hits something;
-            // Temporarily enable backface queries so it also hits mesh faces whose normals are flipped away from the ray;
+            // Up ray: starts a bit ahead of the eye impact point but at ground/foot level.
+            // Temporarily enable backface queries so it also hits mesh faces whose normals are flipped away from the ray.
             Vector3 worldUpRayStart = eyeHit.point + forward * upRayForwardOffset;
             worldUpRayStart.y = transform.position.y;
-            bool prevQueriesHitBackfaces = Physics.queriesHitBackfaces;
+
+            bool previousQueriesHitBackfaces = Physics.queriesHitBackfaces;
             Physics.queriesHitBackfaces = true;
-            upHitSomething = Physics.Raycast(worldUpRayStart, Vector3.up, out upHit, Mathf.Infinity, groundMask, QueryTriggerInteraction.Ignore);
-            Physics.queriesHitBackfaces = prevQueriesHitBackfaces;
 
-            Debug.DrawRay(worldUpRayStart, Vector3.up * upRayGizmoLength, Color.yellow);
+            upHitSomething = Physics.Raycast(
+                worldUpRayStart,
+                Vector3.up,
+                out upHit,
+                Mathf.Infinity,
+                groundMask,
+                QueryTriggerInteraction.Ignore
+            );
 
-            // Save the climb height: distance from the up ray spawn (ground level) to the hit;
+            Physics.queriesHitBackfaces = previousQueriesHitBackfaces;
+
+            Debug.DrawRay(
+                worldUpRayStart,
+                Vector3.up * upRayGizmoLength,
+                Color.yellow
+            );
+
+            // Save the climb height.
             if (upHitSomething)
+            {
                 climbHeight = upHit.distance;
+            }
         }
 
-        // Teleport the player to the up ray's impact point (one-shot until the ray stops hitting);
-        // Only allow climbing while grounded, and skip climbs that are too high;
+        // Teleport the player to the up ray's impact point.
+        // Only allow climbing while grounded, and skip climbs that are too high.
         if (upHitSomething)
         {
-            if (canTeleport && mover.IsGrounded())
+            if (canTeleport && mover != null && mover.IsGrounded())
             {
                 ClimbTier tier = GetClimbTier(climbHeight);
-                Debug.Log($"[ClimbingRaycast] Climb height {climbHeight:F2}m -> tier {tier}");
+
+                Debug.Log(
+                    $"[ClimbingRaycast] Climb height {climbHeight:F2}m -> tier {tier}"
+                );
 
                 if (tier != ClimbTier.TooHigh)
                 {
-                    // Start timer and keep checking if player is inputting forward
-                    StartInputCheck(upHit.point);
+                    StartInputCheck(upHit.point, eyeHit.point);
                 }
-                
+
                 canTeleport = false;
             }
         }
         else
         {
-            // Re-arm whenever the up ray is not hitting (eye miss OR up miss);
+            // Re-arm whenever the up ray is not hitting.
             canTeleport = true;
         }
     }
 
     ClimbTier GetClimbTier(float height)
     {
-        if (height <= lowClimbThreshold) return ClimbTier.Low;
-        if (height <= midClimbThreshold) return ClimbTier.Mid;
-        if (height <= highClimbThreshold) return ClimbTier.High;
+        if (height <= lowClimbThreshold)
+        {
+            return ClimbTier.Low;
+        }
+
+        if (height <= midClimbThreshold)
+        {
+            return ClimbTier.Mid;
+        }
+
+        if (height <= highClimbThreshold)
+        {
+            return ClimbTier.High;
+        }
+
         return ClimbTier.TooHigh;
     }
 
@@ -174,15 +253,21 @@ public class ClimbingRaycast : MonoBehaviour
     {
         Vector3 target = point + Vector3.up * standOffset;
 
-        Transform body = walker != null ? walker.transform
-                       : transform.parent != null ? transform.parent
-                       : transform;
+        Transform body = walker != null
+            ? walker.transform
+            : transform.parent != null
+                ? transform.parent
+                : transform;
 
-        Debug.Log($"[ClimbingRaycast] Teleport '{body.name}' from {body.position} to {target}", body);
+        Debug.Log(
+            $"[ClimbingRaycast] Teleport '{body.name}' from {body.position} to {target}",
+            body
+        );
 
         body.position = target;
 
         Rigidbody rb = body.GetComponent<Rigidbody>();
+
         if (rb != null)
         {
             rb.position = target;
@@ -190,28 +275,88 @@ public class ClimbingRaycast : MonoBehaviour
         }
 
         if (walker != null)
+        {
             walker.SetMomentum(Vector3.zero);
+        }
+
+        Physics.SyncTransforms();
+
+        if (mover != null)
+        {
+            mover.CheckForGround();
+        }
     }
 
-    public void StartInputCheck(Vector3 hitPoint)
+    public void StartInputCheck(Vector3 hitPoint, Vector3 wallPoint)
     {
-        timer = 0.0f;
+        timer = 0f;
         isChecking = true;
-        inputFailed = false;
         targetClimbPoint = hitPoint;
-        Debug.Log("Started checking for forward input.");
+
+        Transform body = walker != null
+            ? walker.transform
+            : transform.parent != null
+                ? transform.parent
+                : transform;
+
+        climbInputDirection = wallPoint - body.position;
+        climbInputDirection.y = 0f;
+
+        if (climbInputDirection.sqrMagnitude > 0.0001f)
+        {
+            climbInputDirection.Normalize();
+        }
+        else
+        {
+            isChecking = false;
+            return;
+        }
+
+        Debug.Log(
+            $"[ClimbingRaycast] Started checking input toward wall. Direction: {climbInputDirection}"
+        );
     }
 
     private void UpdateInputCheck()
     {
-        Vector2 moveInput = moveAction.action.ReadValue<Vector2>();
-        bool isForwardActive = moveInput.y > 0.5f;
-
-        if (!isForwardActive)
+        if (moveAction == null || moveAction.action == null)
         {
-            inputFailed = true;
             isChecking = false;
-            Debug.Log("Forward input interrupted. Check failed.");
+            Debug.LogWarning(
+                "[ClimbingRaycast] Move Action Reference is missing."
+            );
+            return;
+        }
+
+        Vector2 moveInput = moveAction.action.ReadValue<Vector2>();
+
+        if (moveInput.sqrMagnitude < 0.0001f)
+        {
+            timer = 0f;
+            return;
+        }
+
+        Vector3 inputDirection = GetWorldInputDirection(moveInput);
+
+        if (inputDirection.sqrMagnitude < 0.0001f)
+        {
+            timer = 0f;
+            return;
+        }
+
+        float directionAlignment = Vector3.Dot(
+            inputDirection.normalized,
+            climbInputDirection
+        );
+
+        if (directionAlignment < climbInputThreshold)
+        {
+            timer = 0f;
+
+            Debug.Log(
+                $"[ClimbingRaycast] Input is not pointing toward the wall. Alignment: {directionAlignment:F2}"
+            );
+
             return;
         }
 
@@ -220,19 +365,87 @@ public class ClimbingRaycast : MonoBehaviour
         if (timer >= durationToCheck)
         {
             isChecking = false;
-            Debug.Log("Success: Forward input was held continuously for " + durationToCheck + " seconds.");
+
+            Debug.Log(
+                $"[ClimbingRaycast] Success: input was held toward the wall for {durationToCheck:F2} seconds."
+            );
+
             TeleportPlayer(targetClimbPoint);
+
+            if (abyssCast != null)
+            {
+                abyssCast.NotifyClimbCompleted();
+            }
         }
+    }
+
+    private Vector3 GetWorldInputDirection(Vector2 moveInput)
+    {
+        Transform body = walker != null
+            ? walker.transform
+            : transform.parent != null
+                ? transform.parent
+                : transform;
+
+        Vector3 inputDirection;
+
+        if (walker != null && walker.cameraTransform != null)
+        {
+            Vector3 cameraRight = Vector3.ProjectOnPlane(
+                walker.cameraTransform.right,
+                body.up
+            ).normalized;
+
+            Vector3 cameraForward = Vector3.ProjectOnPlane(
+                walker.cameraTransform.forward,
+                body.up
+            ).normalized;
+
+            inputDirection =
+                cameraRight * moveInput.x +
+                cameraForward * moveInput.y;
+        }
+        else
+        {
+            inputDirection =
+                body.right * moveInput.x +
+                body.forward * moveInput.y;
+        }
+
+        inputDirection = Vector3.ProjectOnPlane(
+            inputDirection,
+            body.up
+        );
+
+        if (inputDirection.sqrMagnitude > 0.0001f)
+        {
+            inputDirection.Normalize();
+        }
+
+        return inputDirection;
+    }
+
+    public bool IsCheckingClimb()
+    {
+        return isChecking;
     }
 
     public bool IsEyeRayHitting()
     {
-        if (transform.parent == null) return false;
+        if (transform.parent == null)
+        {
+            return false;
+        }
 
         Vector3 worldEyeRayStart = transform.parent.TransformPoint(eyeRayStart);
         Vector3 forward = transform.parent.forward;
 
-        // Realiza el mismo raycast para devolver el estado actual
-        return Physics.Raycast(worldEyeRayStart, forward, eyeRayLength, groundMask, QueryTriggerInteraction.Ignore);
+        return Physics.Raycast(
+            worldEyeRayStart,
+            forward,
+            eyeRayLength,
+            groundMask,
+            QueryTriggerInteraction.Ignore
+        );
     }
 }

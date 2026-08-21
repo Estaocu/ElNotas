@@ -19,8 +19,7 @@ public class PlayerRhythmController : MonoBehaviour
     [SerializeField] private float maxContinuityMultiplier = 1.25f;
 
     [Tooltip("Controls how the continuity bonus grows.")]
-    [SerializeField]
-    private AnimationCurve continuityCurve =
+    [SerializeField] private AnimationCurve continuityCurve =
         AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 1.0f);
 
     [Header("Cadence Bonus")]
@@ -53,6 +52,8 @@ public class PlayerRhythmController : MonoBehaviour
     private readonly Queue<double> recentInputTimes =
         new Queue<double>();
 
+    private PlayerInputs input;
+
     private float currentMeter;
     private int continuityCount;
 
@@ -65,41 +66,55 @@ public class PlayerRhythmController : MonoBehaviour
     private bool isOverheated;
     private int overheatEndBar;
 
-    public IReadOnlyList<PlayedNote> CurrentNotes =>
-        currentNotes;
+    public IReadOnlyList<PlayedNote> CurrentNotes => currentNotes;
 
-    public float CurrentMeter =>
-        currentMeter;
+    public float CurrentMeter => currentMeter;
 
-    public float MaxMeter =>
-        maxMeter;
+    public float MaxMeter => maxMeter;
 
     public float FirstSubBeatPoints =>
         secondSubBeatPoints / 1.5f;
 
+    public bool IsOverheated => isOverheated;
+
     public bool HasFullMeter =>
         currentMeter >= maxMeter;
-
-    public bool IsOverheated =>
-        isOverheated;
 
     public event Action<PlayedNote> OnNoteAccepted;
     public event Action OnNoteRejected;
     public event Action OnNoteTooClose;
-    public event Action<notesEnum[]> OnMelodyCompleted;
     public event Action OnMelodyCleared;
     public event Action OnSpam;
     public event Action OnOverheatStarted;
     public event Action OnOverheatEnded;
     public event Action<float> OnMeterChanged;
 
+    private void Awake()
+    {
+        input = new PlayerInputs();
+    }
+
     private void OnEnable()
     {
+        input.Gameplay.Note1.performed += OnNote1Played;
+        input.Gameplay.Note2.performed += OnNote2Played;
+        input.Gameplay.Note3.performed += OnNote3Played;
+        input.Gameplay.Note4.performed += OnNote4Played;
+
+        input.Gameplay.Enable();
+
         RhythmClock.OnBar += HandleBar;
     }
 
     private void OnDisable()
     {
+        input.Gameplay.Note1.performed -= OnNote1Played;
+        input.Gameplay.Note2.performed -= OnNote2Played;
+        input.Gameplay.Note3.performed -= OnNote3Played;
+        input.Gameplay.Note4.performed -= OnNote4Played;
+
+        input.Gameplay.Disable();
+
         RhythmClock.OnBar -= HandleBar;
     }
 
@@ -124,13 +139,46 @@ public class PlayerRhythmController : MonoBehaviour
             Math.Max(0.01, rapidInputWindowSeconds);
     }
 
+    private void OnNote1Played(
+        UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            ProcessNote(notesEnum.Note1);
+    }
+
+    private void OnNote2Played(
+        UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            ProcessNote(notesEnum.Note2);
+    }
+
+    private void OnNote3Played(
+        UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            ProcessNote(notesEnum.Note3);
+    }
+
+    private void OnNote4Played(
+        UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            ProcessNote(notesEnum.Note4);
+    }
+
     public bool ProcessNote(notesEnum note)
     {
-        if (!HasValidReferences())
-            return false;
+        if (rhythmClock == null || rhythmQuantizer == null)
+        {
+            Debug.LogError(
+                "PlayerRhythmController requires a RhythmClock and RhythmQuantizer."
+            );
 
-        double inputDspTime =
-            AudioSettings.dspTime;
+            return false;
+        }
+
+        double inputDspTime = AudioSettings.dspTime;
 
         RhythmQuantizationResult result =
             rhythmQuantizer.Quantize(inputDspTime);
@@ -163,51 +211,32 @@ public class PlayerRhythmController : MonoBehaviour
             return false;
         }
 
-        HandleValidNote(note, result);
+        AcceptNote(note, result);
 
         return true;
-    }
-
-    private bool HasValidReferences()
-    {
-        if (rhythmClock != null &&
-            rhythmQuantizer != null)
-        {
-            return true;
-        }
-
-        Debug.LogError(
-            "PlayerRhythmController requires a RhythmClock and RhythmQuantizer."
-        );
-
-        return false;
     }
 
     private bool IsSpam(
         double inputDspTime,
         RhythmQuantizationResult result)
     {
-        return
-            RegisterRapidInput(inputDspTime) ||
-            IsSameSlotSpam(result);
+        return RegisterRapidInput(inputDspTime) ||
+               IsSameSlotSpam(result);
     }
 
-    private bool RegisterRapidInput(
-        double inputDspTime)
+    private bool RegisterRapidInput(double inputDspTime)
     {
         recentInputTimes.Enqueue(inputDspTime);
 
         while (
             recentInputTimes.Count > 0 &&
-            inputDspTime -
-            recentInputTimes.Peek() >=
+            inputDspTime - recentInputTimes.Peek() >=
             rapidInputWindowSeconds)
         {
             recentInputTimes.Dequeue();
         }
 
-        return recentInputTimes.Count >=
-               rapidInputCount;
+        return recentInputTimes.Count >= rapidInputCount;
     }
 
     private bool IsSameSlotSpam(
@@ -222,8 +251,7 @@ public class PlayerRhythmController : MonoBehaviour
         ) < 0.000001;
     }
 
-    private bool IsInputTooClose(
-        double inputDspTime)
+    private bool IsInputTooClose(double inputDspTime)
     {
         if (!hasLastAcceptedNote)
             return false;
@@ -242,19 +270,20 @@ public class PlayerRhythmController : MonoBehaviour
 
         for (int i = 0; i < currentNotes.Count; i++)
         {
-            int noteSubBeat =
+            if (
                 GetAbsoluteSubBeat(
                     currentNotes[i].position
-                );
-
-            if (noteSubBeat == targetSubBeat)
+                ) == targetSubBeat
+            )
+            {
                 return true;
+            }
         }
 
         return false;
     }
 
-    private void HandleValidNote(
+    private void AcceptNote(
         notesEnum note,
         RhythmQuantizationResult result)
     {
@@ -286,9 +315,7 @@ public class PlayerRhythmController : MonoBehaviour
         SetMeter(currentMeter + points);
 
         if (meterText != null)
-            meterText.SetText(
-                currentMeter.ToString()
-            );
+            meterText.SetText(currentMeter.ToString());
 
         lastAcceptedPosition =
             result.position;
@@ -301,12 +328,7 @@ public class PlayerRhythmController : MonoBehaviour
 
         hasLastAcceptedNote = true;
 
-        OnNoteAccepted?.Invoke(
-            playedNote
-        );
-
-        if (currentNotes.Count >= 4)
-            EmitCompletedMelody();
+        OnNoteAccepted?.Invoke(playedNote);
     }
 
     private bool HasRhythmContinuity(
@@ -315,8 +337,6 @@ public class PlayerRhythmController : MonoBehaviour
         if (!hasLastAcceptedNote)
             return false;
 
-        // A valid note keeps the continuity streak alive.
-        // Empty subbeats do not break the rhythm.
         return true;
     }
 
@@ -336,9 +356,7 @@ public class PlayerRhythmController : MonoBehaviour
             );
 
         float cadenceMultiplier =
-            GetCadenceMultiplier(
-                position
-            );
+            GetCadenceMultiplier(position);
 
         return
             basePoints *
@@ -362,9 +380,7 @@ public class PlayerRhythmController : MonoBehaviour
             );
 
         float curveValue =
-            continuityCurve.Evaluate(
-                normalized
-            );
+            continuityCurve.Evaluate(normalized);
 
         return Mathf.Lerp(
             1.0f,
@@ -380,33 +396,25 @@ public class PlayerRhythmController : MonoBehaviour
             return 1.0f;
 
         int previousSlot =
-            GetAbsoluteSubBeat(
-                lastAcceptedPosition
-            );
+            GetAbsoluteSubBeat(lastAcceptedPosition);
 
         int currentSlot =
-            GetAbsoluteSubBeat(
-                position
-            );
+            GetAbsoluteSubBeat(position);
 
         int distance =
-            currentSlot -
-            previousSlot;
+            currentSlot - previousSlot;
 
         if (distance <= 0)
             return 1.0f;
 
         if (distance == 1)
         {
-            return
-                1.0f +
-                maxCadenceMultiplier;
+            return 1.0f + maxCadenceMultiplier;
         }
 
         float normalizedGap =
             Mathf.Clamp01(
-                (distance - 1) /
-                3.0f
+                (distance - 1) / 3.0f
             );
 
         float cadenceFactor =
@@ -429,11 +437,7 @@ public class PlayerRhythmController : MonoBehaviour
         float totalPoints = 0.0f;
 
         RhythmPosition previousPosition =
-            new RhythmPosition(
-                0,
-                0,
-                0
-            );
+            new RhythmPosition(0, 0, 0);
 
         bool previousExists = false;
 
@@ -461,8 +465,7 @@ public class PlayerRhythmController : MonoBehaviour
                     );
 
                 int distance =
-                    i -
-                    previousSlot;
+                    i - previousSlot;
 
                 if (distance == 1)
                 {
@@ -494,25 +497,9 @@ public class PlayerRhythmController : MonoBehaviour
         return maxMeter / totalPoints;
     }
 
-    private void EmitCompletedMelody()
-    {
-        notesEnum[] melody =
-            new notesEnum[4];
-
-        for (int i = 0; i < 4; i++)
-            melody[i] = currentNotes[i].note;
-
-        OnMelodyCompleted?.Invoke(
-            melody
-        );
-    }
-
     private void HandleRhythmMiss()
     {
-        // Missing the timing window does not remove
-        // the melody or meter.
         ResetContinuity();
-
         OnNoteRejected?.Invoke();
     }
 
@@ -539,22 +526,15 @@ public class PlayerRhythmController : MonoBehaviour
                 currentMeter.ToString()
             );
 
-        StartOverheat(
-            position.bar
-        );
+        StartOverheat(position.bar);
 
         OnSpam?.Invoke();
     }
 
-    private void StartOverheat(
-        int currentBar)
+    private void StartOverheat(int currentBar)
     {
         isOverheated = true;
-
-        // The player cannot play during the rest
-        // of the current bar and the entire next bar.
-        overheatEndBar =
-            currentBar + 2;
+        overheatEndBar = currentBar + 2;
 
         OnOverheatStarted?.Invoke();
 
@@ -591,8 +571,7 @@ public class PlayerRhythmController : MonoBehaviour
             Debug.Log("INSTRUMENT OVERHEAT ENDED");
     }
 
-    private void HandleBar(
-        RhythmTick tick)
+    private void HandleBar(RhythmTick tick)
     {
         if (isOverheated &&
             tick.position.bar >= overheatEndBar)
@@ -608,11 +587,8 @@ public class PlayerRhythmController : MonoBehaviour
                 currentNotes.Count - 1
             ].position.bar;
 
-        if (tick.position.bar >
-            lastNoteBar)
-        {
+        if (tick.position.bar > lastNoteBar)
             ClearMelody();
-        }
     }
 
     private void ClearMelodyIfNewBar(
@@ -626,11 +602,8 @@ public class PlayerRhythmController : MonoBehaviour
                 currentNotes.Count - 1
             ].position.bar;
 
-        if (position.bar >
-            lastNoteBar)
-        {
+        if (position.bar > lastNoteBar)
             ClearMelody();
-        }
     }
 
     public void ClearMelody()
@@ -669,12 +642,10 @@ public class PlayerRhythmController : MonoBehaviour
                 maxMeter
             );
 
-        OnMeterChanged?.Invoke(
-            currentMeter
-        );
+        OnMeterChanged?.Invoke(currentMeter);
     }
 
-    public bool TryConsumeFullMeter()
+    public bool ConsumeFullMeter()
     {
         if (!HasFullMeter)
             return false;

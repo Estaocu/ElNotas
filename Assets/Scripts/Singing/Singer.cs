@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum NoteSlot
@@ -21,7 +22,6 @@ public class Singer : MonoBehaviour
 {
     private RhythmTimingValidator timingValidator;
     private MelodyDatabase database;
-    private Instrument instrument;
     private PlayerRhythmController playerRhythmController;
     private SingerVoice voice;
 
@@ -34,7 +34,7 @@ public class Singer : MonoBehaviour
     private readonly notesEnum[] noteBuffer = new notesEnum[4];
     private int notesPlayed;
 
-    public bool IsPlayer => instrument != null;
+    public bool IsPlayer => playerRhythmController != null;
 
     public event Action<Melody> onSoundwaveSpawned;
 
@@ -43,52 +43,68 @@ public class Singer : MonoBehaviour
         database = Resources.Load<MelodyDatabase>("MelodyDatabase");
 
         if (GameManager.Instance != null)
-            timingValidator = GameManager.Instance.RhythmTimingValidator;
-
-        if (gameObject.CompareTag("Player"))
         {
-            instrument = GetComponent<Instrument>();
-            playerRhythmController = GetComponent<PlayerRhythmController>();
+            timingValidator = GameManager.Instance.RhythmTimingValidator;
         }
+
+        playerRhythmController =
+            GetComponent<PlayerRhythmController>();
 
         voice = GetComponent<SingerVoice>();
 
         if (soundwaveSpawnpoint == null)
+        {
             soundwaveSpawnpoint = transform;
+        }
     }
 
     private void OnEnable()
     {
-        if (instrument != null)
-            instrument.OnNoteAdded += OnPlayerNoteAdded;
+        if (playerRhythmController != null)
+        {
+            playerRhythmController.OnNoteAccepted += OnPlayerNoteAccepted;
+        }
     }
 
     private void OnDisable()
     {
-        if (instrument != null)
-            instrument.OnNoteAdded -= OnPlayerNoteAdded;
+        if (playerRhythmController != null)
+        {
+            playerRhythmController.OnNoteAccepted -= OnPlayerNoteAccepted;
+        }
     }
 
-    // ========================================================================
-    // PLAYER
-    // ========================================================================
-
-    private void OnPlayerNoteAdded(notesEnum[] sequence, int played)
+    private void OnPlayerNoteAccepted(
+        PlayerRhythmController.PlayedNote playedNote)
     {
-        if (sequence == null || played <= 0)
-            return;
+        notesEnum note = playedNote.note;
 
-        notesEnum note = sequence[3];
-
-        // Play the individual note.
         ProcessSingleNote(note);
 
-        // Check melodies.
-        if (database == null)
-            return;
-
-        foreach (Melody melody in database.melodies)
+        if (database == null ||
+            database.melodies == null ||
+            database.melodies.Length == 0)
         {
+            return;
+        }
+
+        CheckPlayerMelodies();
+    }
+
+    private void CheckPlayerMelodies()
+    {
+        IReadOnlyList<PlayerRhythmController.PlayedNote> notes =
+            playerRhythmController.CurrentNotes;
+
+        if (notes.Count < 4)
+        {
+            return;
+        }
+
+        for (int i = 0; i < database.melodies.Length; i++)
+        {
+            Melody melody = database.melodies[i];
+
             if (melody == null ||
                 melody.notes == null ||
                 melody.notes.Length == 0)
@@ -96,27 +112,76 @@ public class Singer : MonoBehaviour
                 continue;
             }
 
-            int melodyLength = melody.notes.Length;
-
-            if (played < melodyLength)
+            if (notes.Count < melody.notes.Length)
+            {
                 continue;
+            }
 
-            if (!SequenceEndMatches(sequence, melody.notes))
+            if (!SequenceMatches(notes, melody.notes))
+            {
                 continue;
+            }
 
             TrySpawnPlayerMelody(melody);
             return;
         }
     }
 
-    // ========================================================================
-    // NPC / NON-PLAYER SINGERS
-    // ========================================================================
+    private bool SequenceMatches(
+        IReadOnlyList<PlayerRhythmController.PlayedNote> notes,
+        notesEnum[] melodyNotes)
+    {
+        int startIndex =
+            notes.Count - melodyNotes.Length;
 
+        for (int i = 0; i < melodyNotes.Length; i++)
+        {
+            if (notes[startIndex + i].note != melodyNotes[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void TrySpawnPlayerMelody(Melody melody)
+    {
+        if (!playerRhythmController.HasFullMeter)
+        {
+            return;
+        }
+
+        if (Time.time - lastSingTime < cooldown)
+        {
+            return;
+        }
+
+        if (!playerRhythmController.ConsumeFullMeter())
+        {
+            return;
+        }
+
+        lastSingTime = Time.time;
+
+        NoteSystem.EmitMelody(
+            melody,
+            soundwaveSpawnpoint.position,
+            this
+        );
+
+        onSoundwaveSpawned?.Invoke(melody);
+
+        playerRhythmController.ClearMelody();
+    }
+
+    // Used by NPCs and other non-player singers.
     public void AddNote(notesEnum note)
     {
         if (IsPlayer)
+        {
             return;
+        }
 
         ProcessSingleNote(note);
 
@@ -126,13 +191,26 @@ public class Singer : MonoBehaviour
         noteBuffer[3] = note;
 
         if (notesPlayed < 4)
-            notesPlayed++;
-
-        if (database == null)
-            return;
-
-        foreach (Melody melody in database.melodies)
         {
+            notesPlayed++;
+        }
+
+        CheckNpcMelodies();
+    }
+
+    private void CheckNpcMelodies()
+    {
+        if (database == null ||
+            database.melodies == null ||
+            database.melodies.Length == 0)
+        {
+            return;
+        }
+
+        for (int i = 0; i < database.melodies.Length; i++)
+        {
+            Melody melody = database.melodies[i];
+
             if (melody == null ||
                 melody.notes == null ||
                 melody.notes.Length == 0)
@@ -140,13 +218,17 @@ public class Singer : MonoBehaviour
                 continue;
             }
 
-            int melodyLength = melody.notes.Length;
-
-            if (notesPlayed < melodyLength)
+            if (notesPlayed < melody.notes.Length)
+            {
                 continue;
+            }
 
-            if (!SequenceEndMatches(noteBuffer, melody.notes))
+            if (!SequenceEndMatches(
+                    noteBuffer,
+                    melody.notes))
+            {
                 continue;
+            }
 
             TrySpawnMelody(melody);
             ClearLocalBuffer();
@@ -154,14 +236,12 @@ public class Singer : MonoBehaviour
         }
     }
 
-    // ========================================================================
-    // NOTE PROCESSING
-    // ========================================================================
-
     private void ProcessSingleNote(notesEnum note)
     {
         if (voice != null)
+        {
             voice.PlayNote(note);
+        }
 
         NoteSystem.EmitSingleNote(
             note,
@@ -170,37 +250,12 @@ public class Singer : MonoBehaviour
         );
     }
 
-    // ========================================================================
-    // PLAYER MELODY
-    // ========================================================================
-
-    private void TrySpawnPlayerMelody(Melody melody)
-    {
-        if (playerRhythmController == null)
-            return;
-
-        // A valid melody can only become a soundwave when the meter is full.
-        if (!playerRhythmController.HasFullMeter)
-            return;
-
-        // Consume the meter only if the soundwave can actually be spawned.
-        if (!playerRhythmController.TryConsumeFullMeter())
-            return;
-
-        TrySpawnMelody(melody);
-
-        // The melody has successfully been cast.
-        instrument?.ClearSequence();
-    }
-
-    // ========================================================================
-    // MELODY SPAWNING
-    // ========================================================================
-
     private void TrySpawnMelody(Melody melody)
     {
         if (Time.time - lastSingTime < cooldown)
+        {
             return;
+        }
 
         lastSingTime = Time.time;
 
@@ -213,14 +268,12 @@ public class Singer : MonoBehaviour
         onSoundwaveSpawned?.Invoke(melody);
     }
 
-    // ========================================================================
-    // BUFFER
-    // ========================================================================
-
     private void ClearLocalBuffer()
     {
         for (int i = 0; i < noteBuffer.Length; i++)
+        {
             noteBuffer[i] = default;
+        }
 
         notesPlayed = 0;
     }
@@ -229,29 +282,30 @@ public class Singer : MonoBehaviour
         notesEnum[] sequence,
         notesEnum[] melodyNotes)
     {
-        int melodyLength = melodyNotes.Length;
+        int startIndex =
+            4 - melodyNotes.Length;
 
-        if (melodyLength > 4)
+        if (startIndex < 0)
+        {
             return false;
+        }
 
-        int startIndex = 4 - melodyLength;
-
-        for (int i = 0; i < melodyLength; i++)
+        for (int i = 0; i < melodyNotes.Length; i++)
         {
             if (sequence[startIndex + i] != melodyNotes[i])
+            {
                 return false;
+            }
         }
 
         return true;
     }
 
-    // ========================================================================
-    // AUDIO ONLY
-    // ========================================================================
-
     public void PlayNoteSoundOnly(notesEnum note)
     {
         if (voice != null)
+        {
             voice.PlayNote(note);
+        }
     }
 }

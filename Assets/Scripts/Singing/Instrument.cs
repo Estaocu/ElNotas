@@ -6,28 +6,33 @@ using TMPro;
 
 public class Instrument : MonoBehaviour
 {
-    [SerializeField] private PlayerInput playerInput;
+    [Header("References")]
+    [SerializeField] private PlayerRhythmController playerRhythmController;
+
     private Singer singer;
     private PlayerInputs input;
+
     public ActionMapsManager controlsManager;
-    [SerializeField] private int timeToClearMelody;
-    private BeatWaitHandle afkHandle;
-    
+
     [SerializeField] public TMP_Text[] uiNotes;
 
-    // Las últimas 4 notas tocadas. El índice 3 es siempre la más reciente.
+    // The four most recent accepted notes.
     public notesEnum[] noteSequence = new notesEnum[4];
 
-    // Cuántas notas reales ha tocado el jugador (máx 4).
+    // Number of accepted notes currently stored.
     public int notesPlayed { get; private set; }
 
-    // Singer se suscribe a este evento para comprobar melodías.
+    // Singer subscribes to this event to check melodies.
     public event Action<notesEnum[], int> OnNoteAdded;
 
     private void Awake()
     {
         input = new PlayerInputs();
+
         singer = GetComponent<Singer>();
+
+        if (playerRhythmController == null)
+            playerRhythmController = GetComponent<PlayerRhythmController>();
     }
 
     private void OnEnable()
@@ -38,6 +43,9 @@ public class Instrument : MonoBehaviour
         input.Gameplay.Note4.performed += OnNote4Played;
 
         input.Gameplay.Enable();
+
+        if (playerRhythmController != null)
+            playerRhythmController.OnMelodyCleared += ClearSequence;
     }
 
     private void OnDisable()
@@ -48,57 +56,97 @@ public class Instrument : MonoBehaviour
         input.Gameplay.Note4.performed -= OnNote4Played;
 
         input.Gameplay.Disable();
+
+        if (playerRhythmController != null)
+            playerRhythmController.OnMelodyCleared -= ClearSequence;
+    }
+
+    private void TryPlayNote(notesEnum note)
+    {
+        if (playerRhythmController == null)
+        {
+            Debug.LogError(
+                "Instrument requires a PlayerRhythmController reference."
+            );
+
+            return;
+        }
+
+        bool accepted =
+            playerRhythmController.ProcessNote(note);
+
+        if (!accepted)
+            return;
+
+        AddNote(note);
     }
 
     private void AddNote(notesEnum note)
     {
-        afkHandle?.Cancel();
-        // Desplaza las notas hacia la izquierda y coloca la nueva al final.
-        noteSequence[0] = noteSequence[1];
-        noteSequence[1] = noteSequence[2];
-        noteSequence[2] = noteSequence[3];
-        noteSequence[3] = note;
-
-        if (notesPlayed < 4) notesPlayed++;
+        if (notesPlayed < 4)
+        {
+            noteSequence[notesPlayed] = note;
+            notesPlayed++;
+        }
+        else
+        {
+            noteSequence[0] = noteSequence[1];
+            noteSequence[1] = noteSequence[2];
+            noteSequence[2] = noteSequence[3];
+            noteSequence[3] = note;
+        }
 
         UpdateUIDisplays();
-        OnNoteAdded?.Invoke(noteSequence, notesPlayed);
 
-        afkHandle = RhythmBeatWaiter.WaitForSubBeats(timeToClearMelody, BeatWaitMode.Immediate, ClearSequence);
+        OnNoteAdded?.Invoke(noteSequence, notesPlayed);
     }
 
-    // Llamado por Singer tras detectar una melodía y spawnear la soundwave,
-    // para que la última nota no arrastre hacia el siguiente match.
     public void ClearSequence()
     {
-        for (int i = 0; i < noteSequence.Length; i++) noteSequence[i] = default;
+        for (int i = 0; i < noteSequence.Length; i++)
+            noteSequence[i] = default;
+
         notesPlayed = 0;
+
         UpdateUIDisplays();
-        Debug.Log("Notes Cleared");
     }
 
     private void UpdateUIDisplays()
     {
         for (int i = 0; i < uiNotes.Length; i++)
         {
-            if (uiNotes[i] != null)
+            if (uiNotes[i] == null)
+                continue;
+
+            if (i < notesPlayed)
             {
-                if (i < notesPlayed)
-                {
-                    int sourceIndex = 4 - notesPlayed + i;
-                    uiNotes[i].text = ((int)noteSequence[sourceIndex] + 1).ToString();
-                }
-                else
-                {
-                    uiNotes[i].text = "";
-                }
+                uiNotes[i].text =
+                    ((int)noteSequence[i] + 1).ToString();
+            }
+            else
+            {
+                uiNotes[i].text = "";
             }
         }
     }
 
-    private void OnNote1Played(InputAction.CallbackContext context) => AddNote(notesEnum.Note1);
-    private void OnNote2Played(InputAction.CallbackContext context) => AddNote(notesEnum.Note2);
-    private void OnNote3Played(InputAction.CallbackContext context) => AddNote(notesEnum.Note3);
-    private void OnNote4Played(InputAction.CallbackContext context) => AddNote(notesEnum.Note4);
-}
+    private void OnNote1Played(InputAction.CallbackContext context)
+    {
+        TryPlayNote(notesEnum.Note1);
+    }
 
+    private void OnNote2Played(InputAction.CallbackContext context)
+    {
+        TryPlayNote(notesEnum.Note2);
+    }
+
+    private void OnNote3Played(InputAction.CallbackContext context)
+    {
+        TryPlayNote(notesEnum.Note3);
+    }
+
+    private void OnNote4Played(InputAction.CallbackContext context)
+    {
+        TryPlayNote(notesEnum.Note4);
+    }
+}

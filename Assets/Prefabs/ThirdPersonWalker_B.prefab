@@ -129,7 +129,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.095
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -835,6 +835,7 @@ GameObject:
   - component: {fileID: 2902904493212257918}
   - component: {fileID: 8795301043739215124}
   - component: {fileID: 7755476730974396988}
+  - component: {fileID: 7499289551295869908}
   m_Layer: 6
   m_Name: ThirdPersonWalker_B
   m_TagString: Player
@@ -1004,9 +1005,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4c58c952b0682d4ab6316a1a6f0e4c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerInput: {fileID: 2902904493212257918}
+  playerRhythmController: {fileID: 7499289551295869908}
   controlsManager: {fileID: 0}
-  timeToClearMelody: 32
   uiNotes:
   - {fileID: 0}
   - {fileID: 0}
@@ -1172,10 +1172,6 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 2a4a74fa-8971-4700-9a01-fccba25e4a69
     m_ActionName: Gameplay/DebugSpawnSoundwave[/Keyboard/space]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 897b77e5-14ae-4255-ba35-de7c8f8b9dfb
-    m_ActionName: Gameplay/Jump[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 36546575-fd7e-4738-919d-90dd8c545869
@@ -1383,6 +1379,55 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aimTransform: {fileID: 5223356599605855382}
+--- !u!114 &7499289551295869908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7146024218861173856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 647cc5ee9cf2631438eaf774a6d2a8d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rhythmClock: {fileID: 0}
+  rhythmQuantizer: {fileID: 0}
+  meterText: {fileID: 0}
+  maxMeter: 100
+  secondSubBeatPoints: 6
+  maxContinuityMultiplier: 7.25
+  continuityCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.39920554
+      outSlope: 0.39920554
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.7916667
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  maxCadenceMultiplier: 1
+  minimumCadenceMultiplier: 0.35
+  minimumNoteInterval: 0.05
+  spamDetectionEnabled: 0
+  rapidInputCount: 3
+  rapidInputWindowSeconds: 0.325
+  logSpam: 0
 --- !u!1 &7835414320846562555
 GameObject:
   m_ObjectHideFlags: 0

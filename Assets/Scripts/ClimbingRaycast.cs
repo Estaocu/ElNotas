@@ -210,9 +210,9 @@ public class ClimbingRaycast : MonoBehaviour
             {
                 ClimbTier tier = GetClimbTier(climbHeight);
 
-                Debug.Log(
-                    $"[ClimbingRaycast] Climb height {climbHeight:F2}m -> tier {tier}"
-                );
+                // Debug.Log(
+                //     $"[ClimbingRaycast] Climb height {climbHeight:F2}m -> tier {tier}"
+                // );
 
                 if (tier != ClimbTier.TooHigh)
                 {
@@ -259,10 +259,7 @@ public class ClimbingRaycast : MonoBehaviour
                 ? transform.parent
                 : transform;
 
-        Debug.Log(
-            $"[ClimbingRaycast] Teleport '{body.name}' from {body.position} to {target}",
-            body
-        );
+        //Debug.Log($"[ClimbingRaycast] Teleport '{body.name}' from {body.position} to {target}",body);
 
         body.position = target;
 
@@ -312,9 +309,7 @@ public class ClimbingRaycast : MonoBehaviour
             return;
         }
 
-        Debug.Log(
-            $"[ClimbingRaycast] Started checking input toward wall. Direction: {climbInputDirection}"
-        );
+        //Debug.Log($"[ClimbingRaycast] Started checking input toward wall. Direction: {climbInputDirection}");
     }
 
     private void UpdateInputCheck()
@@ -322,9 +317,7 @@ public class ClimbingRaycast : MonoBehaviour
         if (moveAction == null || moveAction.action == null)
         {
             isChecking = false;
-            Debug.LogWarning(
-                "[ClimbingRaycast] Move Action Reference is missing."
-            );
+            //Debug.LogWarning("[ClimbingRaycast] Move Action Reference is missing.");
             return;
         }
 
@@ -353,9 +346,7 @@ public class ClimbingRaycast : MonoBehaviour
         {
             timer = 0f;
 
-            Debug.Log(
-                $"[ClimbingRaycast] Input is not pointing toward the wall. Alignment: {directionAlignment:F2}"
-            );
+            //Debug.Log($"[ClimbingRaycast] Input is not pointing toward the wall. Alignment: {directionAlignment:F2}");
 
             return;
         }
@@ -366,9 +357,7 @@ public class ClimbingRaycast : MonoBehaviour
         {
             isChecking = false;
 
-            Debug.Log(
-                $"[ClimbingRaycast] Success: input was held toward the wall for {durationToCheck:F2} seconds."
-            );
+            //Debug.Log($"[ClimbingRaycast] Success: input was held toward the wall for {durationToCheck:F2} seconds.");
 
             TeleportPlayer(targetClimbPoint);
 

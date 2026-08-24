@@ -218,9 +218,7 @@ public class AbyssRaycast : MonoBehaviour
         movementHoldTimer = 0f;
         heldMovementDirection = Vector3.zero;
 
-        Debug.Log(
-            $"[AbyssRaycast] Abyss jump disabled for {abyssJumpCooldownAfterClimb:F2} seconds after climb."
-        );
+        //Debug.Log($"[AbyssRaycast] Abyss jump disabled for {abyssJumpCooldownAfterClimb:F2} seconds after climb.");
     }
 
     void UpdateMovementHoldTimer()

@@ -4,7 +4,6 @@ using System.Linq;
 using CarterGames.Assets.SaveManager.Slots;
 using CMF;
 using TMPro;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Localization.Settings;

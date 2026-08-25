@@ -5,7 +5,6 @@ using UnityEngine.Localization.Settings;
 using CarterGames.Assets.SaveManager; 
 using Save;
 using NaughtyAttributes;
-using UnityEditor.Localization.Plugins.XLIFF.V20;
 using System.Collections.Generic;
 
 public enum DialogueMode { Intro, Monologue, Answer, Question, Goodbye };

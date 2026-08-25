@@ -1,0 +1,203 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2691673536012627073
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3f98ad8d8037a14092ba255b32baf1a, type: 3}
+  m_Name: GeneralizedKuwaharaVolume
+  m_EditorClassIdentifier: 
+  active: 0
+  _kernelSize:
+    m_OverrideState: 1
+    m_Value: 14
+  _sharpness:
+    m_OverrideState: 1
+    m_Value: 8
+  _hardness:
+    m_OverrideState: 1
+    m_Value: 8
+  _zeroCrossing:
+    m_OverrideState: 1
+    m_Value: 0.58
+  _useZeta:
+    m_OverrideState: 1
+    m_Value: 0
+  _zeta:
+    m_OverrideState: 1
+    m_Value: 1
+  _passes:
+    m_OverrideState: 1
+    m_Value: 1
+--- !u!114 &-335511172079800181
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8943a1254475bd43ba652227e9a00c5, type: 3}
+  m_Name: FogVolume
+  m_EditorClassIdentifier: 
+  active: 1
+  _fogColor:
+    m_OverrideState: 1
+    m_Value: {r: 0.504717, g: 0.504717, b: 1, a: 1}
+  _fogDensity:
+    m_OverrideState: 1
+    m_Value: 0
+  _fogOffset:
+    m_OverrideState: 1
+    m_Value: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
+  m_Name: KuwaharaPP
+  m_EditorClassIdentifier: 
+  components:
+  - {fileID: 7764059033741560627}
+  - {fileID: -335511172079800181}
+  - {fileID: 9188860151190826870}
+  - {fileID: 1635786735857241742}
+  - {fileID: -2691673536012627073}
+--- !u!114 &1635786735857241742
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c01700fd266d6914ababb731e09af2eb, type: 3}
+  m_Name: DepthOfField
+  m_EditorClassIdentifier: 
+  active: 0
+  mode:
+    m_OverrideState: 1
+    m_Value: 1
+  gaussianStart:
+    m_OverrideState: 1
+    m_Value: 1.35
+  gaussianEnd:
+    m_OverrideState: 1
+    m_Value: 163
+  gaussianMaxRadius:
+    m_OverrideState: 0
+    m_Value: 1.5
+  highQualitySampling:
+    m_OverrideState: 0
+    m_Value: 0
+  focusDistance:
+    m_OverrideState: 1
+    m_Value: 10
+  aperture:
+    m_OverrideState: 0
+    m_Value: 5.6
+  focalLength:
+    m_OverrideState: 0
+    m_Value: 50
+  bladeCount:
+    m_OverrideState: 0
+    m_Value: 5
+  bladeCurvature:
+    m_OverrideState: 0
+    m_Value: 1
+  bladeRotation:
+    m_OverrideState: 0
+    m_Value: 0
+--- !u!114 &7764059033741560627
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4777b298c54fde44f8f99eadfb3b48d9, type: 3}
+  m_Name: KuwaharaVolume
+  m_EditorClassIdentifier: 
+  active: 0
+  _kernelSize:
+    m_OverrideState: 1
+    m_Value: 1
+  _animateKernelSize:
+    m_OverrideState: 1
+    m_Value: 0
+  _minKernelSize:
+    m_OverrideState: 1
+    m_Value: 1
+  _sizeAnimationSpeed:
+    m_OverrideState: 1
+    m_Value: 1
+  _noiseFrequency:
+    m_OverrideState: 1
+    m_Value: 10
+  _animateKernelOrigin:
+    m_OverrideState: 1
+    m_Value: 0
+  _passes:
+    m_OverrideState: 1
+    m_Value: 1
+--- !u!114 &9188860151190826870
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b2db86121404754db890f4c8dfe81b2, type: 3}
+  m_Name: Bloom
+  m_EditorClassIdentifier: 
+  active: 1
+  skipIterations:
+    m_OverrideState: 0
+    m_Value: 1
+  threshold:
+    m_OverrideState: 0
+    m_Value: 0.9
+  intensity:
+    m_OverrideState: 1
+    m_Value: 3.14
+  scatter:
+    m_OverrideState: 0
+    m_Value: 0.7
+  clamp:
+    m_OverrideState: 0
+    m_Value: 65472
+  tint:
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  highQualityFiltering:
+    m_OverrideState: 0
+    m_Value: 0
+  downscale:
+    m_OverrideState: 0
+    m_Value: 0
+  maxIterations:
+    m_OverrideState: 0
+    m_Value: 6
+  dirtTexture:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+    dimension: 1
+  dirtIntensity:
+    m_OverrideState: 0
+    m_Value: 0

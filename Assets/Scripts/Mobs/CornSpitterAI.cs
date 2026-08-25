@@ -144,7 +144,7 @@ public class CornSpitterAI : MonoBehaviour
 
             if (targetCollider != null)
             {
-                Debug.DrawLine(startPos, targetCollider.bounds.center, Color.red);
+                Debug.DrawLine(startPos, targetCollider.bounds.center, Color.green);
             }
 
             yield return null;

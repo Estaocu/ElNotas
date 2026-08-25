@@ -1,5 +1,32 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8024884539615153421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e89f51878fb6bd4daafdfe0e444c6aa, type: 3}
+  m_Name: KuwaharaDepthOfFieldRendererFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    shader: {fileID: 4800000, guid: c7808ecb62fc78449b0fd02cf045af07, type: 3}
+    intensity: 1
+    radius: 3.01
+    depthStrength: 1
+    focusDistance: 10
+    focusRange: 26.7
+    maxBlurRadius: 6
+    depthFalloff: 2
+    depthBias: 0
+    brushScale: 2.62
+    brushAnisotropy: 0.42
+    brushRotation: 5.21
+    renderPassEvent: 600
 --- !u!114 &-1878332245247344467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35,6 +62,33 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 3302065f671a8450b82c9ddf07426f3a, type: 3}
   - {fileID: 2800000, guid: 56a77a3e8d64f47b6afe9e3c95cb57d5, type: 3}
   m_Shader: {fileID: 4800000, guid: 0849e84e3d62649e8882e9d6f056a017, type: 3}
+--- !u!114 &-1784089157787861850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cf6b94295cbbec4188b765e7293da3b, type: 3}
+  m_Name: KuwaharaDOFFeature
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  settings:
+    renderPassEvent: 600
+    shader: {fileID: 4800000, guid: daf797240ce3b2c439d668048e26e807, type: 3}
+    radius: 6
+    cellSize: 1
+    sharpness: 6.7
+    eccentricity: 1.77
+    tensorBlurIterations: 3
+    focusDistance: 10
+    focusRange: 47.2
+    nearTransitionRange: 92.23
+    farTransitionRange: 29.9
+    halfResolution: 1
+    debugShowFocusMask: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53,7 +107,10 @@ MonoBehaviour:
     hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
   m_RendererFeatures:
   - {fileID: -1878332245247344467}
-  m_RendererFeatureMap: adc0de57c6d2eee5
+  - {fileID: 8301037018918456945}
+  - {fileID: -1784089157787861850}
+  - {fileID: -8024884539615153421}
+  m_RendererFeatureMap: adc0de57c6d2eee5718e001c30353373a6bc6d0e5da43de7f3f2b66407e2a190
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -102,3 +159,47 @@ MonoBehaviour:
   m_CopyDepthMode: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
+--- !u!114 &6313860473002793551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67d392ede04a15a479f75d3a12192d2c, type: 3}
+  m_Name: KuwaharaDepthOfFieldFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    radiusSize: 4
+    radius2X: 0
+    sharpness: 8
+    overlapSlider: 0
+    lineArt: 0
+    lineArtIntensity: 1
+    focusDistance: 10
+    focusRange: 5
+    maxBlur: 1
+    nearBlur: 1
+    farBlur: 1
+    renderPassEvent: 550
+    shader: {fileID: 4800000, guid: b6a9668bc8da5f44ea9bef6387dd3d44, type: 3}
+  material: {fileID: 0}
+--- !u!114 &8301037018918456945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 472cb1b3dd330d64793b79f063400e96, type: 3}
+  m_Name: Fog Pass
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    renderPassEvent: 550
+    shader: {fileID: 4800000, guid: 1691bcb7ada8dbe4ea314fb578ff5468, type: 3}

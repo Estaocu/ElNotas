@@ -2,85 +2,162 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum SpitterState { Idle, Iniciativa, Respuesta, Dead }
-public enum DeflectMode { Homing, Linear }
+public enum SpitterState
+{
+    Idle,
+    Iniciativa,
+    Respuesta,
+    Dead
+}
+
+public enum DeflectMode
+{
+    Homing,
+    Linear
+}
+
+public enum SpitterNoteResolution
+{
+    Eighth,
+    Quarter,
+    Both
+}
 
 public class CornSpitterAI : MonoBehaviour
 {
     private IControllableProjectile projectile;
+
+    [Header("Health")]
     [SerializeField] private int maxHp;
     public int currentHp;
+
+    [Header("References")]
     [SerializeField] private AddNotesOnBeat beatSinger;
     [SerializeField] private GameObject cornPrefab;
     [SerializeField] private Transform cornSpawnpoint;
     [SerializeField] private TriggerDetector cornTrigger;
     [SerializeField] private TriggerDetector playerTrigger;
+    [SerializeField] private RhythmClock rhythmClock;
+
+    [Header("Singing Rhythm")]
+    [SerializeField]
+    private SpitterNoteResolution noteResolution =
+        SpitterNoteResolution.Both;
+
+    [SerializeField, Min(0)]
+    private int silenceBetweenNotes = 0;
 
     [Header("Raycast Confirmation Settings")]
     [SerializeField] private Transform raycastStartPoint;
     [SerializeField] private LayerMask obstacleLayerMask;
     [SerializeField] private float confirmationDuration = 1.5f;
+    private bool isPlayerInsideTrigger;
 
-    public notesEnum[] melodyToCopy = new notesEnum[2];
+    public notesEnum[] melodyToCopy =
+        new notesEnum[2];
 
-    private SpitterState state = SpitterState.Idle;
-    private SpitterState interruptResumeAfter = SpitterState.Idle;
-    private DeflectMode deflectMode = DeflectMode.Homing;
+    private SpitterState state =
+        SpitterState.Idle;
+
+    private SpitterState interruptResumeAfter =
+        SpitterState.Idle;
+
+    private DeflectMode deflectMode =
+        DeflectMode.Homing;
+
     private HomingProjectile currentEngagement;
-    private readonly HashSet<HomingProjectile> incomingCorns = new();
+
+    private readonly HashSet<HomingProjectile>
+        incomingCorns = new();
 
     private bool cornSpawned;
     private bool cornAlreadyRead;
 
     private NoteSlot[] originalPattern;
-    private Coroutine detectionRoutine;
-    private bool isCurrentlyTrackingPlayer = false;
 
-    public SpitterState State => state;
+    private Coroutine detectionRoutine;
+
+    private bool isCurrentlyTrackingPlayer;
+
+    // The melody chosen for the currently active corn.
+    private notesEnum[] currentCombatMelody =
+        new notesEnum[2];
+
+    // True while the current corn combat owns a melody.
+    private bool hasCombatMelody;
+
+    public SpitterState State =>
+        state;
 
     private void Awake()
     {
-        if (beatSinger != null && beatSinger.pattern != null)
-            originalPattern = (NoteSlot[])beatSinger.pattern.Clone();
-        if (currentHp <= 0) currentHp = maxHp;
-    }
-
-    private void Update()
-    {
-        if (detectionRoutine != null && playerTrigger != null && playerTrigger.LastDetected != null)
+        if (rhythmClock == null)
         {
-            var col = playerTrigger.LastDetected.GetComponent<Collider>();
-            if (col != null)
-            {
-                Vector3 startPos = raycastStartPoint != null ? raycastStartPoint.position : transform.position;
-                Vector3 targetPos = col.bounds.center;
-                Debug.DrawLine(startPos, targetPos, Color.red);
-            }
+            rhythmClock =
+                FindFirstObjectByType<RhythmClock>();
+        }
+
+        if (beatSinger != null &&
+            beatSinger.pattern != null)
+        {
+            originalPattern =
+                (NoteSlot[])beatSinger.pattern.Clone();
+        }
+
+        if (currentHp <= 0)
+        {
+            currentHp = maxHp;
         }
     }
 
-    public void RegisterIncomingCorn(HomingProjectile proj)
+    public void RegisterIncomingCorn(
+        HomingProjectile proj)
     {
-        if (proj != null) incomingCorns.Add(proj);
+        if (proj != null)
+        {
+            incomingCorns.Add(proj);
+        }
     }
 
-    public void UnregisterIncomingCorn(HomingProjectile proj)
+    public void UnregisterIncomingCorn(
+        HomingProjectile proj)
     {
         incomingCorns.Remove(proj);
     }
 
     public void OnPlayerDetected()
     {
-        incomingCorns.RemoveWhere(item => item == null);
 
-        if (state != SpitterState.Idle) return;
-        if (incomingCorns.Count > 0) return;
-        if (cornSpawned) return;
-        if (playerTrigger == null || playerTrigger.LastDetected == null) return;
-        if (isCurrentlyTrackingPlayer) return;
+        incomingCorns.RemoveWhere(
+            item => item == null
+        );
 
-        var col = playerTrigger.LastDetected.GetComponent<Collider>();
-        if (col == null) return;
+        if (state != SpitterState.Idle)
+            return;
+
+        if (incomingCorns.Count > 0)
+            return;
+
+        if (cornSpawned)
+            return;
+
+        if (playerTrigger == null ||
+            playerTrigger.LastDetected == null)
+        {
+            return;
+        }
+
+        if (isCurrentlyTrackingPlayer)
+            return;
+
+        Collider col =
+            playerTrigger.LastDetected
+                .GetComponent<Collider>();
+
+        if (col == null)
+            return;
+
+        isPlayerInsideTrigger = true;
 
         if (detectionRoutine != null)
         {
@@ -92,29 +169,30 @@ public class CornSpitterAI : MonoBehaviour
 
     public void OnPlayerLost()
     {
+        isPlayerInsideTrigger = false;
+
         if (detectionRoutine != null)
         {
             StopCoroutine(detectionRoutine);
             detectionRoutine = null;
         }
+
         isCurrentlyTrackingPlayer = false;
     }
 
-    private IEnumerator TrackAndConfirmPlayerRoutine(Collider targetCollider)
+    private IEnumerator TrackAndConfirmPlayerRoutine(Collider playerCol)
     {
         isCurrentlyTrackingPlayer = true;
         float elapsed = 0f;
 
-        while (true)
+        // Evaluamos si el jugador sigue en el trigger y si el collider es válido
+        while (isPlayerInsideTrigger && playerCol != null)
         {
-            if (targetCollider == null)
-            {
-                isCurrentlyTrackingPlayer = false;
-                yield break;
-            }
+            Vector3 startPos = raycastStartPoint != null
+                ? raycastStartPoint.position
+                : transform.position;
 
-            Vector3 startPos = raycastStartPoint != null ? raycastStartPoint.position : transform.position;
-            Vector3 targetPos = targetCollider.bounds.center;
+            Vector3 targetPos = playerCol.bounds.center;
             Vector3 direction = targetPos - startPos;
             float distance = direction.magnitude;
 
@@ -122,9 +200,11 @@ public class CornSpitterAI : MonoBehaviour
 
             if (Physics.Raycast(startPos, direction.normalized, out RaycastHit hit, distance, obstacleLayerMask))
             {
-                if (hit.collider.transform.root != targetCollider.transform.root)
+                if (hit.collider.transform.root != playerCol.transform.root)
                 {
                     isLineOfSightBlocked = true;
+
+                    Debug.DrawLine(startPos, playerCol.bounds.center, Color.red);
                 }
             }
 
@@ -136,24 +216,23 @@ public class CornSpitterAI : MonoBehaviour
             {
                 elapsed += Time.deltaTime;
 
+                Debug.DrawLine(startPos, playerCol.bounds.center, Color.green);
+
                 if (elapsed >= confirmationDuration)
                 {
+                    Debug.Log("DONE!");
                     break;
                 }
-            }
-
-            if (targetCollider != null)
-            {
-                Debug.DrawLine(startPos, targetCollider.bounds.center, Color.red);
             }
 
             yield return null;
         }
 
-        if (state == SpitterState.Idle && !cornSpawned && incomingCorns.Count == 0)
+        // Si ha salido del bucle porque la línea de visión falló o el jugador salió del trigger
+        if (isPlayerInsideTrigger && state == SpitterState.Idle && !cornSpawned && incomingCorns.Count == 0)
         {
             state = SpitterState.Iniciativa;
-            LaunchCorn(targetCollider);
+            LaunchCorn(playerCol);
         }
 
         isCurrentlyTrackingPlayer = false;
@@ -162,95 +241,175 @@ public class CornSpitterAI : MonoBehaviour
 
     public void OnCornDetected()
     {
-        if (state == SpitterState.Dead) return;
-        if (cornTrigger == null || cornTrigger.LastDetected == null) return;
+        if (state == SpitterState.Dead)
+            return;
 
-        var proj = cornTrigger.LastDetected.GetComponent<HomingProjectile>();
-        if (proj == null) return;
-
-        if (proj.mobIsOgSender && proj.LaunchesNumber == 0) return;
-        if (proj.Enemy != gameObject) return;
-
-        // If HP is depleted, cannot sing to deflect anymore
-        if (currentHp <= 0)
+        if (cornTrigger == null ||
+            cornTrigger.LastDetected == null)
         {
-            if (beatSinger != null) beatSinger.StopSinging();
             return;
         }
 
-        bool ownBounce = proj.mobIsOgSender;
+        HomingProjectile proj =
+            cornTrigger.LastDetected
+                .GetComponent<HomingProjectile>();
 
-        if (state == SpitterState.Iniciativa && !ownBounce)
+        if (proj == null)
+            return;
+
+        if (proj.mobIsOgSender &&
+            proj.LaunchesNumber == 0)
         {
-            interruptResumeAfter = SpitterState.Iniciativa;
-            state = SpitterState.Respuesta;
-            deflectMode = DeflectMode.Linear;
-            var listener = proj.GetComponentInChildren<SingleNotesListener>(true);
-            if (listener != null) ReadCornMelody(listener);
+            return;
+        }
+
+        if (proj.Enemy != gameObject)
+            return;
+
+        if (currentHp <= 0)
+        {
+            if (beatSinger != null)
+            {
+                beatSinger.StopSinging();
+            }
+
+            return;
+        }
+
+        bool ownBounce =
+            proj.mobIsOgSender;
+
+        if (state == SpitterState.Iniciativa &&
+            !ownBounce)
+        {
+            interruptResumeAfter =
+                SpitterState.Iniciativa;
+
+            state =
+                SpitterState.Respuesta;
+
+            deflectMode =
+                DeflectMode.Linear;
+
+            SingleNotesListener listener =
+                proj.GetComponentInChildren<
+                    SingleNotesListener>(true);
+
+            if (listener != null)
+            {
+                ReadCornMelody(listener);
+            }
+
             currentEngagement = proj;
-            
+
             SingForCorn();
+
             return;
         }
 
         if (ownBounce)
         {
-            state = SpitterState.Respuesta;
-            deflectMode = DeflectMode.Homing;
+            state =
+                SpitterState.Respuesta;
+
+            deflectMode =
+                DeflectMode.Homing;
+
             currentEngagement = proj;
-            
+
             SingForCorn();
+
             return;
         }
 
-        state = SpitterState.Respuesta;
-        deflectMode = DeflectMode.Homing;
-        var l = proj.GetComponentInChildren<SingleNotesListener>(true);
-        if (l != null) ReadCornMelody(l);
+        state =
+            SpitterState.Respuesta;
+
+        deflectMode =
+            DeflectMode.Homing;
+
+        SingleNotesListener cornListener =
+            proj.GetComponentInChildren<
+                SingleNotesListener>(true);
+
+        if (cornListener != null)
+        {
+            ReadCornMelody(cornListener);
+        }
+
         currentEngagement = proj;
-        
+
         SingForCorn();
     }
 
-    public void OnDeflectionConfirmed(HomingProjectile proj)
+    public void OnDeflectionConfirmed(
+        HomingProjectile proj)
     {
-        if (state != SpitterState.Respuesta) return;
-        if (currentEngagement != proj || proj == null) return;
+        if (state != SpitterState.Respuesta)
+            return;
+
+        if (currentEngagement != proj ||
+            proj == null)
+        {
+            return;
+        }
 
         if (deflectMode == DeflectMode.Linear)
-            proj.LaunchLinear(gameObject);
-        else
-            proj.Launch(gameObject);
-
-        currentEngagement = null;
-
-        if (interruptResumeAfter == SpitterState.Iniciativa)
         {
-            RestorePattern();
-            interruptResumeAfter = SpitterState.Idle;
-            state = SpitterState.Iniciativa;
+            proj.LaunchLinear(gameObject);
         }
         else
         {
-            state = SpitterState.Idle;
+            proj.Launch(gameObject);
+        }
+
+        currentEngagement = null;
+
+        if (interruptResumeAfter ==
+            SpitterState.Iniciativa)
+        {
+            RestorePattern();
+
+            interruptResumeAfter =
+                SpitterState.Idle;
+
+            state =
+                SpitterState.Iniciativa;
+        }
+        else
+        {
+            state =
+                SpitterState.Idle;
         }
     }
 
-    public void OnEngagementCornExploded(HomingProjectile proj)
+    public void OnEngagementCornExploded(
+        HomingProjectile proj)
     {
-        if (state == SpitterState.Dead) return;
+        if (state == SpitterState.Dead)
+            return;
+
         incomingCorns.Remove(proj);
 
-        state = SpitterState.Idle;
-        
-        // HP is no longer restored when projectile explodes elsewhere
+        currentEngagement = null;
+
         cornSpawned = false;
         cornAlreadyRead = false;
-        currentEngagement = null;
-        interruptResumeAfter = SpitterState.Idle;
+
+        // The melody belongs to the old corn.
+        // It must disappear only when that corn is gone.
+        hasCombatMelody = false;
+
+        interruptResumeAfter =
+            SpitterState.Idle;
+
+        state =
+            SpitterState.Idle;
+
         RestorePattern();
 
-        if (playerTrigger != null && playerTrigger.LastDetected != null)
+        if (playerTrigger != null &&
+            playerTrigger.LastDetected != null)
         {
             OnPlayerDetected();
         }
@@ -261,101 +420,268 @@ public class CornSpitterAI : MonoBehaviour
         Die();
     }
 
-    public void LaunchCorn(Collider collider)
+    public void LaunchCorn(
+        Collider collider)
     {
-        if (cornSpawned) return;
+        if (cornSpawned)
+            return;
+
         cornSpawned = true;
 
-        GameObject myCorn = PoolManager.Instance.GetObject(cornPrefab);
+        GameObject myCorn =
+            PoolManager.Instance.GetObject(
+                cornPrefab
+            );
+
         if (myCorn == null)
         {
             cornSpawned = false;
             return;
         }
 
-        myCorn.transform.position = cornSpawnpoint.position;
-        myCorn.transform.rotation = cornSpawnpoint.rotation; 
+        myCorn.transform.position =
+            cornSpawnpoint.position;
 
-        HomingProjectile script = myCorn.GetComponent<HomingProjectile>();
-        if (script != null)
+        myCorn.transform.rotation =
+            cornSpawnpoint.rotation;
+
+        HomingProjectile script =
+            myCorn.GetComponent<HomingProjectile>();
+
+        if (script == null)
         {
-            script.player = collider.gameObject;
-            script.mobIsOgSender = true;
-            script.enemy = gameObject; 
-            
-            RegisterIncomingCorn(script); 
-            
-            RandomizePattern();
-            
-            beatSinger.Sing();
+            cornSpawned = false;
+            return;
         }
+
+        script.player =
+            collider.gameObject;
+
+        script.mobIsOgSender = true;
+        script.enemy = gameObject;
+
+        // A new melody is generated only when a new corn is created.
+        GenerateNewCombatMelody();
+
+        // The corn is initially quiet.
+        // These two notes are scheduled independently.
+        ScheduleCombatMelody();
     }
 
-    private void RandomizePattern()
+    private void GenerateNewCombatMelody()
     {
-        if (beatSinger == null || beatSinger.pattern == null || beatSinger.pattern.Length < 16) return;
+        notesEnum firstNote =
+            GetRandomNote();
 
-        System.Array values = System.Enum.GetValues(typeof(NoteSlot));
-        
-        for (int i = 0; i < beatSinger.pattern.Length; i++)
-        {
-            beatSinger.pattern[i] = NoteSlot.Empty;
-        }
+        notesEnum secondNote =
+            GetRandomDifferentNote(
+                firstNote
+            );
 
-        NoteSlot firstNote = NoteSlot.Empty;
-        while (firstNote == NoteSlot.Empty)
-        {
-            firstNote = (NoteSlot)values.GetValue(Random.Range(0, values.Length));
-        }
+        currentCombatMelody[0] =
+            firstNote;
 
-        NoteSlot secondNote = NoteSlot.Empty;
-        while (secondNote == NoteSlot.Empty || secondNote == firstNote)
-        {
-            secondNote = (NoteSlot)values.GetValue(Random.Range(0, values.Length));
-        }
+        currentCombatMelody[1] =
+            secondNote;
 
-        beatSinger.pattern[0] = firstNote;
-        beatSinger.pattern[4] = secondNote;
-
-        originalPattern = (NoteSlot[])beatSinger.pattern.Clone();
+        hasCombatMelody = true;
     }
 
-    public void ReadCornMelody(SingleNotesListener corn)
+    private void ScheduleCombatMelody()
     {
-        if (cornAlreadyRead) return;
-        melodyToCopy = corn.desiredMelody;
-        
-        for (int i = 0; i < beatSinger.pattern.Length; i++)
+        if (!hasCombatMelody)
+            return;
+
+        if (beatSinger == null ||
+            rhythmClock == null ||
+            !rhythmClock.IsRunning ||
+            rhythmClock.IsPaused)
         {
-            beatSinger.pattern[i] = NoteSlot.Empty;
+            return;
         }
 
-        beatSinger.pattern[0] = (NoteSlot)melodyToCopy[1];
-        beatSinger.pattern[4] = (NoteSlot)melodyToCopy[0];
+        long firstAbsoluteSubBeat =
+            GetNextValidStartSubBeat();
+
+        long secondAbsoluteSubBeat =
+            firstAbsoluteSubBeat +
+            silenceBetweenNotes +
+            1;
+
+        beatSinger.ScheduleTwoNotesAtAbsoluteSubBeats(
+            currentCombatMelody[0],
+            firstAbsoluteSubBeat,
+            currentCombatMelody[1],
+            secondAbsoluteSubBeat
+        );
+    }
+
+    private long GetNextValidStartSubBeat()
+    {
+        if (rhythmClock == null)
+            return 0;
+
+        double elapsed =
+            AudioSettings.dspTime -
+            rhythmClock.StartDspTime;
+
+        if (elapsed < 0.0)
+            elapsed = 0.0;
+
+        double subBeatDuration =
+            rhythmClock.SubBeatDuration;
+
+        if (subBeatDuration <= 0.0)
+            return 0;
+
+        long candidate =
+            (long)System.Math.Ceiling(
+                elapsed /
+                subBeatDuration
+            );
+
+        while (!IsValidStartSubBeat(candidate))
+        {
+            candidate++;
+        }
+
+        return candidate;
+    }
+
+    private bool IsValidStartSubBeat(
+        long absoluteSubBeat)
+    {
+        int localSubBeat =
+            (int)(
+                absoluteSubBeat %
+                RhythmClock.SubBeatsPerBar
+            );
+
+        switch (noteResolution)
+        {
+            case SpitterNoteResolution.Eighth:
+                return true;
+
+            case SpitterNoteResolution.Quarter:
+                return
+                    localSubBeat %
+                    RhythmClock.SubBeatsPerBeat == 0;
+
+            case SpitterNoteResolution.Both:
+                return true;
+        }
+
+        return false;
+    }
+
+    private notesEnum GetRandomNote()
+    {
+        return
+            (notesEnum)Random.Range(
+                0,
+                4
+            );
+    }
+
+    private notesEnum GetRandomDifferentNote(
+        notesEnum firstNote)
+    {
+        notesEnum secondNote;
+
+        do
+        {
+            secondNote =
+                (notesEnum)Random.Range(
+                    0,
+                    4
+                );
+
+        } while (
+            secondNote == firstNote
+        );
+
+        return secondNote;
+    }
+
+    public void ReadCornMelody(
+        SingleNotesListener corn)
+    {
+        if (corn == null)
+            return;
+
+        if (corn.desiredMelody == null ||
+            corn.desiredMelody.Length < 2)
+        {
+            return;
+        }
+
+        if (cornAlreadyRead)
+            return;
+
+        melodyToCopy =
+            (notesEnum[])corn.desiredMelody.Clone();
 
         cornAlreadyRead = true;
     }
 
     public void SingForCorn()
     {
-        if (currentHp <= 0) return;
+        if (currentHp <= 0)
+            return;
+
         currentHp--;
-        beatSinger.Sing();
+
+        if (!hasCombatMelody)
+            return;
+
+        ScheduleCombatMelody();
     }
 
     private void RestorePattern()
     {
-        if (originalPattern == null || beatSinger == null || beatSinger.pattern == null) return;
-        int n = Mathf.Min(originalPattern.Length, beatSinger.pattern.Length);
-        System.Array.Copy(originalPattern, beatSinger.pattern, n);
+        if (originalPattern == null ||
+            beatSinger == null ||
+            beatSinger.pattern == null)
+        {
+            return;
+        }
+
+        int count =
+            Mathf.Min(
+                originalPattern.Length,
+                beatSinger.pattern.Length
+            );
+
+        System.Array.Copy(
+            originalPattern,
+            beatSinger.pattern,
+            count
+        );
+
         cornAlreadyRead = false;
     }
 
     private void Die()
     {
-        if (detectionRoutine != null) StopCoroutine(detectionRoutine);
-        state = SpitterState.Dead;
-        if (beatSinger != null) beatSinger.StopSinging();
+        if (detectionRoutine != null)
+        {
+            StopCoroutine(
+                detectionRoutine
+            );
+
+            detectionRoutine = null;
+        }
+
+        state =
+            SpitterState.Dead;
+
+        hasCombatMelody = false;
+
+        if (beatSinger != null)
+        {
+            beatSinger.StopSinging();
+        }
+
         Destroy(gameObject);
     }
 }

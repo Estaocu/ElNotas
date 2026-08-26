@@ -117,11 +117,23 @@ MonoBehaviour:
         m_CallState: 2
   OnLost:
     m_PersistentCalls:
-      m_Calls: []
-  onTriggerEntered:
+      m_Calls:
+      - m_Target: {fileID: 7339256057747759615}
+        m_TargetAssemblyTypeName: CornSpitterAI, Assembly-CSharp
+        m_MethodName: OnPlayerLost
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnGameObjectDetected:
     m_PersistentCalls:
       m_Calls: []
-  onTriggerExited:
+  OnGameObjectLost:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &984471492768540419
@@ -396,8 +408,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   singer: {fileID: 5183498619773180898}
+  rhythmClock: {fileID: 0}
   patternMode: 0
-  pattern: 00000000ffffffff03000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+  pattern: 00000000ffffffff03000000ffffffffffffffffffffffffffffffffffffffff
   humanizationPercent: 0.05
 --- !u!114 &5183498619773180898
 MonoBehaviour:
@@ -463,6 +476,9 @@ MonoBehaviour:
   cornSpawnpoint: {fileID: 6241696902868849724}
   cornTrigger: {fileID: 8358866438339391095}
   playerTrigger: {fileID: 8264966049224216375}
+  rhythmClock: {fileID: 0}
+  noteResolution: 2
+  silenceBetweenNotes: 0
   raycastStartPoint: {fileID: 8013018246867252038}
   obstacleLayerMask:
     serializedVersion: 2
@@ -522,7 +538,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 10
+  m_Radius: 8
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5632761542977290805
 Rigidbody:
@@ -587,10 +603,10 @@ MonoBehaviour:
   OnLost:
     m_PersistentCalls:
       m_Calls: []
-  onTriggerEntered:
+  OnGameObjectDetected:
     m_PersistentCalls:
       m_Calls: []
-  onTriggerExited:
+  OnGameObjectLost:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &6423449846152537067

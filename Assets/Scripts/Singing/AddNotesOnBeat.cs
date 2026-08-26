@@ -5,115 +5,303 @@ public class AddNotesOnBeat : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Singer singer;
+    [SerializeField] private RhythmClock rhythmClock;
 
     [Header("NPC Rhythm Pattern")]
     [SerializeField] private PatternMode patternMode = PatternMode.Local;
-    public NoteSlot[] pattern = new NoteSlot[16];
-    [SerializeField, Range(0f, 0.25f)] private float humanizationPercent = 0.05f;
 
-    public bool IsSinging => isPatternActive || waitingForStart;
+    // One slot represents one eighth note.
+    public NoteSlot[] pattern =
+        new NoteSlot[RhythmClock.SubBeatsPerBar];
+
+    [SerializeField, Range(0f, 0.25f)]
+    private float humanizationPercent = 0.05f;
+
+    public bool IsSinging =>
+        isPatternActive || waitingForStart;
 
     private bool isPatternActive;
     private bool waitingForStart;
+
     private int nextSlotIndex;
-    private int slotsRemaining;
+
+    private bool hasExplicitStart;
+    private long explicitStartAbsoluteSubBeat;
 
     private void Awake()
     {
-        if (singer == null) singer = GetComponent<Singer>();
+        if (singer == null)
+            singer = GetComponent<Singer>();
+
+        if (rhythmClock == null)
+            rhythmClock = FindFirstObjectByType<RhythmClock>();
     }
 
     private void OnValidate()
     {
-        if (pattern == null || pattern.Length != 16)
+        int requiredLength =
+            RhythmClock.SubBeatsPerBar;
+
+        if (pattern == null ||
+            pattern.Length != requiredLength)
         {
-            var resized = new NoteSlot[16];
+            NoteSlot[] resized =
+                new NoteSlot[requiredLength];
+
             if (pattern != null)
             {
-                int copy = Mathf.Min(pattern.Length, 16);
-                for (int i = 0; i < copy; i++) resized[i] = pattern[i];
+                int copy =
+                    Mathf.Min(
+                        pattern.Length,
+                        requiredLength
+                    );
+
+                for (int i = 0; i < copy; i++)
+                {
+                    resized[i] = pattern[i];
+                }
             }
+
             pattern = resized;
         }
+
+        humanizationPercent =
+            Mathf.Clamp(
+                humanizationPercent,
+                0f,
+                0.25f
+            );
     }
 
     private void OnEnable()
     {
-        RhythmManager.OnBeatChanged += OnBeatChanged;
+        RhythmClock.OnSubBeat += OnSubBeat;
     }
 
     private void OnDisable()
     {
-        RhythmManager.OnBeatChanged -= OnBeatChanged;
+        RhythmClock.OnSubBeat -= OnSubBeat;
     }
 
     public void Sing()
     {
+        if (pattern == null)
+            return;
+
+        hasExplicitStart = false;
+
         waitingForStart = true;
+        isPatternActive = false;
+    }
+
+    public void SingFromAbsoluteSubBeat(
+        long absoluteSubBeat)
+    {
+        if (pattern == null ||
+            pattern.Length < RhythmClock.SubBeatsPerBar)
+        {
+            return;
+        }
+
+        hasExplicitStart = true;
+        explicitStartAbsoluteSubBeat =
+            absoluteSubBeat;
+
+        waitingForStart = true;
+        isPatternActive = false;
+        nextSlotIndex = 0;
+    }
+
+    public void ScheduleNoteAtAbsoluteSubBeat(
+        notesEnum note,
+        long absoluteSubBeat)
+    {
+        if (singer == null)
+            return;
+
+        if (rhythmClock == null)
+        {
+            rhythmClock =
+                FindFirstObjectByType<RhythmClock>();
+        }
+
+        if (rhythmClock == null ||
+            !rhythmClock.IsRunning ||
+            rhythmClock.IsPaused)
+        {
+            return;
+        }
+
+        double targetDspTime =
+            rhythmClock.StartDspTime +
+            absoluteSubBeat *
+            rhythmClock.SubBeatDuration;
+
+        ScheduleNote(
+            note,
+            targetDspTime
+        );
+    }
+
+    public void ScheduleTwoNotesAtAbsoluteSubBeats(
+        notesEnum firstNote,
+        long firstAbsoluteSubBeat,
+        notesEnum secondNote,
+        long secondAbsoluteSubBeat)
+    {
+        ScheduleNoteAtAbsoluteSubBeat(
+            firstNote,
+            firstAbsoluteSubBeat
+        );
+
+        ScheduleNoteAtAbsoluteSubBeat(
+            secondNote,
+            secondAbsoluteSubBeat
+        );
     }
 
     public void StopSinging()
     {
         waitingForStart = false;
         isPatternActive = false;
+
+        hasExplicitStart = false;
+        nextSlotIndex = 0;
     }
 
-    private void OnBeatChanged(int beatOf16)
+    private void OnSubBeat(RhythmTick tick)
     {
-        if (pattern == null || pattern.Length < 16) return;
-
-        int nextSubBeat = beatOf16 >= 16 ? 1 : beatOf16 + 1;
-
-        // 1. Alinear arranque.
-        if (waitingForStart)
+        if (pattern == null ||
+            pattern.Length < RhythmClock.SubBeatsPerBar)
         {
-            bool aligned =
-                (patternMode == PatternMode.Local && IsWholeBeat(nextSubBeat)) ||
-                (patternMode == PatternMode.Absolute && nextSubBeat == 1);
-
-            if (!aligned) return;
-
-            waitingForStart = false;
-            isPatternActive = true;
-            nextSlotIndex = 0;
-            slotsRemaining = 16;
+            return;
         }
 
-        if (!isPatternActive) return;
+        long currentAbsoluteSubBeat =
+            GetAbsoluteSubBeat(tick.position);
 
-        // 2. Programar el slot que debe sonar.
-        NoteSlot slot = pattern[nextSlotIndex];
-        if (slot != NoteSlot.Empty)
+        if (waitingForStart)
         {
-            var rm = RhythmManager.Instance;
-            if (rm != null)
+            if (hasExplicitStart)
             {
-                double target = rm.NextSubBeatDspTime + rm.SubBeatDuration
-                                + Random.Range(-humanizationPercent, humanizationPercent)
-                                  * rm.SubBeatDuration;
+                if (currentAbsoluteSubBeat <
+                    explicitStartAbsoluteSubBeat)
+                {
+                    return;
+                }
 
-                StartCoroutine(PerformNoteAt((notesEnum)slot, target));
+                if (currentAbsoluteSubBeat >
+                    explicitStartAbsoluteSubBeat)
+                {
+                    waitingForStart = false;
+                    isPatternActive = false;
+                    hasExplicitStart = false;
+                    nextSlotIndex = 0;
+
+                    return;
+                }
+
+                waitingForStart = false;
+                isPatternActive = true;
+                nextSlotIndex = 0;
+            }
+            else
+            {
+                if (!IsValidStartPosition(tick.position))
+                    return;
+
+                waitingForStart = false;
+                isPatternActive = true;
+                nextSlotIndex = 0;
             }
         }
 
-        // 3. Avanzar el cursor.
+        if (!isPatternActive)
+            return;
+
+        NoteSlot slot =
+            pattern[nextSlotIndex];
+
+        if (slot != NoteSlot.Empty)
+        {
+            ScheduleNote(
+                (notesEnum)slot,
+                tick.dspTime
+            );
+        }
+
         nextSlotIndex++;
-        slotsRemaining--;
-        if (slotsRemaining <= 0)
+
+        if (nextSlotIndex >=
+            RhythmClock.SubBeatsPerBar)
+        {
             isPatternActive = false;
+            nextSlotIndex = 0;
+            hasExplicitStart = false;
+        }
     }
 
-    private static bool IsWholeBeat(int subBeat)
+    private bool IsValidStartPosition(
+        RhythmPosition position)
     {
-        return ((subBeat - 1) % 4) == 0;
+        if (patternMode == PatternMode.Absolute)
+        {
+            return position.subBeat == 0;
+        }
+
+        return
+            position.subBeat %
+            RhythmClock.SubBeatsPerBeat == 0;
     }
 
-    private IEnumerator PerformNoteAt(notesEnum note, double targetDspTime)
+    private void ScheduleNote(
+        notesEnum note,
+        double baseDspTime)
     {
-        while (AudioSettings.dspTime < targetDspTime)
+        if (rhythmClock == null)
+            return;
+
+        double humanization =
+            (double)Random.Range(
+                -humanizationPercent,
+                humanizationPercent
+            ) *
+            rhythmClock.SubBeatDuration;
+
+        double targetDspTime =
+            baseDspTime + humanization;
+
+        StartCoroutine(
+            PerformNoteAt(
+                note,
+                targetDspTime
+            )
+        );
+    }
+
+    private IEnumerator PerformNoteAt(
+        notesEnum note,
+        double targetDspTime)
+    {
+        while (
+            AudioSettings.dspTime <
+            targetDspTime)
+        {
             yield return null;
+        }
 
         if (singer != null)
+        {
             singer.AddNote(note);
+        }
+    }
+
+    private static long GetAbsoluteSubBeat(
+        RhythmPosition position)
+    {
+        return
+            (long)position.bar *
+            RhythmClock.SubBeatsPerBar +
+            position.subBeat;
     }
 }

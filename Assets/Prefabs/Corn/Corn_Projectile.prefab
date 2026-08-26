@@ -151,7 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveDirection: {x: 0, y: 0, z: 1}
   latestNoteTransform: {fileID: 0}
-  speed: 10
+  speed: 7.5
   impactThreshold: 1
   explosionPrefab: {fileID: 4123485699104678487, guid: 1d5f8fefcdb2bfa4ea3b10dcc9f596a7,
     type: 3}
@@ -193,9 +193,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7528989229273275581}
   - component: {fileID: 9097711372963130733}
-  - component: {fileID: 3798697936029449018}
   - component: {fileID: 917176802679301966}
   - component: {fileID: 5057229645168612037}
+  - component: {fileID: 8412925130516523602}
   m_Layer: 12
   m_Name: NotesDetector
   m_TagString: Untagged
@@ -237,36 +237,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 5
+  m_Radius: 6
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3798697936029449018
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8712990693181608995}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b755f73732ce8374388ff1cc409b9047, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentMode: 1
-  wantsToListen: 1
-  maxBufferLength: 2
-  clearOnFail: 1
-  OnNoteReceivedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  OnMelodyMatchedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  OnMelodyFailedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  currentMelody: 0000000000000000
-  externalMelody: 0000000000000000
-  desiredMelody: 0000000000000000
 --- !u!33 &917176802679301966
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -317,6 +289,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8412925130516523602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8712990693181608995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad1425d2e4082c54f975a7809a5bdca9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentMelody: 0000000000000000
+  externalMelody: 0000000000000000
+  desiredMelody: 0000000000000000
 --- !u!1001 &2866372153825152134
 PrefabInstance:
   m_ObjectHideFlags: 0

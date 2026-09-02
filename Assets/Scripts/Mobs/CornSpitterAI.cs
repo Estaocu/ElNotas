@@ -162,9 +162,12 @@ public class CornSpitterAI : MonoBehaviour
         if (detectionRoutine != null)
         {
             StopCoroutine(detectionRoutine);
+            detectionRoutine = null;
         }
 
-        detectionRoutine = StartCoroutine(TrackAndConfirmPlayerRoutine(col));
+        detectionRoutine = StartCoroutine(
+            TrackAndConfirmPlayerRoutine(col, trackedPlayer)
+        );
     }
 
     public void OnPlayerLost()
@@ -183,6 +186,7 @@ public class CornSpitterAI : MonoBehaviour
     private IEnumerator TrackAndConfirmPlayerRoutine(Collider playerCol)
     {
         isCurrentlyTrackingPlayer = true;
+
         float elapsed = 0f;
 
         // Evaluamos si el jugador sigue en el trigger y si el collider es válido
@@ -196,9 +200,36 @@ public class CornSpitterAI : MonoBehaviour
             Vector3 direction = targetPos - startPos;
             float distance = direction.magnitude;
 
+            /*
+             * Si por alguna razón el objetivo está exactamente
+             * en el punto de origen, no intentamos normalizar
+             * un vector de longitud cero.
+             */
+            if (distance <= Mathf.Epsilon)
+            {
+                elapsed += Time.deltaTime;
+
+                if (elapsed >= confirmationDuration)
+                    break;
+
+                yield return null;
+                continue;
+            }
+
             bool isLineOfSightBlocked = false;
 
-            if (Physics.Raycast(startPos, direction.normalized, out RaycastHit hit, distance, obstacleLayerMask))
+            /*
+             * RAYCAST
+             *
+             * Este es el único sitio donde se ejecuta el Raycast
+             * de confirmación.
+             */
+            if (Physics.Raycast(
+                startPos,
+                direction.normalized,
+                out RaycastHit hit,
+                distance,
+                obstacleLayerMask))
             {
                 if (hit.collider.transform.root != playerCol.transform.root)
                 {
@@ -210,6 +241,10 @@ public class CornSpitterAI : MonoBehaviour
 
             if (isLineOfSightBlocked)
             {
+                /*
+                 * Si hay un obstáculo, la confirmación empieza
+                 * de nuevo desde cero.
+                 */
                 elapsed = 0f;
             }
             else
@@ -237,6 +272,9 @@ public class CornSpitterAI : MonoBehaviour
 
         isCurrentlyTrackingPlayer = false;
         detectionRoutine = null;
+
+        if (trackedPlayer == targetPlayer)
+            trackedPlayer = null;
     }
 
     public void OnCornDetected()

@@ -66,6 +66,8 @@ public class ConversationManager : MonoBehaviour
         Debug.Log("CONVERSATION (re)/enabled");
         IndexToWord();
         npcText.transform.root.gameObject.SetActive(true);
+        melodyUI.ChangeMelodyDisplayed(debugWord.word.melody);
+        melodyUI.SetYValues();
 
         string txt = $"npc_{currentNpc.npcName.ToLower()}_answer0";
         npcText.AssignNewDialogue(txt);
@@ -116,6 +118,9 @@ public class ConversationManager : MonoBehaviour
         debugNum.SetText(centerWordIndex.ToString());
         IndexToWord();
 
+        melodyUI.ChangeMelodyDisplayed(debugWord.word.melody);
+        melodyUI.SetYValues();
+
         //UpdateSlotsVisuals(false);
     }
     }
@@ -163,6 +168,9 @@ public class ConversationManager : MonoBehaviour
         debugNum.SetText(centerWordIndex.ToString());
 
         IndexToWord();
+
+        melodyUI.ChangeMelodyDisplayed(debugWord.word.melody);
+        melodyUI.SetYValues();
 
     }
 

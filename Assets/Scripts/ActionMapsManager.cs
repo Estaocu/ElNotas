@@ -78,6 +78,7 @@ namespace CMF
         public void SetConversationInput()     => SwapActionMap(DefaultActionMap.Conversation);
         public void SetNotesInput()     => SwapActionMap(DefaultActionMap.Notes);
         public void SetTextInput()     => SwapActionMap(DefaultActionMap.Conversation);
+        public void SetNotebookInput()     => SwapActionMap(DefaultActionMap.Notebook);
 
         public void StoreCurrentMap()    => mapBeforePause = playerInput?.currentActionMap?.name;
 

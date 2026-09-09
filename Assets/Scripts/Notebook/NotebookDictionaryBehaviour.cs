@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Localization;
 using NaughtyAttributes;
 using CarterGames.Assets.SaveManager;
+using UnityEngine.Localization.Settings;
 
 public enum ChapterType {Dictionary, Melodies}
 
@@ -16,13 +17,14 @@ public class NotebookDictionaryBehaviour : MonoBehaviour
 
     public int currentPage = 0;
     public int maxPage;
-    [SerializeField] private LearnedWords learnedWordList;
     public WordCategory currentCategory;
-    private IReadOnlyList<Word> currentWordList;
+    private IReadOnlyList<NotebookEntry> currentWordList;
     [SerializeField] private NotebookDictionarySlot[] slots;
     [SerializeField] private TextMeshProUGUI[] pageNums; 
     [SerializeField] private TextMeshProUGUI chapterTxt;
     [SerializeField] private TextMeshProUGUI categoryTxt;
+
+    private string tableName = "Notebook";
 
     public NotebookChapter[] chapters;
     public NotebookChapter currentChapter;
@@ -40,6 +42,23 @@ public class NotebookDictionaryBehaviour : MonoBehaviour
 
     private void Start()
     {
+        if (SaveManager.TryGetGlobalSaveObject<NotebookSaveObject>(out var notebookSave))
+        {
+            List<string> learnedEntries = notebookSave.LearnedEntriesIds.Value;
+        }
+
+
+
+
+
+        for (int i = 0; i < chapters.Length; i++)
+    {
+        string id = $"notebookChapter_{i}";
+        chapters[i].chapterName = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, id);
+    }
+
+        
+
         UpdateTotalPageCount();
         UpdateCurrentChapter();
         UpdateHeader();
@@ -74,11 +93,6 @@ public class NotebookDictionaryBehaviour : MonoBehaviour
 
         UpdateCurrentChapter();
         UpdatePageNumDisplay();
-
-        foreach(NotebookDictionarySlot slot in slots)
-        {
-            slot.RecalculateDisplay();
-        }
     }
 
     public void ChangeChapter(InputAction.CallbackContext context)
@@ -117,18 +131,13 @@ public class NotebookDictionaryBehaviour : MonoBehaviour
         currentPage = desiredPage;
         UpdatePageNumDisplay();
         Debug.Log($"[PageTP] Went to currentPage {currentPage}");
-
-        foreach(NotebookDictionarySlot slot in slots)
-        {
-            slot.RecalculateDisplay();
-        }
     }
 
 
     private void UpdatePageNumDisplay()
     {
-        int pageA = currentPage;
-        int pageB = currentPage+1;
+        int pageA = 2 * currentPage -1;
+        int pageB = pageA+1;
         pageNums[0].SetText(pageA.ToString());
         pageNums[1].SetText(pageB.ToString());
     }
@@ -198,6 +207,17 @@ public class NotebookDictionaryBehaviour : MonoBehaviour
     {
         chapterTxt.SetText(currentChapter.chapterName);
         //categoryTxt.SetText(currentCategory.displayName.ToString());
+    }
+
+    public void CalculateNotebook()
+    {
+        /// 1. Get all learned entries
+        /// 2. Get all different Chapters
+        /// 3. Get all different Categories
+        /// 4. Handle Chapter 0: Send entries to slots based on learned order and separate with categories
+        /// 5. Handle Chapter 1: Send entries to slots based on learned order
+        /// 6. Get chapter 0 page amount
+        /// 7. Get chapter 1 page amount
     }
 
     

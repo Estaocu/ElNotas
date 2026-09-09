@@ -93,6 +93,8 @@ public class DialogueManager : MonoBehaviour
 
         if (desiredState == true) ActionMapsManager.SetActiveMaps(DefaultActionMap.Conversation);
 
+        Debug.Log("Activated Canvas Conversation");
+
         
         
     }

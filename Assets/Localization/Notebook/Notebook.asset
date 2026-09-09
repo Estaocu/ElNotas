@@ -37,6 +37,8 @@ MonoBehaviour:
         - rid: 4444823066874740742
         - rid: 4444823066874740743
         - rid: 4444823066874740744
+        - rid: 4444823178248716312
+        - rid: 4444823179411324928
         m_RemoveMissingPulledKeys: 1
     - rid: 4444823066874740741
       type: {class: KeyColumn, ns: UnityEditor.Localization.Plugins.Google.Columns,
@@ -67,3 +69,11 @@ MonoBehaviour:
         m_LocaleIdentifier:
           m_Code: ca
         m_IncludeComments: 0
+    - rid: 4444823178248716312
+      type: {class: MelodyColumn, ns: , asm: Assembly-CSharp}
+      data:
+        m_Column: E
+    - rid: 4444823179411324928
+      type: {class: WordCategoryColumn, ns: , asm: Assembly-CSharp}
+      data:
+        m_Column: F

@@ -9,7 +9,7 @@ public class PlayerBubbleWordBehaviour : MonoBehaviour
     [SerializeField] private TextMeshProUGUI wordName;
     [SerializeField] private MelodyUI notesDisplay;
     [SerializeField] private Image wordBG;
-    public Word word;
+    public NotebookEntry entry;
     public bool full;
 
     void OnEnable()
@@ -18,15 +18,15 @@ public class PlayerBubbleWordBehaviour : MonoBehaviour
         notesDisplay.HideMelody();
     }
 
-    public void PlaceWord(Word newWord)
+    public void PlaceWord(NotebookEntry newWord)
     {
         full = true;
         notesDisplay.enabled = true;
-        word = newWord;
+        entry = newWord;
         notesDisplay.ShowMelody();
-        notesDisplay.ChangeMelodyDisplayed(word.melody);
+        notesDisplay.ChangeMelodyDisplayed(entry.melody);
         notesDisplay.SetYValues();
-        wordName.SetText(word.displayName.GetLocalizedString());
+        wordName.SetText(entry.id.GetLocalizedString());
         
     }
 
@@ -34,7 +34,7 @@ public class PlayerBubbleWordBehaviour : MonoBehaviour
     {
         full = false;
         notesDisplay.HideMelody();
-        word = null;
+        entry = null;
         wordName.SetText("");
         notesDisplay.enabled = false;
     }

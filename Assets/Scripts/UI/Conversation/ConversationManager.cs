@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CMF;
-using Save;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,9 +12,6 @@ public class ConversationManager : MonoBehaviour
     [SerializeField] private PlayerInput input;
 
     public WordUIBehaviour[] slots;
-
-    [SerializeField] private NotebookSaveObject notebookSaveObject;
-    [SerializeField] private List<NotebookEntry> allNotebookEntries;
 
     public WordCategory currentCategory;
 
@@ -44,24 +40,19 @@ public class ConversationManager : MonoBehaviour
 
     private List<WordCategory> GetAvailableCategories()
     {
-        if (notebookSaveObject == null || allNotebookEntries == null)
+        if (NotebookManager.Instance == null)
         {
+            Debug.LogWarning("[ConversationManager] NotebookManager Instance no encontrada.");
             return new List<WordCategory>();
         }
 
-        // Obtener las entradas aprendidas a partir de los IDs guardados
-        List<string> learnedIds = notebookSaveObject.LearnedEntriesIds.Value;
-
-        return allNotebookEntries
-            .Where(entry => learnedIds.Contains(entry.id.TableEntryReference.Key) || learnedIds.Contains(entry.name))
-            .Where(entry => entry.category.HasValue)
-            .Select(entry => entry.category.Value)
+        return NotebookManager.Instance.LearnedCategories
+            .Where(group => group != null)
+            .Select(group => group.category)
             .Distinct()
             .OrderBy(category => (int)category)
             .ToList();
     }
-
-    
 
     public void UpdateCategoryLength()
     {
@@ -95,8 +86,6 @@ public class ConversationManager : MonoBehaviour
         }
 
         UpdateCategoryText();
-
-        //AdaptSlotNumber();
 
         UpdateCategoryLength();
         AssignWordsToSlots();
@@ -162,7 +151,6 @@ public class ConversationManager : MonoBehaviour
 
         if (catLength <= 1)
         {
-            //PlayErrorSFX();
             return;
         }
 
@@ -171,11 +159,9 @@ public class ConversationManager : MonoBehaviour
             int targetIndex =
                 centerWordIndex - dpadValue;
 
-            // Strict limits for 2 or 3 entries.
             if (targetIndex < 0 ||
                 targetIndex >= catLength)
             {
-                //PlayErrorSFX();
                 return;
             }
 
@@ -183,7 +169,6 @@ public class ConversationManager : MonoBehaviour
         }
         else
         {
-            // Circular navigation for 4 or more entries.
             centerWordIndex =
                 (centerWordIndex - dpadValue + catLength)
                 % catLength;
@@ -208,8 +193,6 @@ public class ConversationManager : MonoBehaviour
 
             melodyUI.SetYValues();
         }
-
-        //UpdateSlotsVisuals(false);
     }
 
     public void NavigateCategory(
@@ -236,17 +219,11 @@ public class ConversationManager : MonoBehaviour
         if (current < 0)
             current = 0;
 
-        // Save the last entry hovered in the current category.
         if (lastIndex != null &&
             current < lastIndex.Length)
         {
             lastIndex[current] =
                 centerWordIndex;
-
-            Debug.Log(
-                $"Category [{current}|{currentCategory}] " +
-                $"Last index: {lastIndex[current]}"
-            );
         }
 
         int next =
@@ -260,14 +237,7 @@ public class ConversationManager : MonoBehaviour
         UpdateCategoryText();
         UpdateCategoryLength();
 
-        //AdaptSlotNumber();
-
         AssignWordsToSlots();
-
-        Debug.Log(
-            $"Category is now {currentCategory} | " +
-            $"Length: {catLength}"
-        );
 
         if (lastIndex != null &&
             next < lastIndex.Length)
@@ -299,8 +269,6 @@ public class ConversationManager : MonoBehaviour
 
             melodyUI.SetYValues();
         }
-
-        //UpdateSlotsVisuals(false);
     }
 
     private void UpdateCategoryText()
@@ -321,11 +289,6 @@ public class ConversationManager : MonoBehaviour
         if (string.IsNullOrEmpty(localized) ||
             localized.StartsWith("No translation"))
         {
-            Debug.LogWarning(
-                $"No localized string for '{id}' " +
-                $"in table '{categoryTableName}'"
-            );
-
             localized =
                 currentCategory.ToString();
         }
@@ -350,8 +313,6 @@ public class ConversationManager : MonoBehaviour
                 debugWord.entry
             );
 
-            // If it was the last empty bubble,
-            // the sentence is complete.
             if (i == bubbleWords.Length - 1)
             {
                 FindAnswer();
@@ -359,29 +320,6 @@ public class ConversationManager : MonoBehaviour
 
             return;
         }
-
-        // foreach (WordUIBehaviour slot in slots)
-        // {
-        //     if (slot.currentSlot != 2)
-        //         continue;
-        //
-        //     for (int i = 0;
-        //          i < bubbleWords.Length;
-        //          i++)
-        //     {
-        //         if (bubbleWords[i].full)
-        //             continue;
-        //
-        //         bubbleWords[i].PlaceWord(slot.entry);
-        //
-        //         // If it was the last empty bubble,
-        //         // the sentence is complete.
-        //         if (i == bubbleWords.Length - 1)
-        //             FindAnswer();
-        //
-        //         return;
-        //     }
-        // }
     }
 
     public void EraseWord(
@@ -404,69 +342,77 @@ public class ConversationManager : MonoBehaviour
 
     public void FindAnswer()
     {
-        npcText.trigger.ToggleInConv(true);
+        if (npcText != null && npcText.trigger != null)
+        {
+            npcText.trigger.ToggleInConv(true);
+        }
 
-        string a =
-            bubbleWords[0].entry.id
-                .ToString()
-                .ToLower();
+        // Obtiene la sub-string limpia de la palabra (ej: "help", "island")
+        string a = GetCleanWordId(bubbleWords[0].entry);
+        string b = GetCleanWordId(bubbleWords[1].entry);
 
-        string b =
-            bubbleWords[1].entry.id
-                .ToString()
-                .ToLower();
+        string npc = currentNpc != null ? currentNpc.npcName.ToLower() : string.Empty;
 
-        string npc =
-            currentNpc.npcName.ToLower();
-
-        // Alphabetical sorting.
+        // Orden alfabético
         if (string.CompareOrdinal(a, b) > 0)
         {
             (a, b) = (b, a);
         }
 
-        string primaryId =
-            $"npc_{npc}_{a}{b}";
+        string primaryId = $"npc_{npc}_{a}{b}";
+        string swappedId = $"npc_{npc}_{b}{a}";
 
-        string swappedId =
-            $"npc_{npc}_{b}{a}";
+        Debug.Log("Finding dialogue: " + primaryId);
 
-        Debug.Log(
-            "Finding dialogue: " +
-            primaryId
-        );
-
-        npcText.AssignNewDialogue(
-            primaryId,
-            swappedId
-        );
+        if (npcText != null)
+        {
+            npcText.AssignNewDialogue(
+                primaryId,
+                swappedId
+            );
+        }
 
         ActionMapsManager.SetActiveMaps(
             DefaultActionMap.Text
         );
     }
 
+    /// <summary>
+    /// Extrae de forma óptima la palabra clave del NotebookEntry.
+    /// Si el ID es "ne_w_helpisland", devolverá "helpisland".
+    /// </summary>
+    private string GetCleanWordId(NotebookEntry entry)
+    {
+        if (entry == null || entry.id == null) return string.Empty;
+
+        // Accede a la Key de la tabla (ej: "ne_w_help" o "ne_w_island")
+        string rawKey = entry.id.TableEntryReference.Key;
+
+        if (string.IsNullOrEmpty(rawKey))
+        {
+            rawKey = entry.name; // Fallback al nombre del ScriptableObject
+        }
+
+        // Busca el último guion bajo '_' para extraer solo el identificador limpio
+        int lastUnderscoreIndex = rawKey.LastIndexOf('_');
+        
+        if (lastUnderscoreIndex >= 0 && lastUnderscoreIndex < rawKey.Length - 1)
+        {
+            return rawKey.Substring(lastUnderscoreIndex + 1).ToLower();
+        }
+
+        return rawKey.ToLower();
+    }
+
     private IReadOnlyList<NotebookEntry> GetActiveWordsByCategory(WordCategory category)
     {
-        if (notebookSaveObject == null || allNotebookEntries == null)
+        if (NotebookManager.Instance == null)
         {
             return new List<NotebookEntry>();
         }
 
-        // 1. Obtener la lista de IDs guardados desde el SaveObject
-        List<string> learnedIds = notebookSaveObject.LearnedEntriesIds.Value;
-
-        // 2. Filtrar el catálogo global de entradas haciendo coincidir el ID/Key y la categoría
-        return allNotebookEntries
-            .Where(entry => entry.category.HasValue && entry.category.Value == category)
-            .Where(entry => 
-                // Valida si la clave guardada coincide con la Key de localización o el nombre del asset
-                learnedIds.Contains(entry.id.TableEntryReference.Key) || 
-                learnedIds.Contains(entry.name)
-            )
-            .ToList();
+        return NotebookManager.Instance.GetEntriesByCategory(category);
     }
-
 
     private void AssignWordsToSlots()
     {
@@ -491,16 +437,9 @@ public class ConversationManager : MonoBehaviour
         if (currentWordList == null ||
             currentWordList.Count == 0)
         {
-            Debug.LogWarning(
-                "IndexToWord skipped: " +
-                "currentWordList is null or empty."
-            );
-
             return;
         }
 
-        // Ensure centerWordIndex stays safely
-        // within currentWordList bounds.
         int index =
             ((centerWordIndex %
               currentWordList.Count)
@@ -512,11 +451,6 @@ public class ConversationManager : MonoBehaviour
 
         if (selectedEntry == null)
         {
-            Debug.LogError(
-                $"NotebookEntry at index {index} " +
-                $"in category {currentCategory} is null!"
-            );
-
             return;
         }
 
@@ -538,9 +472,12 @@ public class ConversationManager : MonoBehaviour
             DefaultActionMap.Conversation
         );
 
-        string txt =
-            $"npc_{currentNpc.npcName.ToLower()}_answer1";
+        if (currentNpc != null && npcText != null)
+        {
+            string txt =
+                $"npc_{currentNpc.npcName.ToLower()}_answer1";
 
-        npcText.AssignNewDialogue(txt);
+            npcText.AssignNewDialogue(txt);
+        }
     }
 }

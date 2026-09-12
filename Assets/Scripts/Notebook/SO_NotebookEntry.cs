@@ -35,6 +35,8 @@ public enum PageSize
 )]
 public class NotebookEntry : ScriptableObject
 {
+
+    public string key;
     public LocalizedString id;
 
     public EntryType type;
@@ -80,7 +82,7 @@ public class NotebookEntry : ScriptableObject
         if (sharedEntry == null)
             return;
 
-        string key = sharedEntry.Key;
+        key = sharedEntry.Key;
 
         if (key.StartsWith("ne_w_"))
         {

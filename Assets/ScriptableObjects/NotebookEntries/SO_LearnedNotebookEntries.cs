@@ -10,7 +10,7 @@ using UnityEngine;
     menuName = "ScriptableObjects/Learned Notebook Entries",
     order = 3
 )]
-public class LearnedLearnedEntriesIds : ScriptableObject
+public class LearnedEntriesIds : ScriptableObject
 {
     [Header("Total Notebook Entries")]
     [SerializeField]

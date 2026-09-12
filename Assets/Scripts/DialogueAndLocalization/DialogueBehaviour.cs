@@ -150,9 +150,23 @@ public class DialogueBehaviour : MonoBehaviour
 
     private void OnMessageReceived(EventMarker marker)
     {
-        // Remove from pending list if received naturally through TextAnimator
-        pendingEndEvents.RemoveAll(e => e.name.Equals(marker.name, StringComparison.OrdinalIgnoreCase));
-        onEventMarkerReceived?.Invoke(marker.name, marker.parameters);
+        Debug.Log($"EVENT: {marker.name}");
+
+        if (marker.parameters != null)
+        {
+            foreach (string parameter in marker.parameters)
+            {
+                Debug.Log($"PARAMETER: {parameter}");
+            }
+        }
+
+        pendingEndEvents.RemoveAll(e =>
+            e.name.Equals(marker.name, StringComparison.OrdinalIgnoreCase));
+
+        onEventMarkerReceived?.Invoke(
+            marker.name,
+            marker.parameters
+        );
     }
 
     private void ExecutePendingEndEvents()

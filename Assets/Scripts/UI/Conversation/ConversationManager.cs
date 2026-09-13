@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Localization.Settings;
+using static NotebookLearner;
 
 public class ConversationManager : MonoBehaviour
 {
@@ -40,13 +41,13 @@ public class ConversationManager : MonoBehaviour
 
     private List<WordCategory> GetAvailableCategories()
     {
-        if (NotebookManager.Instance == null)
+        if (Instance == null)
         {
-            Debug.LogWarning("[ConversationManager] NotebookManager Instance no encontrada.");
+            Debug.LogWarning("[ConversationManager] NotebookLearner Instance no encontrada.");
             return new List<WordCategory>();
         }
 
-        return NotebookManager.Instance.LearnedCategories
+        return Instance.LearnedCategories
             .Where(group => group != null)
             .Select(group => group.category)
             .Distinct()
@@ -56,7 +57,7 @@ public class ConversationManager : MonoBehaviour
 
     public void UpdateCategoryLength()
     {
-        currentWordList = GetActiveWordsByCategory(currentCategory);
+        currentWordList = GetThisCategoryEntries(currentCategory);
 
         catLength = currentWordList != null ? currentWordList.Count : 0;
     }
@@ -75,8 +76,7 @@ public class ConversationManager : MonoBehaviour
     {
         ClampCategoryToAvailable();
 
-        List<WordCategory> available =
-            GetAvailableCategories();
+        List<WordCategory> available = GetAvailableCategories();
 
         lastIndex = new int[available.Count];
 
@@ -99,22 +99,16 @@ public class ConversationManager : MonoBehaviour
             npcText.transform.root.gameObject.SetActive(true);
         }
 
-        if (debugWord != null &&
-            debugWord.entry != null &&
-            melodyUI != null)
+        if (debugWord != null && debugWord.entry != null && melodyUI != null)
         {
-            melodyUI.ChangeMelodyDisplayed(
-                debugWord.entry.melody
-            );
+            melodyUI.ChangeMelodyDisplayed(debugWord.entry.melody);
 
             melodyUI.SetYValues();
         }
 
-        if (currentNpc != null &&
-            npcText != null)
+        if (currentNpc != null && npcText != null)
         {
-            string txt =
-                $"npc_{currentNpc.npcName.ToLower()}_answer0";
+            string txt = $"npc_{currentNpc.npcName.ToLower()}_answer0";
 
             npcText.AssignNewDialogue(txt);
         }
@@ -122,8 +116,7 @@ public class ConversationManager : MonoBehaviour
 
     private void ClampCategoryToAvailable()
     {
-        List<WordCategory> available =
-            GetAvailableCategories();
+        List<WordCategory> available = GetAvailableCategories();
 
         if (available.Count == 0)
         {
@@ -137,17 +130,13 @@ public class ConversationManager : MonoBehaviour
         }
     }
 
-    public void NavigateWords(
-        InputAction.CallbackContext context)
+    public void NavigateWords(InputAction.CallbackContext context)
     {
-        if (!context.performed)
-            return;
+        if (!context.performed) return;
 
-        float axisValue =
-            context.ReadValue<float>();
+        float axisValue = context.ReadValue<float>();
 
-        int dpadValue =
-            (int)Mathf.Sign(axisValue);
+        int dpadValue = (int)Mathf.Sign(axisValue);
 
         if (catLength <= 1)
         {
@@ -156,11 +145,9 @@ public class ConversationManager : MonoBehaviour
 
         if (catLength < 4)
         {
-            int targetIndex =
-                centerWordIndex - dpadValue;
+            int targetIndex = centerWordIndex - dpadValue;
 
-            if (targetIndex < 0 ||
-                targetIndex >= catLength)
+            if (targetIndex < 0 || targetIndex >= catLength)
             {
                 return;
             }
@@ -169,9 +156,7 @@ public class ConversationManager : MonoBehaviour
         }
         else
         {
-            centerWordIndex =
-                (centerWordIndex - dpadValue + catLength)
-                % catLength;
+            centerWordIndex = (centerWordIndex - dpadValue + catLength) % catLength;
         }
 
         if (debugNum != null)
@@ -195,44 +180,30 @@ public class ConversationManager : MonoBehaviour
         }
     }
 
-    public void NavigateCategory(
-        InputAction.CallbackContext context)
+    public void NavigateCategory(InputAction.CallbackContext context)
     {
-        if (!context.performed)
-            return;
+        if (!context.performed) return;
 
-        float axisValue =
-            context.ReadValue<float>();
+        float axisValue = context.ReadValue<float>();
 
-        int dpadValue =
-            (int)Mathf.Sign(axisValue);
+        int dpadValue = (int)Mathf.Sign(axisValue);
 
-        List<WordCategory> available =
-            GetAvailableCategories();
+        List<WordCategory> available = GetAvailableCategories();
 
-        if (available.Count < 2)
-            return;
+        if (available.Count < 2) return;
 
-        int current =
-            available.IndexOf(currentCategory);
+        int current = available.IndexOf(currentCategory);
 
-        if (current < 0)
-            current = 0;
+        if (current < 0) current = 0;
 
-        if (lastIndex != null &&
-            current < lastIndex.Length)
+        if (lastIndex != null && current < lastIndex.Length)
         {
-            lastIndex[current] =
-                centerWordIndex;
+            lastIndex[current] = centerWordIndex;
         }
 
-        int next =
-            ((current + dpadValue) % available.Count
-             + available.Count)
-            % available.Count;
+        int next = ((current + dpadValue) % available.Count + available.Count) % available.Count;
 
-        currentCategory =
-            available[next];
+        currentCategory = available[next];
 
         UpdateCategoryText();
         UpdateCategoryLength();
@@ -259,13 +230,9 @@ public class ConversationManager : MonoBehaviour
 
         IndexToWord();
 
-        if (debugWord != null &&
-            debugWord.entry != null &&
-            melodyUI != null)
+        if (debugWord != null && debugWord.entry != null && melodyUI != null)
         {
-            melodyUI.ChangeMelodyDisplayed(
-                debugWord.entry.melody
-            );
+            melodyUI.ChangeMelodyDisplayed(debugWord.entry.melody);
 
             melodyUI.SetYValues();
         }
@@ -276,42 +243,27 @@ public class ConversationManager : MonoBehaviour
         if (categoryText == null)
             return;
 
-        string id =
-            $"category_{currentCategory}";
+        string id = $"category_{currentCategory}";
 
-        string localized =
-            LocalizationSettings.StringDatabase
-                .GetLocalizedString(
-                    categoryTableName,
-                    id
-                );
+        string localized = LocalizationSettings.StringDatabase.GetLocalizedString(categoryTableName,id);
 
-        if (string.IsNullOrEmpty(localized) ||
-            localized.StartsWith("No translation"))
+        if (string.IsNullOrEmpty(localized) || localized.StartsWith("No translation"))
         {
-            localized =
-                currentCategory.ToString();
+            localized = currentCategory.ToString();
         }
 
         categoryText.SetText(localized);
     }
 
-    public void SelectWord(
-        InputAction.CallbackContext context)
+    public void SelectWord(InputAction.CallbackContext context)
     {
-        if (!context.performed)
-            return;
+        if (!context.performed) return;
 
-        for (int i = 0;
-             i < bubbleWords.Length;
-             i++)
+        for (int i = 0; i < bubbleWords.Length; i++)
         {
-            if (bubbleWords[i].full)
-                continue;
+            if (bubbleWords[i].full) continue;
 
-            bubbleWords[i].PlaceWord(
-                debugWord.entry
-            );
+            bubbleWords[i].PlaceWord(debugWord.entry);
 
             if (i == bubbleWords.Length - 1)
             {
@@ -322,21 +274,15 @@ public class ConversationManager : MonoBehaviour
         }
     }
 
-    public void EraseWord(
-        InputAction.CallbackContext context)
+    public void EraseWord(InputAction.CallbackContext context)
     {
-        if (!context.performed)
-            return;
+        if (!context.performed) return;
 
-        for (int i = bubbleWords.Length - 1;
-             i >= 0;
-             i--)
+        for (int i = bubbleWords.Length - 1;i >= 0; i--)
         {
-            if (!bubbleWords[i].full)
-                continue;
+            if (!bubbleWords[i].full) continue;
 
-            bubbleWords[i].EraseWord();
-            return;
+            bubbleWords[i].EraseWord(); return;
         }
     }
 
@@ -347,9 +293,8 @@ public class ConversationManager : MonoBehaviour
             npcText.trigger.ToggleInConv(true);
         }
 
-        // Obtiene la sub-string limpia de la palabra (ej: "help", "island")
-        string a = GetCleanWordId(bubbleWords[0].entry);
-        string b = GetCleanWordId(bubbleWords[1].entry);
+        string a = bubbleWords[0].entry.key.Substring(5);
+        string b = bubbleWords[1].entry.key.Substring(5);
 
         string npc = currentNpc != null ? currentNpc.npcName.ToLower() : string.Empty;
 
@@ -366,57 +311,24 @@ public class ConversationManager : MonoBehaviour
 
         if (npcText != null)
         {
-            npcText.AssignNewDialogue(
-                primaryId,
-                swappedId
-            );
+            npcText.AssignNewDialogue(primaryId,swappedId);
         }
 
-        ActionMapsManager.SetActiveMaps(
-            DefaultActionMap.Text
-        );
+        ActionMapsManager.SetActiveMaps(DefaultActionMap.Text);
     }
 
-    /// <summary>
-    /// Extrae de forma óptima la palabra clave del NotebookEntry.
-    /// Si el ID es "ne_w_helpisland", devolverá "helpisland".
-    /// </summary>
-    private string GetCleanWordId(NotebookEntry entry)
+    private IReadOnlyList<NotebookEntry> GetThisCategoryEntries(WordCategory category)
     {
-        if (entry == null || entry.id == null) return string.Empty;
-
-        // Accede a la Key de la tabla (ej: "ne_w_help" o "ne_w_island")
-        string rawKey = entry.id.TableEntryReference.Key;
-
-        if (string.IsNullOrEmpty(rawKey))
-        {
-            rawKey = entry.name; // Fallback al nombre del ScriptableObject
-        }
-
-        // Busca el último guion bajo '_' para extraer solo el identificador limpio
-        int lastUnderscoreIndex = rawKey.LastIndexOf('_');
+        if (Instance == null)   return new List<NotebookEntry>();
         
-        if (lastUnderscoreIndex >= 0 && lastUnderscoreIndex < rawKey.Length - 1)
-        {
-            return rawKey.Substring(lastUnderscoreIndex + 1).ToLower();
-        }
-
-        return rawKey.ToLower();
-    }
-
-    private IReadOnlyList<NotebookEntry> GetActiveWordsByCategory(WordCategory category)
-    {
-        if (NotebookManager.Instance == null)
-        {
-            return new List<NotebookEntry>();
-        }
-
-        return NotebookManager.Instance.GetEntriesByCategory(category);
+        return Instance.LearnedCategories
+        .FirstOrDefault(x => x.category == category)
+        ?.entries ?? new List<NotebookEntry>();
     }
 
     private void AssignWordsToSlots()
     {
-        currentWordList = GetActiveWordsByCategory(currentCategory);
+        currentWordList = GetThisCategoryEntries(currentCategory);
 
         if (currentWordList == null || currentWordList.Count == 0)
         {
@@ -434,43 +346,31 @@ public class ConversationManager : MonoBehaviour
 
     private void IndexToWord()
     {
-        if (currentWordList == null ||
-            currentWordList.Count == 0)
+        if (currentWordList == null || currentWordList.Count == 0)
         {
             return;
         }
 
-        int index =
-            ((centerWordIndex %
-              currentWordList.Count)
-             + currentWordList.Count)
-            % currentWordList.Count;
+        int index = ((centerWordIndex % currentWordList.Count) + currentWordList.Count) % currentWordList.Count;
 
-        NotebookEntry selectedEntry =
-            currentWordList[index];
+        NotebookEntry selectedEntry = currentWordList[index];
 
         if (selectedEntry == null)
         {
             return;
         }
 
-        debugWord.DisplayNewWord(
-            selectedEntry
-        );
+        debugWord.DisplayNewWord(selectedEntry);
     }
 
     public void ReturnConversation()
     {
-        foreach (
-            PlayerBubbleWordBehaviour bubble
-            in bubbleWords)
+        foreach (PlayerBubbleWordBehaviour bubble in bubbleWords)
         {
             bubble.EraseWord();
         }
 
-        ActionMapsManager.SetActiveMaps(
-            DefaultActionMap.Conversation
-        );
+        ActionMapsManager.SetActiveMaps(DefaultActionMap.Conversation);
 
         if (currentNpc != null && npcText != null)
         {

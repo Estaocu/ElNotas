@@ -205,8 +205,7 @@ public class NotebookManager : MonoBehaviour
         );
     }
 
-    public IReadOnlyList<NotebookEntry> GetEntriesByCategory(
-        WordCategory category)
+    public IReadOnlyList<NotebookEntry> GetEntriesByCategory(WordCategory category)
     {
         CategoryGroup group =
             learnedCategoriesRuntime.FirstOrDefault(

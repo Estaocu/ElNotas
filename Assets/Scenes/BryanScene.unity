@@ -430,9 +430,6 @@ MonoBehaviour:
   - {fileID: 2006492703}
   - {fileID: 698573327}
   - {fileID: 1486983074}
-  totalWordList: {fileID: 11400000, guid: 046c6d1eba450d34bab3183254887468, type: 2}
-  learnedWordList: {fileID: 11400000, guid: ea693b30e6b546b4c96a8d43af1f0de2, type: 2}
-  debugUseTotalWordList: 1
   currentCategory: 2
   melodyUI: {fileID: 877217260}
   npcText: {fileID: 166207392}
@@ -583,6 +580,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BridgeTile (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277264620897591179, guid: b8de80a2eee2de94b89c7e1166a1857d,
+        type: 3}
+      propertyPath: xCoord
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277264620897591179, guid: b8de80a2eee2de94b89c7e1166a1857d,
+        type: 3}
+      propertyPath: yCoord
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3085,7 +3092,7 @@ MonoBehaviour:
   wordName: {fileID: 1193094571}
   notesDisplay: {fileID: 1930710130}
   wordBG: {fileID: 0}
-  word: {fileID: 0}
+  entry: {fileID: 0}
   full: 0
 --- !u!1 &268230204
 GameObject:
@@ -5119,6 +5126,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 426914372}
+  - component: {fileID: 426914373}
   m_Layer: 0
   m_Name: Bridge1
   m_TagString: Untagged
@@ -5147,6 +5155,41 @@ Transform:
   - {fileID: 1457688937}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &426914373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 426914371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 569839dc0f47b3247af839a0c14ba0a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPoint: {fileID: 0}
+  currentSpawner: {fileID: 0}
+  previousTile: {fileID: 0}
+  currentTile: {fileID: 0}
+  nextTile: {fileID: 0}
+  spawners:
+  - {fileID: 1268413084}
+  note1Action: {fileID: -8214473091420491663, guid: 56c211aa1fdd20b43b909e36b9bafac1,
+    type: 3}
+  note2Action: {fileID: -8473096212516348721, guid: 56c211aa1fdd20b43b909e36b9bafac1,
+    type: 3}
+  note3Action: {fileID: -7784485262108720104, guid: 56c211aa1fdd20b43b909e36b9bafac1,
+    type: 3}
+  note4Action: {fileID: 7021222077252952713, guid: 56c211aa1fdd20b43b909e36b9bafac1,
+    type: 3}
+  walker: {fileID: 1504693688}
+  mover: {fileID: 1504693687}
+  actionMap: {fileID: 918859948}
+  playerJump: {fileID: 1110565127}
+  apexHeight: 3
+  gizmoResolution: 30
+  trajectoryColor: {r: 0, g: 1, b: 0, a: 1}
+  gridGizmoColor: {r: 0, g: 1, b: 1, a: 0.35}
 --- !u!1 &440686780
 GameObject:
   m_ObjectHideFlags: 0
@@ -9131,6 +9174,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: BridgeTile
       objectReference: {fileID: 0}
+    - target: {fileID: 8277264620897591179, guid: b8de80a2eee2de94b89c7e1166a1857d,
+        type: 3}
+      propertyPath: isEnd
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277264620897591179, guid: b8de80a2eee2de94b89c7e1166a1857d,
+        type: 3}
+      propertyPath: xCoord
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277264620897591179, guid: b8de80a2eee2de94b89c7e1166a1857d,
+        type: 3}
+      propertyPath: yCoord
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277264620897591179, guid: b8de80a2eee2de94b89c7e1166a1857d,
+        type: 3}
+      propertyPath: assignedSpawner
+      value: 
+      objectReference: {fileID: 1268413084}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10706,12 +10769,12 @@ PrefabInstance:
     - target: {fileID: 2902904493212257918, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
       propertyPath: m_DefaultActionMap
-      value: Notebook
+      value: 2c2bc065-129e-4500-82e2-3eca58da5515
       objectReference: {fileID: 0}
     - target: {fileID: 2902904493212257918, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
       propertyPath: m_ActionEvents.Array.size
-      value: 45
+      value: 47
       objectReference: {fileID: 0}
     - target: {fileID: 2902904493212257918, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
@@ -10890,6 +10953,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2902904493212257918, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
+      propertyPath: m_ActionEvents.Array.data[45].m_ActionId
+      value: f8076dfa-158a-4666-9072-349570f112ad
+      objectReference: {fileID: 0}
+    - target: {fileID: 2902904493212257918, guid: 2852d88465bdd2e4daf673f56308c148,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[46].m_ActionId
+      value: 31612bb0-3815-47ba-b720-ebb9d1a7425c
+      objectReference: {fileID: 0}
+    - target: {fileID: 2902904493212257918, guid: 2852d88465bdd2e4daf673f56308c148,
+        type: 3}
       propertyPath: m_ActionEvents.Array.data[10].m_ActionName
       value: Notebook/Back[/Keyboard/tab]
       objectReference: {fileID: 0}
@@ -11062,6 +11135,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ActionEvents.Array.data[44].m_ActionName
       value: Notebook/FlipPage[/XInputControllerWindows/leftShoulder,/XInputControllerWindows/rightShoulder,/Keyboard/d,/Keyboard/leftArrow,/Keyboard/a,/Keyboard/rightArrow]
+      objectReference: {fileID: 0}
+    - target: {fileID: 2902904493212257918, guid: 2852d88465bdd2e4daf673f56308c148,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[45].m_ActionName
+      value: Notebook/FlipChapter[/XInputControllerWindows/leftTrigger,/XInputControllerWindows/rightTrigger]
+      objectReference: {fileID: 0}
+    - target: {fileID: 2902904493212257918, guid: 2852d88465bdd2e4daf673f56308c148,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[46].m_ActionName
+      value: Notebook/Debug_AddPages[/XInputControllerWindows/dpad/left,/XInputControllerWindows/dpad/right]
       objectReference: {fileID: 0}
     - target: {fileID: 2902904493212257918, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
@@ -11341,17 +11424,17 @@ PrefabInstance:
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 79.8
+      value: -16.2
       objectReference: {fileID: 0}
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 26.8
+      value: 52.6
       objectReference: {fileID: 0}
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1038.2
+      value: 1104.52
       objectReference: {fileID: 0}
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
@@ -11408,6 +11491,16 @@ PrefabInstance:
       propertyPath: rhythmQuantizer
       value: 
       objectReference: {fileID: 1357628613}
+    - target: {fileID: 7499289551295869908, guid: 2852d88465bdd2e4daf673f56308c148,
+        type: 3}
+      propertyPath: maxCadenceMultiplier
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7499289551295869908, guid: 2852d88465bdd2e4daf673f56308c148,
+        type: 3}
+      propertyPath: minimumCadenceMultiplier
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7769595068345590230, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
       propertyPath: maxGroundAngle
@@ -11969,6 +12062,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 871290276}
   m_CullTransparentMesh: 1
+--- !u!114 &871927666 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8277264620897591179, guid: b8de80a2eee2de94b89c7e1166a1857d,
+    type: 3}
+  m_PrefabInstance: {fileID: 667323148}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06152444635f6d841aae8b1f81a284c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &875809022
 GameObject:
   m_ObjectHideFlags: 0
@@ -12538,7 +12643,7 @@ PrefabInstance:
     - target: {fileID: 7476597574689282346, guid: 246aa9467fd319c4b8aea4b4088ab797,
         type: 3}
       propertyPath: defaultActionMap
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14204,6 +14309,18 @@ Transform:
   - {fileID: 1694989330}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1110565127 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3909866502027320316, guid: 2852d88465bdd2e4daf673f56308c148,
+    type: 3}
+  m_PrefabInstance: {fileID: 805793870}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa8f45af1549e364bb8ba078dae2c3b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1133735783
 GameObject:
   m_ObjectHideFlags: 0
@@ -15327,6 +15444,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: MotherActivator
       objectReference: {fileID: 0}
+    - target: {fileID: 1417580321932305162, guid: 4ff06d776e8d20c40b17ce18ba0d530d,
+        type: 3}
+      propertyPath: id
+      value: XDDD
+      objectReference: {fileID: 0}
+    - target: {fileID: 1417580321932305162, guid: 4ff06d776e8d20c40b17ce18ba0d530d,
+        type: 3}
+      propertyPath: bridge
+      value: 
+      objectReference: {fileID: 426914373}
+    - target: {fileID: 1417580321932305162, guid: 4ff06d776e8d20c40b17ce18ba0d530d,
+        type: 3}
+      propertyPath: listener
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1417580321932305162, guid: 4ff06d776e8d20c40b17ce18ba0d530d,
+        type: 3}
+      propertyPath: closestTile
+      value: 
+      objectReference: {fileID: 871927666}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15338,6 +15475,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1268413082}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1268413084 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1417580321932305162, guid: 4ff06d776e8d20c40b17ce18ba0d530d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1268413082}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e2f103e17a3aba4a8df595730a5bdf4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1273232664 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1133502769173893899, guid: 337ebc87ca73b9145bd519264ccc488c,
@@ -15714,7 +15863,7 @@ MonoBehaviour:
   wordName: {fileID: 132061708}
   notesDisplay: {fileID: 1851656371}
   wordBG: {fileID: 0}
-  word: {fileID: 0}
+  entry: {fileID: 0}
   full: 0
 --- !u!1 &1301789913
 GameObject:
@@ -16963,6 +17112,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: BridgeTile (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8277264620897591179, guid: b8de80a2eee2de94b89c7e1166a1857d,
+        type: 3}
+      propertyPath: xCoord
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277264620897591179, guid: b8de80a2eee2de94b89c7e1166a1857d,
+        type: 3}
+      propertyPath: yCoord
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17682,6 +17841,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: BridgeTile (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 8277264620897591179, guid: b8de80a2eee2de94b89c7e1166a1857d,
+        type: 3}
+      propertyPath: xCoord
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277264620897591179, guid: b8de80a2eee2de94b89c7e1166a1857d,
+        type: 3}
+      propertyPath: yCoord
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -18218,6 +18387,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1504693687 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7994079705188547349, guid: 2852d88465bdd2e4daf673f56308c148,
+    type: 3}
+  m_PrefabInstance: {fileID: 805793870}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d98ace8715c2a184ca85247b18eb0853, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1504693688 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2028947995848929648, guid: 2852d88465bdd2e4daf673f56308c148,
+    type: 3}
+  m_PrefabInstance: {fileID: 805793870}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f5e44db14072ea4c964da3b192181c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &1507574222 stripped
@@ -20185,6 +20378,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BridgeTile (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277264620897591179, guid: b8de80a2eee2de94b89c7e1166a1857d,
+        type: 3}
+      propertyPath: xCoord
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -22434,12 +22632,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 619fa0d2f257c9c4bace0d3160e4f804, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalWordList: {fileID: 11400000, guid: 046c6d1eba450d34bab3183254887468, type: 2}
-  learnedWords: {fileID: 11400000, guid: ea693b30e6b546b4c96a8d43af1f0de2, type: 2}
-  buttonPrefab: {fileID: 8696048602644533554, guid: 7537e77a06b4f3841ab85e25a907ecea,
-    type: 3}
-  buttonsContainer: {fileID: 1862938087}
-  clearContainerOnStart: 1
 --- !u!114 &1862938083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23416,7 +23608,7 @@ PrefabInstance:
     - target: {fileID: 28254093647285720, guid: 3d56ca0382d802b42b2433c531f9741c,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 281770423306088117, guid: 3d56ca0382d802b42b2433c531f9741c,
         type: 3}
@@ -23891,7 +24083,7 @@ GameObject:
   m_Icon: {fileID: 2800000, guid: 35d9a94aa1e915049b1f0131246cbe70, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1964808361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23987,21 +24179,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd0a51485f6f82a4d9a1dd170d80ed60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  page: 0
+  currentPage: 0
   maxPage: 50
-  learnedWordList: {fileID: 11400000, guid: ea693b30e6b546b4c96a8d43af1f0de2, type: 2}
   currentCategory: 0
   slots:
   - {fileID: 1964385245}
   pageNums:
   - {fileID: 2103630283}
   - {fileID: 1886989385}
+  chapterTxt: {fileID: 0}
+  categoryTxt: {fileID: 0}
   chapters:
-  - chapterName:
+  - chapterName: 
+    chapterLocString:
       m_TableReference:
-        m_TableCollectionName: GUID:5ed18153755a57c4aaea87824f366bcc
+        m_TableCollectionName: 
       m_TableEntryReference:
-        m_KeyId: 248035835904
+        m_KeyId: 0
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
@@ -24009,11 +24203,26 @@ MonoBehaviour:
     pageAmount: 0
     entries: []
     isUnlocked: 0
-  - chapterName:
+  - chapterName: 
+    chapterLocString:
       m_TableReference:
-        m_TableCollectionName: GUID:5ed18153755a57c4aaea87824f366bcc
+        m_TableCollectionName: 
       m_TableEntryReference:
-        m_KeyId: 352956350464
+        m_KeyId: 0
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+    pageAmount: 0
+    entries: []
+    isUnlocked: 0
+  currentChapter:
+    chapterName: 
+    chapterLocString:
+      m_TableReference:
+        m_TableCollectionName: 
+      m_TableEntryReference:
+        m_KeyId: 0
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0

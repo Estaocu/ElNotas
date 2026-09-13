@@ -87,13 +87,10 @@ public class DialogueManager : MonoBehaviour
 
     public void ToggleTextCanvas(bool desiredState)
     {
-        if (textCanvas == null) return;
+        //if (textCanvas == null) return;
         
         textCanvas.SetActive(desiredState);
 
-        if (desiredState == true) ActionMapsManager.SetActiveMaps(DefaultActionMap.Conversation);
-
-        Debug.Log("Activated Canvas Conversation");
 
         
         

@@ -5,7 +5,7 @@ public class AddNotesOnBeat : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Singer singer;
-    [SerializeField] private RhythmClock rhythmClock;
+    private RhythmClock rhythmClock;
 
     [Header("NPC Rhythm Pattern")]
     [SerializeField] private PatternMode patternMode = PatternMode.Local;
@@ -89,7 +89,6 @@ public class AddNotesOnBeat : MonoBehaviour
             return;
 
         hasExplicitStart = false;
-
         waitingForStart = true;
         isPatternActive = false;
     }
@@ -126,20 +125,23 @@ public class AddNotesOnBeat : MonoBehaviour
         }
 
         if (rhythmClock == null ||
-            !rhythmClock.IsRunning ||
-            rhythmClock.IsPaused)
+            !rhythmClock.IsRunning)
         {
             return;
         }
 
-        double targetDspTime =
-            rhythmClock.StartDspTime +
-            absoluteSubBeat *
-            rhythmClock.SubBeatDuration;
+        double humanization =
+            Random.Range(
+                -humanizationPercent,
+                humanizationPercent
+            ) * rhythmClock.SubBeatDuration;
 
-        ScheduleNote(
-            note,
-            targetDspTime
+        StartCoroutine(
+            PerformNoteAtAbsoluteSubBeat(
+                note,
+                absoluteSubBeat,
+                humanization
+            )
         );
     }
 
@@ -262,11 +264,10 @@ public class AddNotesOnBeat : MonoBehaviour
             return;
 
         double humanization =
-            (double)Random.Range(
+            Random.Range(
                 -humanizationPercent,
                 humanizationPercent
-            ) *
-            rhythmClock.SubBeatDuration;
+            ) * rhythmClock.SubBeatDuration;
 
         double targetDspTime =
             baseDspTime + humanization;
@@ -287,6 +288,50 @@ public class AddNotesOnBeat : MonoBehaviour
             AudioSettings.dspTime <
             targetDspTime)
         {
+            yield return null;
+        }
+
+        if (singer != null)
+        {
+            singer.AddNote(note);
+        }
+    }
+
+    private IEnumerator PerformNoteAtAbsoluteSubBeat(
+        notesEnum note,
+        long absoluteSubBeat,
+        double humanization)
+    {
+        while (rhythmClock == null ||
+               !rhythmClock.IsRunning ||
+               rhythmClock.IsPaused)
+        {
+            yield return null;
+        }
+
+        while (true)
+        {
+            if (rhythmClock == null ||
+                !rhythmClock.IsRunning)
+            {
+                yield break;
+            }
+
+            if (rhythmClock.IsPaused)
+            {
+                yield return null;
+                continue;
+            }
+
+            double targetDspTime =
+                rhythmClock.StartDspTime +
+                absoluteSubBeat *
+                rhythmClock.SubBeatDuration +
+                humanization;
+
+            if (AudioSettings.dspTime >= targetDspTime)
+                break;
+
             yield return null;
         }
 

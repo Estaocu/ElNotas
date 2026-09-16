@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerRhythmController : MonoBehaviour
 {
@@ -140,31 +141,38 @@ public class PlayerRhythmController : MonoBehaviour
     }
 
     private void OnNote1Played(
-        UnityEngine.InputSystem.InputAction.CallbackContext context)
+        InputAction.CallbackContext context)
     {
         if (context.performed)
             ProcessNote(notesEnum.Note1);
     }
 
     private void OnNote2Played(
-        UnityEngine.InputSystem.InputAction.CallbackContext context)
+        InputAction.CallbackContext context)
     {
         if (context.performed)
             ProcessNote(notesEnum.Note2);
     }
 
     private void OnNote3Played(
-        UnityEngine.InputSystem.InputAction.CallbackContext context)
+        InputAction.CallbackContext context)
     {
         if (context.performed)
             ProcessNote(notesEnum.Note3);
     }
 
     private void OnNote4Played(
-        UnityEngine.InputSystem.InputAction.CallbackContext context)
+        InputAction.CallbackContext context)
     {
         if (context.performed)
             ProcessNote(notesEnum.Note4);
+    }
+
+    public void DebugMaxMeter(InputAction.CallbackContext context)
+    {
+        if (context.performed) SetMeter(maxMeter);
+        if (meterText != null) meterText.SetText(currentMeter.ToString());
+        Debug.Log("Meter Maxed");
     }
 
     public bool ProcessNote(notesEnum note)

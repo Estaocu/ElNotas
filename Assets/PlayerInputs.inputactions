@@ -557,6 +557,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "MaxMeter",
+                    "type": "Button",
+                    "id": "7a94f3bd-5a26-4501-b544-63d4a2640c0c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -942,6 +951,28 @@
                     "processors": "",
                     "groups": ";ControllerScheme",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "746c9222-bf5c-4def-9310-28495e53b86e",
+                    "path": "<Gamepad>/leftStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MaxMeter",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9851ad74-2b77-4b0f-a760-3f4e8cf67907",
+                    "path": "<Keyboard>/alt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MaxMeter",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

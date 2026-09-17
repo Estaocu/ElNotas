@@ -148,12 +148,12 @@ public class HostileEntityAI : MonoBehaviour
 {
     Debug.Log($"[HostileEntityAI] ⚔️ ATTACKING {currentTarget?.name ?? "unknown"}!");
     
-    // Obtener el componente LifeAndMeter del objetivo
-    LifeAndMeter lifeMeter = currentTarget.GetComponent<LifeAndMeter>();
+    // Obtener el componente PlayerHP del objetivo
+    PlayerHP lifeMeter = currentTarget.GetComponent<PlayerHP>();
     
     if (lifeMeter != null)
     {
-        // Si el objetivo tiene LifeAndMeter (es el player), infligir daño
+        // Si el objetivo tiene PlayerHP (es el player), infligir daño
         lifeMeter.OnHit(1); // 1 de daño, ajusta según necesites
     }
 }

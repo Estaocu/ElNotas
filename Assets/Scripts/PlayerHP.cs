@@ -3,35 +3,38 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 
-public class LifeAndMeter : MonoBehaviour
+public class PlayerHP : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private int maxHp = 2;
-    [SerializeField] private int maxMeter = 10;
-    [SerializeField] private float stunTime = 2f;
-    [SerializeField] private float immunityTime = 2f;
-    [SerializeField] public TMP_Text meterText;
+    [SerializeField] private int stunTime = 4;
+    [SerializeField] private int immunityTime = 8;
 
     // Campos privados (Estado interno)
     private int currentHp;
-    private int currentMeter;
+    private float currentMeter => meter.CurrentMeter;
     private bool damageImmune;
     private bool isStunned;
 
     // Propiedades calculadas (Solo lectura para el exterior)
-    public bool IsMeterFull => currentMeter >= maxMeter;
+    public bool isMeterFull => meter.HasFullMeter;
     public int GetCurrentHp() => currentHp;
+
+    [SerializeField] private PlayerRhythmController meter;
+
+    private RhythmClock rhythmClock;
 
     private void Awake()
     {
         currentHp = maxHp;
+        rhythmClock = FindFirstObjectByType<RhythmClock>();
     }
 
     public void OnHit(int dmg)
     {
         if (damageImmune) return;
 
-        if (IsMeterFull)
+        if (isMeterFull)
         {
             DoParry();
         }
@@ -39,35 +42,21 @@ public class LifeAndMeter : MonoBehaviour
         {
             if(currentMeter != 0)
             {
+                meter.ConsumeFullMeter();
                 StartCoroutine(StunRoutine());
-                SetExactMeterCharge(0);
                 return;
             }
 
             currentHp = Mathf.Max(currentHp - dmg, 0);
-            SetExactMeterCharge(0);
+            meter.ConsumeFullMeter();
             Debug.Log($"HITS LEFT: {currentHp} / {maxHp}");
             CheckHp();
             
         }
     }
-
-    public void ChangeMeterCharge(int q)
-    {
-        currentMeter = Mathf.Clamp(currentMeter + q, 0, maxMeter);
-        // Debug.Log($"meter charge: {currentMeter} / {maxMeter}");
-        meterText.SetText($"Meter: {currentMeter} / {maxMeter}");
-    }
-
-    public void SetExactMeterCharge(int q)
-    {
-        currentMeter = Mathf.Clamp(q, 0, maxMeter);
-        meterText.SetText($"Meter: {currentMeter} / {maxMeter}");
-    }
-
     private void DoParry()
     {
-        SetExactMeterCharge(0);
+        meter.ConsumeFullMeter();
         StartCoroutine(ImmunityRoutine());
         Debug.Log("PARRIED");
     }
@@ -76,7 +65,7 @@ public class LifeAndMeter : MonoBehaviour
     {
         damageImmune = true;
         Debug.Log("Player DMG Immune");
-        yield return new WaitForSeconds(immunityTime);
+        yield return rhythmClock.WaitForSubBeats(immunityTime);
         damageImmune = false;
         Debug.Log("Player can be damaged");
     }
@@ -95,7 +84,7 @@ public class LifeAndMeter : MonoBehaviour
         Debug.Log("Player Stunned");
         ActionMapsManager.Instance.SwapActionMap("RestrictedInput");
 
-        yield return new WaitForSeconds(stunTime);
+        yield return rhythmClock.WaitForSubBeats(stunTime);
 
         isStunned = false;
         ActionMapsManager.Instance.SwapActionMap("Gameplay");

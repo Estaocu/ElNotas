@@ -93,6 +93,7 @@ public class PlayerRhythmController : MonoBehaviour
     private void Awake()
     {
         input = new PlayerInputs();
+        if (meterText != null) meterText.SetText(currentMeter.ToString());
     }
 
     private void OnEnable()
@@ -179,17 +180,14 @@ public class PlayerRhythmController : MonoBehaviour
     {
         if (rhythmClock == null || rhythmQuantizer == null)
         {
-            Debug.LogError(
-                "PlayerRhythmController requires a RhythmClock and RhythmQuantizer."
-            );
+            Debug.LogError("PlayerRhythmController requires a RhythmClock and RhythmQuantizer.");
 
             return false;
         }
 
         double inputDspTime = AudioSettings.dspTime;
 
-        RhythmQuantizationResult result =
-            rhythmQuantizer.Quantize(inputDspTime);
+        RhythmQuantizationResult result = rhythmQuantizer.Quantize(inputDspTime);
 
         if (IsOverheatActive(result.position))
             return false;
@@ -367,10 +365,10 @@ public class PlayerRhythmController : MonoBehaviour
             GetCadenceMultiplier(position);
 
         return
-            basePoints *
+            Mathf.CeilToInt(basePoints *
             continuityMultiplier *
             cadenceMultiplier *
-            GetMeterNormalization();
+            GetMeterNormalization());
     }
 
     private float GetContinuityMultiplier(
@@ -653,19 +651,20 @@ public class PlayerRhythmController : MonoBehaviour
         OnMeterChanged?.Invoke(currentMeter);
     }
 
-    public bool ConsumeFullMeter()
+    public void ConsumeFullMeter()
     {
-        if (!HasFullMeter)
-            return false;
-
         SetMeter(0.0f);
 
         if (meterText != null)
-            meterText.SetText(
-                currentMeter.ToString()
-            );
+            meterText.SetText(currentMeter.ToString());
+    }
 
-        return true;
+    public void ConsumeHalfMeter()
+    {
+        if (currentMeter < maxMeter/2) return;
+        SetMeter(currentMeter - maxMeter/2);
+        if (meterText != null)
+            meterText.SetText(currentMeter.ToString());
     }
 
     [Serializable]
@@ -684,5 +683,10 @@ public class PlayerRhythmController : MonoBehaviour
             this.position = position;
             this.inputDspTime = inputDspTime;
         }
+    }
+
+    public float CheckMeter()
+    {
+        return currentMeter/maxMeter * 100;
     }
 }

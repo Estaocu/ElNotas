@@ -10344,7 +10344,7 @@ PrefabInstance:
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.065643236
+      value: 0.7523156
       objectReference: {fileID: 0}
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
@@ -10354,7 +10354,7 @@ PrefabInstance:
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.99784315
+      value: 0.6588029
       objectReference: {fileID: 0}
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
@@ -10369,7 +10369,7 @@ PrefabInstance:
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -532.472
+      value: -637.583
       objectReference: {fileID: 0}
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
@@ -10396,6 +10396,31 @@ PrefabInstance:
       propertyPath: rhythmQuantizer
       value: 
       objectReference: {fileID: 1357628613}
+    - target: {fileID: 7499289551295869908, guid: 2852d88465bdd2e4daf673f56308c148,
+        type: 3}
+      propertyPath: maxContinuityMultiplier
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7499289551295869908, guid: 2852d88465bdd2e4daf673f56308c148,
+        type: 3}
+      propertyPath: continuityCurve.m_Curve.Array.data[1].time
+      value: 0.77916664
+      objectReference: {fileID: 0}
+    - target: {fileID: 7499289551295869908, guid: 2852d88465bdd2e4daf673f56308c148,
+        type: 3}
+      propertyPath: continuityCurve.m_Curve.Array.data[1].inSlope
+      value: 0.0052900854
+      objectReference: {fileID: 0}
+    - target: {fileID: 7499289551295869908, guid: 2852d88465bdd2e4daf673f56308c148,
+        type: 3}
+      propertyPath: continuityCurve.m_Curve.Array.data[1].inWeight
+      value: 0.5721925
+      objectReference: {fileID: 0}
+    - target: {fileID: 7499289551295869908, guid: 2852d88465bdd2e4daf673f56308c148,
+        type: 3}
+      propertyPath: continuityCurve.m_Curve.Array.data[1].outSlope
+      value: 0.0052900854
+      objectReference: {fileID: 0}
     - target: {fileID: 7769595068345590230, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
       propertyPath: maxGroundAngle
@@ -10408,9 +10433,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8795301043739215124, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
+      propertyPath: meter
+      value: 
+      objectReference: {fileID: 1504693690}
+    - target: {fileID: 8795301043739215124, guid: 2852d88465bdd2e4daf673f56308c148,
+        type: 3}
+      propertyPath: stunTime
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8795301043739215124, guid: 2852d88465bdd2e4daf673f56308c148,
+        type: 3}
       propertyPath: meterText
       value: 
       objectReference: {fileID: 1504095863}
+    - target: {fileID: 8795301043739215124, guid: 2852d88465bdd2e4daf673f56308c148,
+        type: 3}
+      propertyPath: immunityTime
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15067,6 +15107,11 @@ PrefabInstance:
         type: 3}
       propertyPath: positiveWindow
       value: 0.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 9033491503444234332, guid: b6722fb357e2bc54ab4a9865350ffe71,
+        type: 3}
+      propertyPath: m_Volume
+      value: 0.101
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -177,13 +177,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce05f7fcdfd140b4e90fce25dc019140, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentState: 0
   isStatic: 1
   patrolSpeed: 5
-  chaseSpeed: 9
+  chaseSpeed: 7
   stoppingDistance: 2
   stunDuration: 12
   timeTilBite: 16
-  peaceTime: 16
+  peaceTime: 24
   targetTags:
   - Player
   - NPC
@@ -203,6 +204,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   singer: {fileID: 5042880092936730101}
   patternMode: 0
+  MelodyEnded:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2725611551508977993}
+        m_TargetAssemblyTypeName: MosquitoAI, Assembly-CSharp
+        m_MethodName: OnQuestionDone
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   pattern: ffffffff0000000000000000ffffffff01000000ffffffffffffffffffffffff
   humanizationPercent: 0.047
 --- !u!114 &7258774073744655851
@@ -228,12 +244,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2725611551508977993}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+        m_TargetAssemblyTypeName: MosquitoAI, Assembly-CSharp
+        m_MethodName: BeRelaxed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

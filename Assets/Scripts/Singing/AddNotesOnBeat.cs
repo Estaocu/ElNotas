@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class AddNotesOnBeat : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class AddNotesOnBeat : MonoBehaviour
 
     [Header("NPC Rhythm Pattern")]
     [SerializeField] private PatternMode patternMode = PatternMode.Local;
+
+    [Header("Events")]
+    public UnityEvent MelodyEnded;
 
     // One slot represents one eighth note.
     public NoteSlot[] pattern =
@@ -24,6 +28,7 @@ public class AddNotesOnBeat : MonoBehaviour
     private bool waitingForStart;
 
     private int nextSlotIndex;
+    private int lastNoteSlotIndex;
 
     private bool hasExplicitStart;
     private long explicitStartAbsoluteSubBeat;
@@ -88,6 +93,8 @@ public class AddNotesOnBeat : MonoBehaviour
         if (pattern == null)
             return;
 
+        CacheLastNoteSlot();
+
         hasExplicitStart = false;
         waitingForStart = true;
         isPatternActive = false;
@@ -101,6 +108,8 @@ public class AddNotesOnBeat : MonoBehaviour
         {
             return;
         }
+
+        CacheLastNoteSlot();
 
         hasExplicitStart = true;
         explicitStartAbsoluteSubBeat =
@@ -169,6 +178,7 @@ public class AddNotesOnBeat : MonoBehaviour
 
         hasExplicitStart = false;
         nextSlotIndex = 0;
+        lastNoteSlotIndex = -1;
     }
 
     private void OnSubBeat(RhythmTick tick)
@@ -226,9 +236,13 @@ public class AddNotesOnBeat : MonoBehaviour
 
         if (slot != NoteSlot.Empty)
         {
+            bool isLastNote =
+                nextSlotIndex == lastNoteSlotIndex;
+
             ScheduleNote(
                 (notesEnum)slot,
-                tick.dspTime
+                tick.dspTime,
+                isLastNote
             );
         }
 
@@ -256,9 +270,27 @@ public class AddNotesOnBeat : MonoBehaviour
             RhythmClock.SubBeatsPerBeat == 0;
     }
 
+    private void CacheLastNoteSlot()
+    {
+        lastNoteSlotIndex = -1;
+
+        if (pattern == null)
+            return;
+
+        for (int i = pattern.Length - 1; i >= 0; i--)
+        {
+            if (pattern[i] != NoteSlot.Empty)
+            {
+                lastNoteSlotIndex = i;
+                return;
+            }
+        }
+    }
+
     private void ScheduleNote(
         notesEnum note,
-        double baseDspTime)
+        double baseDspTime,
+        bool isLastNote)
     {
         if (rhythmClock == null)
             return;
@@ -275,14 +307,16 @@ public class AddNotesOnBeat : MonoBehaviour
         StartCoroutine(
             PerformNoteAt(
                 note,
-                targetDspTime
+                targetDspTime,
+                isLastNote
             )
         );
     }
 
     private IEnumerator PerformNoteAt(
         notesEnum note,
-        double targetDspTime)
+        double targetDspTime,
+        bool isLastNote)
     {
         while (
             AudioSettings.dspTime <
@@ -294,6 +328,12 @@ public class AddNotesOnBeat : MonoBehaviour
         if (singer != null)
         {
             singer.AddNote(note);
+
+            if (isLastNote)
+            {
+                MelodyEnded?.Invoke();
+                Debug.Log("Melody Ended, invoking event");
+            }
         }
     }
 

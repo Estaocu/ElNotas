@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MosquitoAI : MonoBehaviour, IReactToMelody
+public class MosquitoAI : MonoBehaviour
 {
     public enum State { Idle, Patrol, Chase, Return, Stunned }
-    private State currentState;
+    public State currentState;
 
     public bool isStatic = false;
 
@@ -39,6 +39,8 @@ public class MosquitoAI : MonoBehaviour, IReactToMelody
 
     [SerializeField] private SingleNotesListener listener;
     [SerializeField] private notesEnum[] relaxMelody;
+
+    public bool wantsAnswer;
 
 
     void Awake()
@@ -119,11 +121,11 @@ public class MosquitoAI : MonoBehaviour, IReactToMelody
             currentTarget.transform.position -
             transform.position;
 
-        if (offset.sqrMagnitude <=
-            stoppingDistance * stoppingDistance ||
-            !hasAskedForMelody)
+        if (offset.sqrMagnitude <= stoppingDistance * stoppingDistance || !hasAskedForMelody)
         {
             AskForMelody();
+            Debug.Log("Started asking for melody");
+            hasAskedForMelody = true;
             return;
         }
 
@@ -143,22 +145,19 @@ public class MosquitoAI : MonoBehaviour, IReactToMelody
 
     private void AskForMelody()
     {
-        if (hasAskedForMelody)
-            return;
+        if (hasAskedForMelody) return;
 
         if (beatSinger != null)
             beatSinger.Sing();
-
-        hasAskedForMelody = true;
-
-        OnMelodyEmitted();
     }
 
-    private void OnMelodyEmitted()
+    public void OnQuestionDone()
     {
+        if (currentState == State.Stunned) return;
+
+        wantsAnswer = true;
+
         Debug.Log("Mosquito started angry timer. Looking for melody");
-        if (currentState == State.Stunned)
-            return;
 
         CancelRelaxWait();
 
@@ -256,9 +255,11 @@ public class MosquitoAI : MonoBehaviour, IReactToMelody
         }
     }
 
-    public void React(Melody receivedMelody)
+    public void BeRelaxed()
     {
-        if (currentState != State.Chase) return;
+        if (currentState != State.Chase || !hasAskedForMelody) return;
+
+        if (!wantsAnswer) return;
 
         CancelRelaxWait();
 
@@ -279,6 +280,7 @@ public class MosquitoAI : MonoBehaviour, IReactToMelody
         CancelPeaceWait();
 
         peaceCoroutine =StartCoroutine(PeaceWaitRoutine());
+        
     }
 
     private IEnumerator StunWaitRoutine()

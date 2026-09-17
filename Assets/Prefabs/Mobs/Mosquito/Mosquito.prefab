@@ -142,10 +142,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 6864685881883496993}
-  note1: {fileID: 8300000, guid: 390a0e1b6000e1544be39d6d6b2fca32, type: 3}
-  note2: {fileID: 8300000, guid: eda1af705f9b3bf468c1d8bca0a7f2ae, type: 3}
-  note3: {fileID: 8300000, guid: bc6183da4e5464b4bbaa11832a7ca978, type: 3}
-  note4: {fileID: 8300000, guid: 8756d71c9872fd248a7ba4b04b13d09d, type: 3}
+  note1: {fileID: 8300000, guid: e7e4a14ca0930014d8a7946923704ce8, type: 3}
+  note2: {fileID: 8300000, guid: e812e883ea3c3b8479df851d379b49ca, type: 3}
+  note3: {fileID: 8300000, guid: d9367fad0da398049b5b7d0b7b8a96d0, type: 3}
+  note4: {fileID: 8300000, guid: f42e09aa1b095bc4aaa8c511ee4517f8, type: 3}
 --- !u!114 &108109710666919391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,8 +181,8 @@ MonoBehaviour:
   isStatic: 1
   patrolSpeed: 5
   chaseSpeed: 7
-  stoppingDistance: 2
-  stunDuration: 12
+  stoppingDistance: 4.5
+  stunDuration: 16
   timeTilBite: 16
   peaceTime: 24
   targetTags:
@@ -190,6 +190,7 @@ MonoBehaviour:
   - NPC
   listener: {fileID: 7258774073744655851}
   relaxMelody: 0200000000000000
+  wantsAnswer: 0
 --- !u!114 &8377302604967112286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -453,7 +454,7 @@ AudioSource:
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
-  DopplerLevel: 0.39
+  DopplerLevel: 0
   MinDistance: 1
   MaxDistance: 500
   Pan2D: 0

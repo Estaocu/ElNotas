@@ -22,7 +22,7 @@ public class Singer : MonoBehaviour
 {
     private RhythmTimingValidator timingValidator;
     private MelodyDatabase database;
-    private PlayerRhythmController playerRhythmController;
+    private PlayerRhythmController player;
     private SingerVoice voice;
 
     [Header("Settings")]
@@ -34,7 +34,7 @@ public class Singer : MonoBehaviour
     private readonly notesEnum[] noteBuffer = new notesEnum[4];
     private int notesPlayed;
 
-    public bool IsPlayer => playerRhythmController != null;
+    public bool IsPlayer => player != null;
 
     public event Action<Melody> onSoundwaveSpawned;
 
@@ -47,7 +47,7 @@ public class Singer : MonoBehaviour
             timingValidator = GameManager.Instance.RhythmTimingValidator;
         }
 
-        playerRhythmController =
+        player =
             GetComponent<PlayerRhythmController>();
 
         voice = GetComponent<SingerVoice>();
@@ -60,17 +60,17 @@ public class Singer : MonoBehaviour
 
     private void OnEnable()
     {
-        if (playerRhythmController != null)
+        if (player != null)
         {
-            playerRhythmController.OnNoteAccepted += OnPlayerNoteAccepted;
+            player.OnNoteAccepted += OnPlayerNoteAccepted;
         }
     }
 
     private void OnDisable()
     {
-        if (playerRhythmController != null)
+        if (player != null)
         {
-            playerRhythmController.OnNoteAccepted -= OnPlayerNoteAccepted;
+            player.OnNoteAccepted -= OnPlayerNoteAccepted;
         }
     }
 
@@ -94,7 +94,7 @@ public class Singer : MonoBehaviour
     private void CheckPlayerMelodies()
     {
         IReadOnlyList<PlayerRhythmController.PlayedNote> notes =
-            playerRhythmController.CurrentNotes;
+            player.CurrentNotes;
 
         if (notes.Count < 4)
         {
@@ -147,32 +147,29 @@ public class Singer : MonoBehaviour
 
     private void TrySpawnPlayerMelody(Melody melody)
     {
-        if (!playerRhythmController.HasFullMeter)
-        {
-            return;
-        }
 
-        if (Time.time - lastSingTime < cooldown)
-        {
-            return;
-        }
+        Debug.Log($"Melody inputed and launched. | Meter %: {player.CheckMeter()}");
 
-        if (!playerRhythmController.ConsumeFullMeter())
+        switch (player.CheckMeter())
         {
+            case > 50:
+            player.ConsumeHalfMeter();
+            break;
+
+
+            case < 50:
+            Debug.LogWarning("Tried to play melody with less than half meter.");
             return;
+            
         }
 
         lastSingTime = Time.time;
 
-        NoteSystem.EmitMelody(
-            melody,
-            soundwaveSpawnpoint.position,
-            this
-        );
+        NoteSystem.EmitMelody(melody, soundwaveSpawnpoint.position, this);
 
         onSoundwaveSpawned?.Invoke(melody);
 
-        playerRhythmController.ClearMelody();
+        player.ClearMelody();
     }
 
     // Used by NPCs and other non-player singers.
@@ -308,4 +305,6 @@ public class Singer : MonoBehaviour
             voice.PlayNote(note);
         }
     }
+
+    
 }

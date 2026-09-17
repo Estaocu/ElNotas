@@ -124,7 +124,7 @@ public class MosquitoAI : MonoBehaviour
         if (offset.sqrMagnitude <= stoppingDistance * stoppingDistance || !hasAskedForMelody)
         {
             AskForMelody();
-            Debug.Log("Started asking for melody");
+            //Debug.Log("Started asking for melody");
             hasAskedForMelody = true;
             return;
         }
@@ -180,11 +180,13 @@ public class MosquitoAI : MonoBehaviour
         if (currentTarget == null)
         {
             StartReturn();
+            wantsAnswer = false;
             return;
         }
 
         Attack();
         StartReturn();
+        wantsAnswer = false;
     }
 
     private void Attack()
@@ -193,9 +195,9 @@ public class MosquitoAI : MonoBehaviour
 
         // Attack animation.
 
-        LifeAndMeter playerHp = currentTarget.GetComponent<LifeAndMeter>();
+        PlayerHP hp = currentTarget.GetComponent<PlayerHP>();
 
-        if (playerHp != null) playerHp.OnHit(1);
+        if (hp != null) hp.OnHit(1);
 
         peaceful = true;
 
@@ -215,6 +217,7 @@ public class MosquitoAI : MonoBehaviour
 
     private void StartReturn()
     {
+        wantsAnswer = false;
         if (traveler == null) return;
 
         currentTarget = null;
@@ -260,7 +263,7 @@ public class MosquitoAI : MonoBehaviour
         if (currentState != State.Chase || !hasAskedForMelody) return;
 
         if (!wantsAnswer) return;
-
+        
         CancelRelaxWait();
 
         if (beatSinger != null) beatSinger.StopSinging();

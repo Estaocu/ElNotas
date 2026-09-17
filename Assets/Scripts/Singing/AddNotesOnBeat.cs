@@ -1,14 +1,18 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class AddNotesOnBeat : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Singer singer;
-    [SerializeField] private RhythmClock rhythmClock;
+    private RhythmClock rhythmClock;
 
     [Header("NPC Rhythm Pattern")]
     [SerializeField] private PatternMode patternMode = PatternMode.Local;
+
+    [Header("Events")]
+    public UnityEvent MelodyEnded;
 
     // One slot represents one eighth note.
     public NoteSlot[] pattern =
@@ -24,6 +28,7 @@ public class AddNotesOnBeat : MonoBehaviour
     private bool waitingForStart;
 
     private int nextSlotIndex;
+    private int lastNoteSlotIndex;
 
     private bool hasExplicitStart;
     private long explicitStartAbsoluteSubBeat;
@@ -88,8 +93,9 @@ public class AddNotesOnBeat : MonoBehaviour
         if (pattern == null)
             return;
 
-        hasExplicitStart = false;
+        CacheLastNoteSlot();
 
+        hasExplicitStart = false;
         waitingForStart = true;
         isPatternActive = false;
     }
@@ -102,6 +108,8 @@ public class AddNotesOnBeat : MonoBehaviour
         {
             return;
         }
+
+        CacheLastNoteSlot();
 
         hasExplicitStart = true;
         explicitStartAbsoluteSubBeat =
@@ -126,20 +134,23 @@ public class AddNotesOnBeat : MonoBehaviour
         }
 
         if (rhythmClock == null ||
-            !rhythmClock.IsRunning ||
-            rhythmClock.IsPaused)
+            !rhythmClock.IsRunning)
         {
             return;
         }
 
-        double targetDspTime =
-            rhythmClock.StartDspTime +
-            absoluteSubBeat *
-            rhythmClock.SubBeatDuration;
+        double humanization =
+            Random.Range(
+                -humanizationPercent,
+                humanizationPercent
+            ) * rhythmClock.SubBeatDuration;
 
-        ScheduleNote(
-            note,
-            targetDspTime
+        StartCoroutine(
+            PerformNoteAtAbsoluteSubBeat(
+                note,
+                absoluteSubBeat,
+                humanization
+            )
         );
     }
 
@@ -167,6 +178,7 @@ public class AddNotesOnBeat : MonoBehaviour
 
         hasExplicitStart = false;
         nextSlotIndex = 0;
+        lastNoteSlotIndex = -1;
     }
 
     private void OnSubBeat(RhythmTick tick)
@@ -224,9 +236,13 @@ public class AddNotesOnBeat : MonoBehaviour
 
         if (slot != NoteSlot.Empty)
         {
+            bool isLastNote =
+                nextSlotIndex == lastNoteSlotIndex;
+
             ScheduleNote(
                 (notesEnum)slot,
-                tick.dspTime
+                tick.dspTime,
+                isLastNote
             );
         }
 
@@ -254,19 +270,36 @@ public class AddNotesOnBeat : MonoBehaviour
             RhythmClock.SubBeatsPerBeat == 0;
     }
 
+    private void CacheLastNoteSlot()
+    {
+        lastNoteSlotIndex = -1;
+
+        if (pattern == null)
+            return;
+
+        for (int i = pattern.Length - 1; i >= 0; i--)
+        {
+            if (pattern[i] != NoteSlot.Empty)
+            {
+                lastNoteSlotIndex = i;
+                return;
+            }
+        }
+    }
+
     private void ScheduleNote(
         notesEnum note,
-        double baseDspTime)
+        double baseDspTime,
+        bool isLastNote)
     {
         if (rhythmClock == null)
             return;
 
         double humanization =
-            (double)Random.Range(
+            Random.Range(
                 -humanizationPercent,
                 humanizationPercent
-            ) *
-            rhythmClock.SubBeatDuration;
+            ) * rhythmClock.SubBeatDuration;
 
         double targetDspTime =
             baseDspTime + humanization;
@@ -274,19 +307,71 @@ public class AddNotesOnBeat : MonoBehaviour
         StartCoroutine(
             PerformNoteAt(
                 note,
-                targetDspTime
+                targetDspTime,
+                isLastNote
             )
         );
     }
 
     private IEnumerator PerformNoteAt(
         notesEnum note,
-        double targetDspTime)
+        double targetDspTime,
+        bool isLastNote)
     {
         while (
             AudioSettings.dspTime <
             targetDspTime)
         {
+            yield return null;
+        }
+
+        if (singer != null)
+        {
+            singer.AddNote(note);
+
+            if (isLastNote)
+            {
+                MelodyEnded?.Invoke();
+                Debug.Log("Melody Ended, invoking event");
+            }
+        }
+    }
+
+    private IEnumerator PerformNoteAtAbsoluteSubBeat(
+        notesEnum note,
+        long absoluteSubBeat,
+        double humanization)
+    {
+        while (rhythmClock == null ||
+               !rhythmClock.IsRunning ||
+               rhythmClock.IsPaused)
+        {
+            yield return null;
+        }
+
+        while (true)
+        {
+            if (rhythmClock == null ||
+                !rhythmClock.IsRunning)
+            {
+                yield break;
+            }
+
+            if (rhythmClock.IsPaused)
+            {
+                yield return null;
+                continue;
+            }
+
+            double targetDspTime =
+                rhythmClock.StartDspTime +
+                absoluteSubBeat *
+                rhythmClock.SubBeatDuration +
+                humanization;
+
+            if (AudioSettings.dspTime >= targetDspTime)
+                break;
+
             yield return null;
         }
 

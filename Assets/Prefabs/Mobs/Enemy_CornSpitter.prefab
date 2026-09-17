@@ -408,7 +408,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   singer: {fileID: 5183498619773180898}
-  rhythmClock: {fileID: 0}
   patternMode: 0
   pattern: 00000000ffffffff03000000ffffffffffffffffffffffffffffffffffffffff
   humanizationPercent: 0.05
@@ -476,14 +475,13 @@ MonoBehaviour:
   cornSpawnpoint: {fileID: 6241696902868849724}
   cornTrigger: {fileID: 8358866438339391095}
   playerTrigger: {fileID: 8264966049224216375}
-  rhythmClock: {fileID: 0}
   noteResolution: 2
   silenceBetweenNotes: 0
   raycastStartPoint: {fileID: 8013018246867252038}
   obstacleLayerMask:
     serializedVersion: 2
-    m_Bits: 65463
-  confirmationDuration: 0.2
+    m_Bits: 1638327
+  confirmationDuration: 1.5
   melodyToCopy: 0000000000000000
 --- !u!1 &6197459673897144269
 GameObject:

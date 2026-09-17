@@ -643,6 +643,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MaxMeter"",
+                    ""type"": ""Button"",
+                    ""id"": ""7a94f3bd-5a26-4501-b544-63d4a2640c0c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1028,6 +1037,28 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";ControllerScheme"",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""746c9222-bf5c-4def-9310-28495e53b86e"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MaxMeter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9851ad74-2b77-4b0f-a760-3f4e8cf67907"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MaxMeter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1781,6 +1812,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Gameplay_DebugSpawnSoundwave = m_Gameplay.FindAction("DebugSpawnSoundwave", throwIfNotFound: true);
         m_Gameplay_Debug_NPC_Sing = m_Gameplay.FindAction("Debug_NPC_Sing", throwIfNotFound: true);
         m_Gameplay_Interact = m_Gameplay.FindAction("Interact", throwIfNotFound: true);
+        m_Gameplay_MaxMeter = m_Gameplay.FindAction("MaxMeter", throwIfNotFound: true);
         // Notebook
         m_Notebook = asset.FindActionMap("Notebook", throwIfNotFound: true);
         m_Notebook_PreviousPage = m_Notebook.FindAction("Previous Page", throwIfNotFound: true);
@@ -2244,6 +2276,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_DebugSpawnSoundwave;
     private readonly InputAction m_Gameplay_Debug_NPC_Sing;
     private readonly InputAction m_Gameplay_Interact;
+    private readonly InputAction m_Gameplay_MaxMeter;
     /// <summary>
     /// Provides access to input actions defined in input action map "Gameplay".
     /// </summary>
@@ -2312,6 +2345,10 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Interact => m_Wrapper.m_Gameplay_Interact;
         /// <summary>
+        /// Provides access to the underlying input action "Gameplay/MaxMeter".
+        /// </summary>
+        public InputAction @MaxMeter => m_Wrapper.m_Gameplay_MaxMeter;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
@@ -2379,6 +2416,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @MaxMeter.started += instance.OnMaxMeter;
+            @MaxMeter.performed += instance.OnMaxMeter;
+            @MaxMeter.canceled += instance.OnMaxMeter;
         }
 
         /// <summary>
@@ -2432,6 +2472,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @MaxMeter.started -= instance.OnMaxMeter;
+            @MaxMeter.performed -= instance.OnMaxMeter;
+            @MaxMeter.canceled -= instance.OnMaxMeter;
         }
 
         /// <summary>
@@ -3329,6 +3372,13 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInteract(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "MaxMeter" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMaxMeter(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Notebook" which allows adding and removing callbacks.

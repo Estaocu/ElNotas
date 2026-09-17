@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Splines;
@@ -8,11 +9,12 @@ public class NavMeshSplineTraveler : MonoBehaviour
 {
     public NavMeshAgent agent;
     public SplineContainer splineContainer;
-    
+
     [Header("Movement Settings")]
     public float arrivalDistance = 0.5f;
-    public bool isLoop = true; 
+    public bool isLoop = true;
     public float decelerationRate = 2f;
+    public int stopDuration = 4;
 
     private float splineT = 0f;
     private bool isPatrolling = false;
@@ -20,6 +22,9 @@ public class NavMeshSplineTraveler : MonoBehaviour
 
     public float originalSpeed;
     private bool isDecelerating = false;
+
+    private RhythmClock rhythmClock;
+    private Coroutine patrolResumeCoroutine;
 
     void Start()
     {
@@ -34,6 +39,8 @@ public class NavMeshSplineTraveler : MonoBehaviour
         {
             originalSpeed = agent.speed;
         }
+
+        rhythmClock = FindFirstObjectByType<RhythmClock>();
     }
 
     void Update()
@@ -43,14 +50,14 @@ public class NavMeshSplineTraveler : MonoBehaviour
             PerformDeceleration();
         }
 
-        if (isPatrolling && splineContainer != null) 
+        if (isPatrolling && splineContainer != null)
             MoveAlongSpline();
     }
 
     private void MoveAlongSpline()
     {
         float splineLength = splineContainer.CalculateLength();
-        float speedInT = agent.speed / splineLength; 
+        float speedInT = agent.speed / splineLength;
         float delta = speedInT * Time.deltaTime;
 
         if (isLoop)
@@ -62,42 +69,80 @@ public class NavMeshSplineTraveler : MonoBehaviour
             if (movingForward)
             {
                 splineT += delta;
-                if (splineT >= 1f) { splineT = 1f; movingForward = false; }
+
+                if (splineT >= 1f)
+                {
+                    splineT = 1f;
+                    movingForward = false;
+                }
             }
             else
             {
                 splineT -= delta;
-                if (splineT <= 0f) { splineT = 0f; movingForward = true; }
+
+                if (splineT <= 0f)
+                {
+                    splineT = 0f;
+                    movingForward = true;
+                }
             }
         }
 
-        Vector3 targetPos = (Vector3)splineContainer.EvaluatePosition(splineT);
+        Vector3 targetPos =
+            (Vector3)splineContainer.EvaluatePosition(splineT);
+
         agent.SetDestination(targetPos);
     }
 
     private void PerformDeceleration()
     {
         // Gradually reduce speed to 0
-        agent.speed = Mathf.MoveTowards(agent.speed, 0, decelerationRate * Time.deltaTime);
+        agent.speed = Mathf.MoveTowards(
+            agent.speed,
+            0,
+            decelerationRate * Time.deltaTime
+        );
 
         if (agent.speed <= 0.01f)
         {
             agent.speed = 0;
             isDecelerating = false;
-            
-            // To prevent splineT from shifting while waiting, we can pause patrolling
+
+            // To prevent splineT from shifting while waiting,
+            // pause patrolling.
             isPatrolling = false;
 
-            // Debug.Log("Hemos llamado al reloj, pronto empezamos a patrullar de nuevo");
-            // We use the new resume method here to maintain current direction and T
-            RhythmBeatWaiter.WaitForSubBeats(24, BeatWaitMode.Immediate, () => ResumePatrolMaintainingDirection(originalSpeed));
+            // Cancel any previous resume wait before starting a new one.
+            CancelPatrolResumeWait();
+
+            patrolResumeCoroutine =
+                StartCoroutine(
+                    ResumePatrolAfterSubBeats(stopDuration)
+                );
         }
     }
 
-    public void MoveToDestination(Vector3 destination, float speed)
+    private IEnumerator ResumePatrolAfterSubBeats(int subBeats)
+    {
+        if (rhythmClock == null)
+            yield break;
+
+        yield return rhythmClock.WaitForSubBeats(subBeats);
+
+        patrolResumeCoroutine = null;
+
+        ResumePatrolMaintainingDirection(originalSpeed);
+    }
+
+    public void MoveToDestination(
+        Vector3 destination,
+        float speed)
     {
         isPatrolling = false;
         isDecelerating = false;
+
+        CancelPatrolResumeWait();
+
         agent.speed = speed;
         agent.SetDestination(destination);
     }
@@ -108,41 +153,70 @@ public class NavMeshSplineTraveler : MonoBehaviour
     /// </summary>
     public void ResumePatrol(float speed)
     {
+        CancelPatrolResumeWait();
+
         agent.speed = speed;
         splineT = FindClosestPointOnSpline(transform.position);
-        movingForward = (splineT < 0.99f); 
+        movingForward = (splineT < 0.99f);
         isPatrolling = true;
         isDecelerating = false;
     }
 
     /// <summary>
-    /// New resume method for stops during patrol. 
+    /// New resume method for stops during patrol.
     /// Maintains the current progress and direction on the spline.
     /// </summary>
     public void ResumePatrolMaintainingDirection(float speed)
     {
+        CancelPatrolResumeWait();
+
         agent.speed = speed;
         isPatrolling = true;
         isDecelerating = false;
-        // Logic continues from the current splineT and movingForward state
+
+        // Logic continues from the current splineT and movingForward state.
     }
 
     public bool HasReachedDestination()
     {
-        return !agent.pathPending && agent.remainingDistance <= arrivalDistance;
+        return !agent.pathPending &&
+               agent.remainingDistance <= arrivalDistance;
     }
 
     public float FindClosestPointOnSpline(Vector3 worldPosition)
     {
-        if (splineContainer == null) return 0f;
-        float3 localPos = splineContainer.transform.InverseTransformPoint(worldPosition);
-        SplineUtility.GetNearestPoint(splineContainer.Spline, localPos, out _, out float t);
+        if (splineContainer == null)
+            return 0f;
+
+        float3 localPos =
+            splineContainer.transform.InverseTransformPoint(
+                worldPosition
+            );
+
+        SplineUtility.GetNearestPoint(
+            splineContainer.Spline,
+            localPos,
+            out _,
+            out float t
+        );
+
         return t;
     }
 
     public void StopOnPoint()
     {
-        if (!isPatrolling) return;
+        if (!isPatrolling)
+            return;
+
         isDecelerating = true;
+    }
+
+    private void CancelPatrolResumeWait()
+    {
+        if (patrolResumeCoroutine != null)
+        {
+            StopCoroutine(patrolResumeCoroutine);
+            patrolResumeCoroutine = null;
+        }
     }
 }

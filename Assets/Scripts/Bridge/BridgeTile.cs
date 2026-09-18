@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using ElNotas.Input.Glyphs;
 using NaughtyAttributes;
 using Unity.VisualScripting;
+using System.Collections;
 
 [RequireComponent(typeof(Collider))]
 public class BridgeTile : MonoBehaviour
@@ -25,10 +26,19 @@ public class BridgeTile : MonoBehaviour
 
     public Transform JumpTarget => jumpTarget;
 
-    private BeatWaitHandle currentWaitHandle;
+    private RhythmClock rhythmClock;
+
+    private Coroutine dieRoutine;
+
+    [SerializeField] int dissapearSubbeats = 8;
+
+
+
 
     private void Awake()
     {
+        rhythmClock = FindFirstObjectByType<RhythmClock>();
+
         if (glyphView == null)
         {
             glyphView = GetComponentInChildren<BindingGlyphView>(true);
@@ -55,7 +65,7 @@ public class BridgeTile : MonoBehaviour
         gameObject.SetActive(true);
         UpdateGlyphDisplay();
 
-        currentWaitHandle = RhythmBeatWaiter.WaitForSubBeats(16, BeatWaitMode.Immediate, Disappear);
+        dieRoutine = StartCoroutine(DissapearRoutine(12));
     }
 
     public void Disappear()
@@ -69,7 +79,7 @@ public class BridgeTile : MonoBehaviour
 
     bridge.OnTileReached(this);
 
-    currentWaitHandle = RhythmBeatWaiter.WaitForSubBeats(8, BeatWaitMode.Immediate, Disappear);
+    dieRoutine = StartCoroutine(DissapearRoutine(8));
 
     if (isEnd)
     {
@@ -134,5 +144,14 @@ public class BridgeTile : MonoBehaviour
     public void ProcessNote(notesEnum incomingNote)
     {
         bridge.CompareNotes(incomingNote);
+    }
+
+    private IEnumerator DissapearRoutine(int subbeats)
+    {
+        yield return rhythmClock.WaitForSubBeats(subbeats);
+
+        dieRoutine = null;
+
+        Disappear();
     }
 }

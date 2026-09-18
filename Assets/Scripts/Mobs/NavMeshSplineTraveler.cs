@@ -209,6 +209,7 @@ public class NavMeshSplineTraveler : MonoBehaviour
             return;
 
         isDecelerating = true;
+        Debug.Log("Mosquito stopping");
     }
 
     private void CancelPatrolResumeWait()

@@ -140,9 +140,10 @@ public class PlayerRhythmController : MonoBehaviour
             OnNoteTooClose?.Invoke();
             return false;
         }
-
-        AcceptNote(note, result);
+        
         meter.IncreaseByOne();
+        AcceptNote(note, result);
+        
 
         return true;
     }

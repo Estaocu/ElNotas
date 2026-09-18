@@ -15,8 +15,27 @@ public class PlayerHP : MonoBehaviour
 
     [SerializeField] private Meter meter;
 
+
+    void Awake()
+    {
+        meter = GetComponent<Meter>();
+    }
+
     public void OnHit(int dmg)
     {
         Debug.Log("hit XD");
+
+        if(meter.currentMeter >= 4)
+        {
+            meter.ConsumeFullMeter();
+            Debug.Log("TP to closest spawnpoint");
+        }
+
+        else
+        {
+            meter.ConsumeFullMeter();
+            Debug.Log("GAME OVER. TP to first spawnpoint in this zone");
+
+        }
     }
 }

@@ -56,6 +56,8 @@ public class Singer : MonoBehaviour
         {
             soundwaveSpawnpoint = transform;
         }
+
+        meter = GetComponent<Meter>();
     }
 
     private void OnEnable()
@@ -147,16 +149,13 @@ public class Singer : MonoBehaviour
 
     private void TrySpawnPlayerMelody(Melody melody)
     {
-
-        Debug.Log($"Melody inputed and launched. | instrument %: {meter.currentMeter}");
-
-
-        if(meter.currentMeter <= 8)
+        if(!meter.hasFullMeter)
         {
             Debug.LogWarning("Tried to play melody with less than half instrument.");
             return;
         }
-        
+
+        Debug.Log($"Melody inputed and launched. | METER: {meter.currentMeter}");
         meter.ConsumeFullMeter();
         lastSingTime = Time.time;
 

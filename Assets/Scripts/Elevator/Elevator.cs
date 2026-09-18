@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.VisualScripting;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -34,7 +36,11 @@ public class Elevator : MonoBehaviour
     private Vector3 targetPosition;
     private float moveProgress = 0f;
     private float moveDuration = 1f;
-    private BeatWaitHandle currentWaitHandle;
+    //private BeatWaitHandle currentWaitHandle;
+
+    private RhythmClock clock;
+    private Coroutine moveCoroutine;
+
 
     private void Awake()
     {
@@ -52,6 +58,8 @@ public class Elevator : MonoBehaviour
         notesListener.OnNoteReceivedEvent.AddListener(HandleNoteReceived);
         notesListener.OnMelodyMatchedEvent.AddListener(HandleMelodyMatched);
         notesListener.OnMelodyFailedEvent.AddListener(HandleMelodyFailed);
+
+        clock = FindFirstObjectByType<RhythmClock>();
     }
 
     private void Start()
@@ -140,7 +148,8 @@ public class Elevator : MonoBehaviour
         if (matchedFloorIndex != -1)
         {
             PlaySuccessFeedback();
-            StartMovementToFloor(matchedFloorIndex);
+            nextFloor = matchedFloorIndex;
+            StartMovementToFloor(nextFloor);
         }
     }
 
@@ -154,56 +163,58 @@ public class Elevator : MonoBehaviour
     // MOVEMENT & PHYSICS
     // ==========================================
 
-    private void StartMovementToFloor(int targetFloorIndex)
+    private int nextFloor;
+
+    public void StartMovementToFloor(int targetFloor)
     {
+        if (isMoving) return;
+
+        nextFloor = targetFloor;
+
         isMoving = true;
         notesListener.wantsToListen = false;
 
-        int distanceInFloors = Mathf.Abs(targetFloorIndex - currentFloorIndex);
+        int distanceInFloors = Mathf.Abs(targetFloor - currentFloorIndex);
         int totalSubBeats = distanceInFloors * subBeatsPerFloor;
 
         startPosition = rb.position;
-        targetPosition = GetWorldPositionForFloor(targetFloorIndex);
+        targetPosition = GetWorldPositionForFloor(targetFloor);
 
-        float secondsPerSubBeat = GetSecondsPerSubBeat();
-        moveDuration = totalSubBeats * secondsPerSubBeat;
+
+        moveDuration = (float)(totalSubBeats * clock.SubBeatDuration);
         moveProgress = 0f;
 
-        Debug.Log($"<color=yellow>[ELEVATOR] Moving from Floor {currentFloorIndex} to Floor {targetFloorIndex}. Duration: {moveDuration:F2}s ({totalSubBeats} subbeats).</color>");
-
-        if (currentWaitHandle != null && !currentWaitHandle.IsCompleted)
-        {
-            currentWaitHandle.Cancel();
-        }
-
-        currentWaitHandle = RhythmBeatWaiter.WaitForSubBeats(totalSubBeats, BeatWaitMode.Immediate, () =>
-        {
-            OnArrivedAtFloor(targetFloorIndex);
-        });
+        moveCoroutine = StartCoroutine(ElevateRoutine(totalSubBeats));
     }
 
     private void FixedUpdate()
     {
-        if (!isMoving) return;
+        if (!isMoving)
+            return;
 
         moveProgress += Time.fixedDeltaTime;
+
         float t = Mathf.Clamp01(moveProgress / moveDuration);
 
         rb.MovePosition(Vector3.Lerp(startPosition, targetPosition, t));
+
+        if (t >= 1f)
+        {
+            OnArrivedAtFloor(nextFloor);
+        }
     }
 
-    private void OnArrivedAtFloor(int arrivedFloorIndex)
+    private void OnArrivedAtFloor(int floor)
     {
-        rb.MovePosition(targetPosition);
-        currentFloorIndex = arrivedFloorIndex;
+        currentFloorIndex = floor;
         isMoving = false;
-
-        Debug.Log($"<color=green>[ELEVATOR] Arrived at Floor {currentFloorIndex}.</color>");
 
         if (isPlayerOnBoard)
         {
             notesListener.wantsToListen = true;
         }
+
+        Debug.Log($"<color=green>[ELEVATOR] Arrived at Floor {currentFloorIndex}.</color>");
     }
 
     private Vector3 GetWorldPositionForFloor(int floorIndex)
@@ -214,14 +225,12 @@ public class Elevator : MonoBehaviour
         return initialWorldPosition + new Vector3(0f, floors[floorIndex].height, 0f);
     }
 
-    private float GetSecondsPerSubBeat()
+
+    private IEnumerator ElevateRoutine(int subbeats)
     {
-        RhythmManager rhythm = FindObjectOfType<RhythmManager>();
-        if (rhythm != null && rhythm.bpm > 0)
-        {
-            return (60f / rhythm.bpm) / 4f;
-        }
-        return 0.25f;
+        yield return clock.WaitForSubBeats(subbeats);
+
+        moveCoroutine = null;
     }
 
     private void PlayNoteFeedback(notesEnum note) { }

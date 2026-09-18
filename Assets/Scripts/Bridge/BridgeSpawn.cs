@@ -12,7 +12,6 @@ public class BridgeSpawn : MonoBehaviour, IReactToMelody, IBridgeListen
     [Header("Bridge Spawn Settings")]
     [SerializeField] private bool isMother;
     [SerializeField] private bool unlocked;
-    [SerializeField] private SingleNotesListener listener;
     [SerializeField] private BridgeTile closestTile;
     public Transform jumpTarget;
     [SerializeField] private Bridge bridge;

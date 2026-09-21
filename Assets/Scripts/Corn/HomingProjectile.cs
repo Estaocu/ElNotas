@@ -9,7 +9,7 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
     private Rigidbody rb;
     [SerializeField] private Vector3 moveDirection = Vector3.forward;
     public Transform latestNoteTransform;
-    [SerializeField] private float speed = 5f;
+    public float speed = 5f;
     [SerializeField] private float impactThreshold = 5f;
     [SerializeField] private GameObject explosionPrefab;
     [SerializeField] private float lifeTime = 10f;

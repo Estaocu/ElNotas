@@ -25,6 +25,7 @@ public class NavMeshSplineTraveler : MonoBehaviour
 
     private RhythmClock rhythmClock;
     private Coroutine patrolResumeCoroutine;
+    [SerializeField] private MosquitoAI mosquito; 
 
     void Start()
     {
@@ -41,6 +42,11 @@ public class NavMeshSplineTraveler : MonoBehaviour
         }
 
         rhythmClock = FindFirstObjectByType<RhythmClock>();
+
+        if (mosquito != null && mosquito.isStatic || splineContainer == null)
+        {
+            this.enabled = false;
+        }
     }
 
     void Update()
@@ -209,7 +215,7 @@ public class NavMeshSplineTraveler : MonoBehaviour
             return;
 
         isDecelerating = true;
-        Debug.Log("Mosquito stopping");
+        //Debug.Log("Mosquito stopping");
     }
 
     private void CancelPatrolResumeWait()

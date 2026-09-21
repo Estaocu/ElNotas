@@ -16,7 +16,7 @@ public class StopForMosquito : MonoBehaviour
             if (mosquito.splineContainer != mySpline) return;
 
             mosquito.StopOnPoint();
-            Debug.Log("Mosquito found in parent and stopped");
+            //Debug.Log("Mosquito found in parent and stopped");
         }
     }
 }

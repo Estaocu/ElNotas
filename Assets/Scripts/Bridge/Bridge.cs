@@ -3,16 +3,19 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using CMF;
 using Unity.VisualScripting;
+using System.Linq;
+using System.Collections;
 
 public class Bridge : MonoBehaviour
 {
     [Header("Bridge Sequence")]
     [SerializeField] private Transform spawnPoint;
     public BridgeSpawn currentSpawner;
-    [SerializeField] private BridgeTile previousTile;
-    [SerializeField] private BridgeTile currentTile;
-    [SerializeField] private BridgeTile nextTile;
+    private BridgeTile previousTile;
+    private BridgeTile currentTile;
+    private BridgeTile nextTile;
     public List<BridgeSpawn> spawners = new List<BridgeSpawn>();
+    public List<BridgeVine> vines = new List<BridgeVine>();
 
     [Header("Note Actions")]
     [SerializeField] private InputActionReference note1Action;
@@ -25,7 +28,6 @@ public class Bridge : MonoBehaviour
     [SerializeField] private Mover mover;
     [SerializeField] private ActionMapsManager actionMap;
     [SerializeField] private AbyssRaycast playerJump;
-    
 
     [Header("Trajectory Settings")]
     [SerializeField] private float apexHeight = 3f;
@@ -33,16 +35,20 @@ public class Bridge : MonoBehaviour
     [SerializeField] private Color trajectoryColor = Color.green;
     [SerializeField] private Color gridGizmoColor = new Color(0f, 1f, 1f, 0.35f);
 
-    
-
     private Dictionary<Vector2Int, BridgeTile> tileGrid = new Dictionary<Vector2Int, BridgeTile>();
+
+    private bool isJumping = false;
+
+    private RhythmClock clock;
 
     private void Awake()
     {
         InitializeGrid();
         spawners = new List<BridgeSpawn>(GetComponentsInChildren<BridgeSpawn>(true));
-   }
-   
+        vines = new List<BridgeVine>(GetComponentsInChildren<BridgeVine>(true));
+
+        clock = FindFirstObjectByType<RhythmClock>();
+    }
 
     private void OnTransformChildrenChanged()
     {
@@ -54,6 +60,7 @@ public class Bridge : MonoBehaviour
     {
         InitializeGrid();
         InitializeSpawners();
+        InitializeVines();
     }
 #endif
 
@@ -88,9 +95,13 @@ public class Bridge : MonoBehaviour
         spawners = new List<BridgeSpawn>(GetComponentsInChildren<BridgeSpawn>(true));
     }
 
-    public void InitializeBridgeFromSpawn(BridgeTile firstTile, Transform spawnJumpTarget)
+    public void InitializeVines()
     {
-        //playerInput.SwitchCurrentActionMap("Notes");
+        vines = new List<BridgeVine>(GetComponentsInChildren<BridgeVine>(true));
+    }
+
+    public void InitializeBridgeFromSpawn(BridgeTile firstTile, Transform spawnJumpTarget, BridgeVine firstVine)
+    {
         actionMap.SetNotesInput();
         playerJump.PreventJump();
 
@@ -101,6 +112,8 @@ public class Bridge : MonoBehaviour
 
         notesEnum initialNote = (notesEnum)Random.Range(0, 4);
         InputActionReference actionRef = GetActionForNote(initialNote);
+
+        firstVine.Bloom();
 
         firstTile.Appear();
         firstTile.SetNoteAndGlyph(initialNote, actionRef);
@@ -113,8 +126,16 @@ public class Bridge : MonoBehaviour
         {
             if (nextTile.note == playedNote)
             {
+                // Advance tile state immediately upon hitting the note
+                previousTile = null;
+                currentTile = nextTile;
+
+                // Spawn and assign notes to adjacent tiles around the new target
+                AssignNotesToTiles();
+
                 JumpToNextTile(spawnPoint);
                 Debug.Log("Jumped");
+                return;
             }
         }
         Debug.Log("Something went wrong");
@@ -128,6 +149,11 @@ public class Bridge : MonoBehaviour
         {
             if (hitTile == nextTile && hitTile.note == playedNote)
             {
+                previousTile = null;
+                currentTile = nextTile;
+
+                AssignNotesToTiles();
+
                 JumpToNextTile(spawnPoint);
             }
             return;
@@ -142,19 +168,31 @@ public class Bridge : MonoBehaviour
 
         if (distance == 1 && hitTile != previousTile && hitTile.note == playedNote)
         {
+            previousTile = currentTile;
+            currentTile = hitTile;
             nextTile = hitTile;
+
+            AssignNotesToTiles();
+            
+
             JumpToNextTile();
         }
     }
 
     public void OnTileReached(BridgeTile reachedTile)
     {
+        isJumping = false;
+    }
 
-        previousTile = currentTile;
-        currentTile = reachedTile;
-        spawnPoint = currentTile.jumpTarget;
-
-        AssignNotesToTiles();
+    private void GrowVines(BridgeTile petal)
+    {
+        foreach (BridgeVine vine in vines)
+        {
+            if (vine.Petals.Contains(petal))
+            {
+                vine.Bloom();
+            }
+        }
     }
 
     public void JumpToNextTile(Transform customStartPoint = null)
@@ -168,60 +206,54 @@ public class Bridge : MonoBehaviour
         JumpToTarget(nextTile.JumpTarget, customStartPoint);
     }
 
-    /// <summary>
-    /// Realiza el salto parabólico directamente hacia el punto final fuera del puente.
-    /// </summary>
-    /// <summary>
-/// Realiza el salto parabólico directamente hacia el punto final fuera del puente.
-/// </summary>
-public void JumpToEnd(Transform endPoint)
-{
-    if (endPoint == null)
+    public void JumpToEnd(Transform targetTransform)
     {
-        Debug.LogWarning("Bridge: Missing endPoint target to jump to end.");
-        return;
+        StartCoroutine(JumpToEndCoroutine(targetTransform));
     }
 
-    // El origen del salto es la casilla actual (la última tile que el jugador acaba de pisar)
-    Transform startPoint = currentTile != null ? currentTile.JumpTarget : null;
-
-    // Ejecuta el salto desde la última casilla hacia el punto final de salida
-    JumpToTarget(endPoint, startPoint);
-}
-
-/// <summary>
-/// Método central que ejecuta el cálculo de trayectoria y físicas de CMF desde un origen A hacia un destino B.
-/// </summary>
-public void JumpToTarget(Transform targetPoint, Transform customStartPoint = null)
-{
-    if (targetPoint == null || walker == null || mover == null)
+    public IEnumerator JumpToEndCoroutine(Transform endPoint)
     {
-        Debug.LogWarning("Bridge: Missing references or target point to perform the jump.");
-        return;
+        if (endPoint == null)
+        {
+            Debug.LogWarning("Bridge: Missing endPoint target to jump to end.");
+            yield break;
+        }
+
+        yield return StartCoroutine(clock.WaitForSubBeats(1));
+
+        Transform startPoint = currentTile != null ? currentTile.JumpTarget : null;
+        JumpToTarget(endPoint, startPoint);
+
+        yield return StartCoroutine(clock.WaitForSubBeats(2));
+        EndBridge();
     }
 
-    // Si se le pasa un customStartPoint explícito tiene prioridad; si no, utiliza la casilla actual
-    Transform pointA = customStartPoint != null ? customStartPoint : (currentTile != null ? currentTile.JumpTarget : null);
-    Transform pointB = targetPoint;
-
-    if (pointA == null || pointB == null)
+    public void JumpToTarget(Transform targetPoint, Transform customStartPoint = null)
     {
-        Debug.LogWarning("Bridge: Missing jump origin (Point A) or target (Point B).");
-        return;
+        if (targetPoint == null || walker == null || mover == null)
+        {
+            Debug.LogWarning("Bridge: Missing references or target point to perform the jump.");
+            return;
+        }
+
+        Transform pointA = customStartPoint != null ? customStartPoint : (previousTile != null ? previousTile.JumpTarget : spawnPoint);
+        Transform pointB = targetPoint;
+
+        if (pointA == null || pointB == null)
+        {
+            Debug.LogWarning("Bridge: Missing jump origin (Point A) or target (Point B).");
+            return;
+        }
+
+        walker.transform.position = pointA.position;
+        Physics.SyncTransforms();
+        mover.CheckForGround();
+
+        Vector3 launchVelocity = CalculateLaunchVelocity(pointA.position, pointB.position, walker.gravity);
+
+        walker.SetMomentum(Vector3.zero);
+        walker.SetMomentum(launchVelocity);
     }
-
-    // 1. Sincroniza la posición inicial con el motor de físicas de Unity
-    walker.transform.position = pointA.position;
-    Physics.SyncTransforms();
-    mover.CheckForGround();
-
-    // 2. Calcula la velocidad vectorial necesaria para la parábola
-    Vector3 launchVelocity = CalculateLaunchVelocity(pointA.position, pointB.position, walker.gravity);
-
-    // 3. Resetea e inyecta la inercia en el AdvancedWalkerController
-    walker.SetMomentum(Vector3.zero);
-    walker.SetMomentum(launchVelocity);
-}
 
     public void AssignNotesToTiles()
     {
@@ -274,6 +306,8 @@ public void JumpToTarget(Transform targetPoint, Transform customStartPoint = nul
 
             availableNotes.RemoveAt(randomIndex);
         }
+
+        GrowVines(currentTile);
     }
 
     private InputActionReference GetActionForNote(notesEnum note)
@@ -405,48 +439,61 @@ public void JumpToTarget(Transform targetPoint, Transform customStartPoint = nul
     }
 
     public bool CompareNotes(notesEnum incomingNote)
+{
+    // Si ya estamos saltando, ignoramos cualquier nota pulsada hasta aterrizar
+    if (isJumping) return false;
+
+    if (currentTile == null)
     {
-        // CASO 1: Aún no estamos en el puente
-        if (currentTile == null)
+        if (nextTile != null && nextTile.note == incomingNote)
         {
-            if (nextTile != null && nextTile.note == incomingNote)
-            {
-                JumpToNextTile(spawnPoint);
-                return true;
-            }
-            return false;
+            isJumping = true; // Bloqueamos nuevas entradas
+            
+            previousTile = null;
+            currentTile = nextTile;
+
+            AssignNotesToTiles();
+            JumpToNextTile(spawnPoint);
+            return true;
         }
-
-        // CASO 2: Ya estamos posicionados sobre una casilla del puente
-        Vector2Int currentPos = new Vector2Int(currentTile.xCoord, currentTile.yCoord);
-
-        Vector2Int[] directions = new Vector2Int[]
-        {
-            new Vector2Int(0, 1),
-            new Vector2Int(0, -1),
-            new Vector2Int(1, 0),
-            new Vector2Int(-1, 0)
-        };
-
-        foreach (Vector2Int dir in directions)
-        {
-            Vector2Int checkPos = currentPos + dir;
-
-            if (tileGrid.TryGetValue(checkPos, out BridgeTile adjTile))
-            {
-                if (adjTile == null || !adjTile.gameObject.activeSelf) continue;
-
-                if (adjTile != previousTile && adjTile.note == incomingNote)
-                {
-                    nextTile = adjTile;
-                    JumpToNextTile();
-                    return true;
-                }
-            }
-        }
-
         return false;
     }
+
+    Vector2Int currentPos = new Vector2Int(currentTile.xCoord, currentTile.yCoord);
+
+    Vector2Int[] directions = new Vector2Int[]
+    {
+        new Vector2Int(0, 1),
+        new Vector2Int(0, -1),
+        new Vector2Int(1, 0),
+        new Vector2Int(-1, 0)
+    };
+
+    foreach (Vector2Int dir in directions)
+    {
+        Vector2Int checkPos = currentPos + dir;
+
+        if (tileGrid.TryGetValue(checkPos, out BridgeTile adjTile))
+        {
+            if (adjTile == null || !adjTile.gameObject.activeSelf) continue;
+
+            if (adjTile != previousTile && adjTile.note == incomingNote)
+            {
+                isJumping = true; // Bloqueamos nuevas entradas
+
+                previousTile = currentTile;
+                currentTile = adjTile;
+                nextTile = adjTile;
+
+                AssignNotesToTiles();
+                JumpToNextTile();
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
 
     public void EndBridge()
     {
@@ -454,7 +501,7 @@ public void JumpToTarget(Transform targetPoint, Transform customStartPoint = nul
         playerJump.EnableJump();
         currentSpawner = null;
 
-        foreach(BridgeSpawn spawner in spawners)
+        foreach (BridgeSpawn spawner in spawners)
         {
             spawner.EndBridge();
         }
@@ -465,6 +512,5 @@ public void JumpToTarget(Transform targetPoint, Transform customStartPoint = nul
         // {
         //     tile.Disappear();
         // }
-
     }
 }

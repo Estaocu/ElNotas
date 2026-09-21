@@ -10,6 +10,8 @@ public class BridgeTile : MonoBehaviour
 {
     public int xCoord;
     public int yCoord;
+
+    private int subbeatsAlive = 12;
     
     public notesEnum note; 
     public bool beingStepped = false;
@@ -30,10 +32,11 @@ public class BridgeTile : MonoBehaviour
 
     private Coroutine dieRoutine;
 
-    [SerializeField] int dissapearSubbeats = 8;
+    [SerializeField] private float growthTime = 0.2f;
 
-
-
+    [SerializeField] private GameObject visuals;
+    [SerializeField] private AnimationCurve growCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+    [SerializeField] private AnimationCurve deathCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
     private void Awake()
     {
@@ -50,47 +53,69 @@ public class BridgeTile : MonoBehaviour
         UpdateGlyphDisplay();
     }
 
-    private void OnDisable()
-    {
-
-    }
-
     private void Start()
     {
         gameObject.SetActive(false);
     }
 
     public void Appear()
-    {
-        gameObject.SetActive(true);
-        UpdateGlyphDisplay();
+{
+    gameObject.SetActive(true);
 
-        dieRoutine = StartCoroutine(DissapearRoutine(12));
+    // Stop previous routine if active to avoid stacking
+    if (dieRoutine != null)
+    {
+        StopCoroutine(dieRoutine);
     }
+
+    StartCoroutine(ScaleMeshRoutine(Vector3.zero, Vector3.one, growthTime, growCurve));
+    UpdateGlyphDisplay();
+
+    dieRoutine = StartCoroutine(DissapearRoutine(subbeatsAlive));
+    
+}
 
     public void Disappear()
     {
-        gameObject.SetActive(false);
+        StartCoroutine(ScaleMeshRoutine(Vector3.one, Vector3.zero, growthTime, deathCurve));
     }
 
     public void SetAsCurrentTile()
-{
-    beingStepped = true;
-
-    bridge.OnTileReached(this);
-
-    dieRoutine = StartCoroutine(DissapearRoutine(8));
-
-    if (isEnd)
     {
-        if (assignedSpawner != bridge.currentSpawner)
+        beingStepped = true;
+
+        bridge.OnTileReached(this);
+
+        if (isEnd)
         {
-            bridge.JumpToEnd(assignedSpawner.jumpTarget);
-            bridge.EndBridge();
-            assignedSpawner.Bloom();
+            if (assignedSpawner != bridge.currentSpawner)
+            {
+                bridge.JumpToEnd(assignedSpawner.jumpTarget);
+                assignedSpawner.Bloom();
+            }
         }
     }
-}
+
+    private IEnumerator ScaleMeshRoutine(Vector3 initialScale, Vector3 endScale, float growthTime, AnimationCurve curve)
+        {
+        float elapsedTime = 0f;
+
+            while (elapsedTime < growthTime)
+        {
+            float progress = elapsedTime / growthTime;
+
+            float curveProgress = curve.Evaluate(progress);
+
+            visuals.transform.localScale = Vector3.Lerp(initialScale, endScale, curveProgress);
+
+            elapsedTime += Time.deltaTime;
+
+            yield return null;
+        }
+
+        visuals.transform.localScale = endScale;
+            
+        }
 
     public void OnEntityExited()
     {
@@ -128,16 +153,14 @@ public class BridgeTile : MonoBehaviour
             if (!beingStepped) return;
 
             if (detectedObj.TryGetComponent<SingleNoteSoundwave>(out var noteWave))
-        {
+            {
             ProcessNote(noteWave.myNote);
             Debug.Log($"Nota {noteWave.myNote}");
-        }
-        else
-        {
-            Debug.LogWarning($"[BridgeSpawn] El objeto '{detectedObj.name}' no tiene el componente SingleNoteSoundwave.", this);
-        }
-
-        
+            }
+            else
+            {
+                Debug.LogWarning($"[BridgeSpawn] El objeto '{detectedObj.name}' no tiene el componente SingleNoteSoundwave.", this);
+            }
         }
     }
 

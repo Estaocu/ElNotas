@@ -54,17 +54,21 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _CreatePosition: 1
     - _Create_Position: 1
+    - _DestroyPosition: 0
     - _Destroy_Position: 0
-    - _Edge_Width: 0.1
+    - _Edge_Width: 0.18
+    - _EmissionStrength: 2
     - _Emission_Intensity: 0
     - _Emission_Width: 0.5
-    - _Noise_Scale: 100
+    - _Noise_Scale: 77.05
     - _Noise_Strength: 47
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _Emission_Color: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 34.29675, g: 34.29675, b: 34.29675, a: 1}
+    - _Emission_Color: {r: 9.4949585e+29, g: 9.4949585e+29, b: 9.4949585e+29, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &4735127892141447417
 MonoBehaviour:

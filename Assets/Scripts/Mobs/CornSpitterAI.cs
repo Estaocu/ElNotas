@@ -39,6 +39,7 @@ public class CornSpitterAI : MonoBehaviour
     [SerializeField] private TriggerDetector cornTrigger;
     [SerializeField] private TriggerDetector playerTrigger;
     private RhythmClock rhythmClock;
+    [SerializeField] private float projectileSpeed = 5;
 
     [Header("Singing Rhythm")]
     [SerializeField]
@@ -475,6 +476,8 @@ public class CornSpitterAI : MonoBehaviour
 
         HomingProjectile script =
             myCorn.GetComponent<HomingProjectile>();
+
+            script.speed = projectileSpeed;
 
         if (script == null)
         {

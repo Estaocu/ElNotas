@@ -2,38 +2,38 @@ using System.Collections;
 using UnityEngine;
 
 public enum Mode { Forward, Homing }
-public enum SenderType { Player, Enemy}
+public enum SenderType { Player, Enemy }
 
 public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolable
 {
     private Rigidbody rb;
     [SerializeField] private Vector3 moveDirection = Vector3.forward;
     public Transform latestNoteTransform;
-    [SerializeField] private float speed = 5f;
+    public float speed = 5f;
     [SerializeField] private float impactThreshold = 5f;
     [SerializeField] private GameObject explosionPrefab;
     [SerializeField] private float lifeTime = 10f;
     private Coroutine _suicideCoroutine;
-    
+
     public GameObject sender;
     public GameObject Sender => sender;
-    public GameObject Enemy => enemy; 
+    public GameObject Enemy => enemy;
     public bool mobIsOgSender = false;
-    
-    private GameObject _target; 
+
+    private GameObject _target;
     private Transform _targetAnchor;
     private Transform spawnPoint;
 
     public bool movingForward = false;
     public bool followingTarget = false;
     public bool destinationAlreadySet = false;
-    
+
     [Header("Enemy Detection")]
     [SerializeField] private LayerMask enemyLayer;
-    [SerializeField] private LayerMask occlusionLayer; 
+    [SerializeField] private LayerMask occlusionLayer;
     [SerializeField] private float detectionRadius = 50f;
     private readonly Collider[] detectionResults = new Collider[10];
-    
+
     public GameObject player;
     public GameObject enemy;
     [SerializeField] private int launchesNumber = 0;
@@ -55,8 +55,8 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
         if (rb != null)
         {
             rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero; 
-            rb.ResetInertiaTensor(); 
+            rb.angularVelocity = Vector3.zero;
+            rb.ResetInertiaTensor();
         }
 
         player = null;
@@ -123,7 +123,7 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
     public void SetTarget(GameObject newTarget)
     {
         _target = newTarget;
-        
+
         if (_target != null)
         {
             if (_target.TryGetComponent(out TargetForCorn anchorProvider))
@@ -171,10 +171,10 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
     public void Launch(GameObject whoSends)
     {
         launchesNumber++;
-        
+
         if (whoSends.layer == 6) // Player
         {
-            SetTarget(enemy); 
+            SetTarget(enemy);
             SetMovementMode(Mode.Homing, whoSends);
         }
         else if (whoSends.layer == 14) // Enemy
@@ -230,7 +230,7 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
 
     public void Explode()
     {
-        if (!gameObject.activeSelf) return; 
+        if (!gameObject.activeSelf) return;
 
         if (explosionPrefab != null) Instantiate(explosionPrefab, transform.position, Quaternion.identity);
 
@@ -244,9 +244,9 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
             }
         }
 
-        CancelSuicide(); 
+        CancelSuicide();
         CancelInvoke();
-        
+
         if (TryGetComponent(out PoolMember member)) member.ReturnToPool();
         gameObject.SetActive(false);
     }
@@ -304,7 +304,7 @@ public class HomingProjectile : MonoBehaviour, IControllableProjectile, IPoolabl
     {
         if (_suicideCoroutine != null)
         {
-            StopCoroutine(_suicideCoroutine); 
+            StopCoroutine(_suicideCoroutine);
             _suicideCoroutine = null;
         }
     }

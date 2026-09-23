@@ -42,6 +42,11 @@ public class MosquitoAI : MonoBehaviour
 
     public bool wantsAnswer;
 
+    [Header("Raycast Confirmation Settings")]
+    [SerializeField] private Transform raycastStartPoint;
+    [SerializeField] private LayerMask obstacleLayerMask;
+
+    private bool getTargetNow = false;
 
     void Awake()
     {
@@ -102,14 +107,19 @@ public class MosquitoAI : MonoBehaviour
         {
             if (other.CompareTag(tag))
             {
-                Debug.Log($"Chasing {other.name}");
-
                 currentTarget = other.gameObject;
+                RayToTarget(other);
+                if(!getTargetNow) return;
                 currentState = State.Chase;
+                Debug.Log($"Chasing {other.name}");
 
                 break;
             }
         }
+
+        
+
+        
     }
 
     private void HandleChase()
@@ -321,4 +331,51 @@ public class MosquitoAI : MonoBehaviour
             peaceCoroutine = null;
         }
     }
-}
+
+    private void RayToTarget(Collider playerCol)
+    {
+            Vector3 startPos =
+                raycastStartPoint != null
+                    ? raycastStartPoint.position
+                    : transform.position;
+
+            Vector3 targetPos = playerCol.bounds.center;
+
+            Vector3 direction = targetPos - startPos;
+
+            float distance = direction.magnitude;
+
+            if (Physics.Raycast(
+                    startPos,
+                    direction.normalized,
+                    out RaycastHit hit,
+                    distance,
+                    obstacleLayerMask))
+            {
+                if (hit.collider.transform.root != playerCol.transform.root)
+                {
+
+                    Debug.DrawLine(
+                        startPos,
+                        playerCol.bounds.center,
+                        Color.red
+                    );
+
+                    getTargetNow = false;
+                    return;
+                }
+            }
+            else
+            {
+                Debug.DrawLine(
+                    startPos,
+                    playerCol.bounds.center,
+                    Color.green
+                );
+
+                getTargetNow = true;
+            }
+        }
+
+        
+    }

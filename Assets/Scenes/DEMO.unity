@@ -9239,22 +9239,22 @@ PrefabInstance:
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -33.57
+      value: 88.278
       objectReference: {fileID: 0}
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.58
+      value: 20.715431
       objectReference: {fileID: 0}
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 8.55
+      value: -100.563
       objectReference: {fileID: 0}
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.6690781
+      value: 0.40880793
       objectReference: {fileID: 0}
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
@@ -9264,7 +9264,7 @@ PrefabInstance:
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.74319214
+      value: -0.9126204
       objectReference: {fileID: 0}
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
@@ -9279,7 +9279,7 @@ PrefabInstance:
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -983.992
+      value: -851.74
       objectReference: {fileID: 0}
     - target: {fileID: 3006524449391289388, guid: 2852d88465bdd2e4daf673f56308c148,
         type: 3}
@@ -10352,6 +10352,184 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 893840396}
   m_CullTransparentMesh: 1
+--- !u!1 &895817071
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 895817075}
+  - component: {fileID: 895817074}
+  - component: {fileID: 895817073}
+  - component: {fileID: 895817072}
+  - component: {fileID: 895817076}
+  - component: {fileID: 895817077}
+  m_Layer: 17
+  m_Name: BigAssDoor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &895817072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895817071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26ab7cafc369c5443aa65c6d132b0c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 8192
+  requiredTag: 
+  triggerOnce: 0
+  debugLog: 1
+  OnDetected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLost:
+    m_PersistentCalls:
+      m_Calls: []
+  OnGameObjectDetected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 895817073}
+        m_TargetAssemblyTypeName: SingleNotesListener, Assembly-CSharp
+        m_MethodName: ProcessIncomingObject
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnGameObjectLost:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &895817073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895817071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b755f73732ce8374388ff1cc409b9047, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentMode: 2
+  wantsToListen: 1
+  maxBufferLength: 8
+  clearOnFail: 0
+  OnNoteReceivedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMelodyMatchedEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 895817076}
+        m_TargetAssemblyTypeName: BigDoor, Assembly-CSharp
+        m_MethodName: OpenDoor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnMelodyFailedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  currentMelody: 0000000000000000
+  externalMelody: 0000000000000000
+  desiredMelody: 03000000020000000100000000000000
+--- !u!65 &895817074
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895817071}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10.8, y: 8.16, z: 7.12}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &895817075
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895817071}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.31006423, z: -0, w: 0.95071566}
+  m_LocalPosition: {x: 81.34, y: 20.761, z: -106.44}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 36.126, z: 0}
+--- !u!114 &895817076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895817071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db48da1825d55bc448709e8c3a7ddac2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &895817077
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895817071}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &918859941
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12914,6 +13092,184 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5a0a36edcbb37743a53c562cc04dec7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1274072091
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1274072097}
+  - component: {fileID: 1274072096}
+  - component: {fileID: 1274072095}
+  - component: {fileID: 1274072094}
+  - component: {fileID: 1274072093}
+  - component: {fileID: 1274072092}
+  m_Layer: 17
+  m_Name: InvernaderoTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!54 &1274072092
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1274072091}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &1274072093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1274072091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db48da1825d55bc448709e8c3a7ddac2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1274072094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1274072091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26ab7cafc369c5443aa65c6d132b0c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 8192
+  requiredTag: 
+  triggerOnce: 0
+  debugLog: 1
+  OnDetected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLost:
+    m_PersistentCalls:
+      m_Calls: []
+  OnGameObjectDetected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1274072095}
+        m_TargetAssemblyTypeName: SingleNotesListener, Assembly-CSharp
+        m_MethodName: ProcessIncomingObject
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnGameObjectLost:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1274072095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1274072091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b755f73732ce8374388ff1cc409b9047, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentMode: 2
+  wantsToListen: 1
+  maxBufferLength: 8
+  clearOnFail: 0
+  OnNoteReceivedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMelodyMatchedEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1274072093}
+        m_TargetAssemblyTypeName: BigDoor, Assembly-CSharp
+        m_MethodName: OpenDoor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnMelodyFailedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  currentMelody: 0000000000000000
+  externalMelody: 0000000000000000
+  desiredMelody: 01000000020000000100000003000000
+--- !u!65 &1274072096
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1274072091}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 7.3894906, y: 8.16, z: 7.12}
+  m_Center: {x: -0.56163484, y: 0, z: 0.0000000073545543}
+--- !u!4 &1274072097
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1274072091}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.38918802, z: -0, w: 0.9211584}
+  m_LocalPosition: {x: -40.91, y: 3.69, z: 12.9}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -45.808, z: 0}
 --- !u!1 &1298664795
 GameObject:
   m_ObjectHideFlags: 0
@@ -20650,90 +21006,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1511867975}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &1998984343
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2336517286261462283, guid: b8de80a2eee2de94b89c7e1166a1857d,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 78ab13ab635967b4ea88bedeb424ab4c,
-        type: 3}
-    - target: {fileID: 4214515464010635916, guid: b8de80a2eee2de94b89c7e1166a1857d,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4239614586739769294, guid: b8de80a2eee2de94b89c7e1166a1857d,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -29.97
-      objectReference: {fileID: 0}
-    - target: {fileID: 4239614586739769294, guid: b8de80a2eee2de94b89c7e1166a1857d,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.68
-      objectReference: {fileID: 0}
-    - target: {fileID: 4239614586739769294, guid: b8de80a2eee2de94b89c7e1166a1857d,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.54
-      objectReference: {fileID: 0}
-    - target: {fileID: 4239614586739769294, guid: b8de80a2eee2de94b89c7e1166a1857d,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.43518153
-      objectReference: {fileID: 0}
-    - target: {fileID: 4239614586739769294, guid: b8de80a2eee2de94b89c7e1166a1857d,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4239614586739769294, guid: b8de80a2eee2de94b89c7e1166a1857d,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.9003428
-      objectReference: {fileID: 0}
-    - target: {fileID: 4239614586739769294, guid: b8de80a2eee2de94b89c7e1166a1857d,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4239614586739769294, guid: b8de80a2eee2de94b89c7e1166a1857d,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4239614586739769294, guid: b8de80a2eee2de94b89c7e1166a1857d,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 128.406
-      objectReference: {fileID: 0}
-    - target: {fileID: 4239614586739769294, guid: b8de80a2eee2de94b89c7e1166a1857d,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5057396296167573710, guid: b8de80a2eee2de94b89c7e1166a1857d,
-        type: 3}
-      propertyPath: m_Name
-      value: BridgeTile
-      objectReference: {fileID: 0}
-    - target: {fileID: 5381565438813858760, guid: b8de80a2eee2de94b89c7e1166a1857d,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: b8de80a2eee2de94b89c7e1166a1857d, type: 3}
 --- !u!1 &1999881353 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6986211842459414528, guid: f4b6a182855f5a0499020bc82211a9f9,
@@ -21892,4 +22164,5 @@ SceneRoots:
   - {fileID: 387833731}
   - {fileID: 395348909}
   - {fileID: 1298997135}
-  - {fileID: 1998984343}
+  - {fileID: 895817075}
+  - {fileID: 1274072097}

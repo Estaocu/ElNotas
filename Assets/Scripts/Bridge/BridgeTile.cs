@@ -38,9 +38,15 @@ public class BridgeTile : MonoBehaviour
     [SerializeField] private AnimationCurve growCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
     [SerializeField] private AnimationCurve deathCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
+    private Collider col;
+
+    private GameObject glyph => glyphView.transform.parent.gameObject;
+
     private void Awake()
     {
         rhythmClock = FindFirstObjectByType<RhythmClock>();
+
+        col = GetComponent<Collider>();
 
         if (glyphView == null)
         {
@@ -53,31 +59,46 @@ public class BridgeTile : MonoBehaviour
         UpdateGlyphDisplay();
     }
 
+    void OnDisable()
+    {
+        
+    }
+
     private void Start()
     {
         gameObject.SetActive(false);
     }
 
     public void Appear()
-{
-    gameObject.SetActive(true);
-
-    // Stop previous routine if active to avoid stacking
-    if (dieRoutine != null)
     {
-        StopCoroutine(dieRoutine);
-    }
+        gameObject.SetActive(true);
+        col.enabled = true;
+        glyph.SetActive(true);
 
-    StartCoroutine(ScaleMeshRoutine(Vector3.zero, Vector3.one, growthTime, growCurve));
-    UpdateGlyphDisplay();
+        // Stop previous routine if active to avoid stacking
+        if (dieRoutine != null)
+        {
+            StopCoroutine(dieRoutine);
+        }
 
-    dieRoutine = StartCoroutine(DissapearRoutine(subbeatsAlive));
+        StartCoroutine(ScaleMeshRoutine(Vector3.zero, Vector3.one, growthTime, growCurve));
+        UpdateGlyphDisplay();
+
+        dieRoutine = StartCoroutine(DissapearRoutine(subbeatsAlive));
     
-}
+    }
 
     public void Disappear()
     {
         StartCoroutine(ScaleMeshRoutine(Vector3.one, Vector3.zero, growthTime, deathCurve));
+
+        if (beingStepped)
+        {
+            Debug.Log("Player was stepping flower when died. Now changing to gameplay map.");
+            bridge.actionMap.SetPlayerInput();
+            bridge.EndBridge();
+        }
+        
     }
 
     public void SetAsCurrentTile()
@@ -85,6 +106,8 @@ public class BridgeTile : MonoBehaviour
         beingStepped = true;
 
         bridge.OnTileReached(this);
+        
+        glyph.SetActive(false);
 
         if (isEnd)
         {
@@ -114,6 +137,12 @@ public class BridgeTile : MonoBehaviour
         }
 
         visuals.transform.localScale = endScale;
+
+        if (endScale == Vector3.zero)
+        {
+            gameObject.SetActive(false);
+        }
+        
             
         }
 

@@ -26,7 +26,7 @@ public class Bridge : MonoBehaviour
     [Header("Player References")]
     [SerializeField] private AdvancedWalkerController walker;
     [SerializeField] private Mover mover;
-    [SerializeField] private ActionMapsManager actionMap;
+    public ActionMapsManager actionMap;
     [SerializeField] private AbyssRaycast playerJump;
 
     [Header("Trajectory Settings")]

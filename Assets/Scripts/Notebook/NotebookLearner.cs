@@ -6,12 +6,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Profiling.Memory.Experimental;
+using Unity.VisualScripting;
+using NaughtyAttributes;
+using CMF;
 
 public class NotebookLearner: MonoBehaviour {
    public static NotebookLearner Instance {
       get;
       private set;
    }
+
+   [SerializeField] private NotebookUIBehaviour n;
 
    private NotebookSaveObject saveObject;
 
@@ -20,7 +25,7 @@ public class NotebookLearner: MonoBehaviour {
    public List < NotebookEntry > learnedEntryList;
 
    private List < string > idList;
-
+   
    [Serializable]
    public class CategoryGroup {
       public WordCategory category;
@@ -108,33 +113,51 @@ public class NotebookLearner: MonoBehaviour {
         RefreshCategories();
     }
 
-public void GetSavedIds()
-    {
-        idList = saveObject?.LearnedEntriesIds?.Value ?? new List < string > ();
-    }
+   public void GetSavedIds()
+      {
+         idList = saveObject?.LearnedEntriesIds?.Value ?? new List < string > ();
+      }
 
-public void RefreshCategories()
-    {
-    LearnedCategories.Clear();
-    var actualCategories = learnedEntryList.Where
-    (entry => entry != null && entry.type == EntryType.Word && entry.category.HasValue)
-    .Select(entry => entry.category.Value)
-    .Distinct()
-    .OrderBy(category => category)
-    .ToList();
+   public void RefreshCategories()
+      {
+      LearnedCategories.Clear();
+      var actualCategories = learnedEntryList.Where
+      (entry => entry != null && entry.type == EntryType.Word && entry.category.HasValue)
+      .Select(entry => entry.category.Value)
+      .Distinct()
+      .OrderBy(category => category)
+      .ToList();
 
-    foreach(WordCategory cat in actualCategories) {
-        CategoryGroup group = new CategoryGroup(cat) {
-            entries = learnedEntryList.Where
-            (entry => entry != null && entry.type == EntryType.Word && entry.category.HasValue && entry.category.Value == cat)
-            .OrderBy(entry => entry.key ?? string.Empty, StringComparer.CurrentCultureIgnoreCase)
-            .ToList()
-        };
+      foreach(WordCategory cat in actualCategories) {
+         CategoryGroup group = new CategoryGroup(cat) {
+               entries = learnedEntryList.Where
+               (entry => entry != null && entry.type == EntryType.Word && entry.category.HasValue && entry.category.Value == cat)
+               .OrderBy(entry => entry.key ?? string.Empty, StringComparer.CurrentCultureIgnoreCase)
+               .ToList()
+         };
 
-        LearnedCategories.Add(group);
-    }
-    
-    Debug.Log($"Categories: {LearnedCategories.Count}");
-    }
+         LearnedCategories.Add(group);
+      }
+      
+      Debug.Log($"Categories: {LearnedCategories.Count}");
+      }
+
+   public void OpenNotebook(InputAction.CallbackContext context)
+   {
+      if (!context.performed) return;
+
+      n.gameObject.SetActive(true);
+
+      ActionMapsManager.SetActiveMaps(DefaultActionMap.Notebook);
+   }
+
+   public void CloseNotebook(InputAction.CallbackContext context)
+   {
+      if (!context.performed) return;
+
+      n.gameObject.SetActive(false);
+
+      ActionMapsManager.SetActiveMaps(DefaultActionMap.Gameplay);
+   }
 
 }

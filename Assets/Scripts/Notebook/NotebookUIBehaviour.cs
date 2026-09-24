@@ -11,7 +11,7 @@ using UnityEngine.Localization.Settings;
 
 public enum ChapterType {Dictionary, Melodies}
 
-public class NotebookDictionaryBehaviour : MonoBehaviour
+public class NotebookUIBehaviour : MonoBehaviour
 {
 
 

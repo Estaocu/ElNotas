@@ -14,6 +14,7 @@ public class PlayerHP : MonoBehaviour
     public int GetCurrentHp() => currentHp;
 
     [SerializeField] private Meter meter;
+    [SerializeField] private CheckpointManager checkpoint;
 
 
     void Awake()
@@ -21,19 +22,20 @@ public class PlayerHP : MonoBehaviour
         meter = GetComponent<Meter>();
     }
 
-    public void OnHit(int dmg)
+    public void OnHit()
     {
-        Debug.Log("hit XD");
 
         if(meter.currentMeter >= 4)
         {
             meter.ConsumeFullMeter();
+            checkpoint.SendPlayerToPoint(false);
             Debug.Log("TP to closest spawnpoint");
         }
 
         else
         {
             meter.ConsumeFullMeter();
+            checkpoint.SendPlayerToPoint(true);
             Debug.Log("GAME OVER. TP to first spawnpoint in this zone");
 
         }

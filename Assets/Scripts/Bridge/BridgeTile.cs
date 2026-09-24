@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using ElNotas.Input.Glyphs;
 using NaughtyAttributes;
-using Unity.VisualScripting;
 using System.Collections;
 
 [RequireComponent(typeof(Collider))]
@@ -35,6 +34,7 @@ public class BridgeTile : MonoBehaviour
     [SerializeField] private float growthTime = 0.2f;
 
     [SerializeField] private GameObject visuals;
+    [SerializeField] private GameObject trigger;
     [SerializeField] private AnimationCurve growCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
     [SerializeField] private AnimationCurve deathCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
@@ -57,6 +57,7 @@ public class BridgeTile : MonoBehaviour
     private void OnEnable()
     {
         UpdateGlyphDisplay();
+        
     }
 
     void OnDisable()
@@ -72,10 +73,11 @@ public class BridgeTile : MonoBehaviour
     public void Appear()
     {
         gameObject.SetActive(true);
+        trigger.SetActive(false);
         col.enabled = true;
         glyph.SetActive(true);
 
-        // Stop previous routine if active to avoid stacking
+        StartCoroutine(PreventEarlyNoteRoutine());
         if (dieRoutine != null)
         {
             StopCoroutine(dieRoutine);
@@ -142,8 +144,6 @@ public class BridgeTile : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
-        
-            
         }
 
     public void OnEntityExited()
@@ -205,5 +205,12 @@ public class BridgeTile : MonoBehaviour
         dieRoutine = null;
 
         Disappear();
+    }
+
+    private IEnumerator PreventEarlyNoteRoutine()
+    {
+        yield return rhythmClock.WaitForSubBeats(2);
+        trigger.SetActive(true);
+
     }
 }

@@ -10299,6 +10299,21 @@ PrefabInstance:
       propertyPath: pauseMenuUI
       value: 
       objectReference: {fileID: 346498707}
+    - target: {fileID: 978617577074136026, guid: 246aa9467fd319c4b8aea4b4088ab797,
+        type: 3}
+      propertyPath: trigger
+      value: 
+      objectReference: {fileID: 2117342025}
+    - target: {fileID: 978617577074136026, guid: 246aa9467fd319c4b8aea4b4088ab797,
+        type: 3}
+      propertyPath: textCanvas
+      value: 
+      objectReference: {fileID: 1729311158}
+    - target: {fileID: 978617577074136026, guid: 246aa9467fd319c4b8aea4b4088ab797,
+        type: 3}
+      propertyPath: conversation
+      value: 
+      objectReference: {fileID: 471460343}
     - target: {fileID: 1883403722539482130, guid: 246aa9467fd319c4b8aea4b4088ab797,
         type: 3}
       propertyPath: m_Name
@@ -10406,18 +10421,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 463d9bf59b7b6f24d907a81f6d4b22e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &918859949 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6013577721631037847, guid: 246aa9467fd319c4b8aea4b4088ab797,
-    type: 3}
-  m_PrefabInstance: {fileID: 918859941}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f716150d0c6b1d84e95b6234d03a6cb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &933935508
@@ -13471,7 +13474,7 @@ PrefabInstance:
         type: 3}
       propertyPath: OnLost.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 918859949}
+      objectReference: {fileID: 1688153221}
     - target: {fileID: 2093274205943348230, guid: 50cadffee76fafa4dbd4b5343ed0812b,
         type: 3}
       propertyPath: OnLost.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -13531,7 +13534,7 @@ PrefabInstance:
         type: 3}
       propertyPath: OnMelodyMatchedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 918859949}
+      objectReference: {fileID: 1688153221}
     - target: {fileID: 7609017738433720855, guid: 50cadffee76fafa4dbd4b5343ed0812b,
         type: 3}
       propertyPath: OnMelodyMatchedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -13561,7 +13564,7 @@ PrefabInstance:
         type: 3}
       propertyPath: manager
       value: 
-      objectReference: {fileID: 918859949}
+      objectReference: {fileID: 1688153221}
     - target: {fileID: 8664640749059546188, guid: 50cadffee76fafa4dbd4b5343ed0812b,
         type: 3}
       propertyPath: currentMode
@@ -18373,6 +18376,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4978795399383359084}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1688153221 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 978617577074136026, guid: 246aa9467fd319c4b8aea4b4088ab797,
+    type: 3}
+  m_PrefabInstance: {fileID: 918859941}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f716150d0c6b1d84e95b6234d03a6cb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1688793437
 GameObject:
   m_ObjectHideFlags: 0

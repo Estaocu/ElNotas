@@ -1069,24 +1069,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             ""id"": ""7cbe3add-0f30-4cb5-8265-8f3f92a669bd"",
             ""actions"": [
                 {
-                    ""name"": ""Previous Page"",
-                    ""type"": ""Button"",
-                    ""id"": ""36ea5ad3-fcd5-48ec-b822-88a602966410"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Next Page"",
-                    ""type"": ""Button"",
-                    ""id"": ""26fca24e-14cb-4036-8996-e1097dc477bf"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Back"",
                     ""type"": ""Button"",
                     ""id"": ""3ea30a42-fcdf-4ee2-8678-27d171d100cf"",
@@ -1103,97 +1085,36 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FlipPage"",
+                    ""type"": ""Button"",
+                    ""id"": ""56000817-a44e-4852-9d8c-3e65df26c54c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FlipChapter"",
+                    ""type"": ""Button"",
+                    ""id"": ""f8076dfa-158a-4666-9072-349570f112ad"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Debug_AddPages"",
+                    ""type"": ""Button"",
+                    ""id"": ""31612bb0-3815-47ba-b720-ebb9d1a7425c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""ee54a6d1-969d-4801-aa18-2e64dcb8fcf2"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Previous Page"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""7dfb1346-c0f9-4145-a00b-eace73274be2"",
-                    ""path"": ""<Gamepad>/dpad/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Previous Page"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1d456e71-7a31-4d7e-b1ba-803bd1955cb5"",
-                    ""path"": ""<Gamepad>/leftStick/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Previous Page"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f7ea1cb9-aaa8-4104-8c77-3cddccb4f7f2"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Previous Page"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""35c1dc4a-3755-4298-8b70-7df794e44f73"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Next Page"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""16424341-9bf5-4050-b679-d916a81e2bda"",
-                    ""path"": ""<Gamepad>/dpad/right"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Next Page"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""68cc9f01-3e33-4103-8975-9bcbdb2cf19b"",
-                    ""path"": ""<Gamepad>/leftStick/right"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Next Page"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3dd44d21-55c1-4e69-85d9-67457bab30d2"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Next Page"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""24b77e8d-28e0-4ca5-a637-cff8e29d97eb"",
@@ -1259,6 +1180,160 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Gamepad"",
+                    ""id"": ""585d32ef-6934-4e31-8bde-e9f9f575e6ca"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FlipPage"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""eadda263-a93f-41cb-82e1-fae45bb96c62"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";ControllerScheme"",
+                    ""action"": ""FlipPage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""f219bc8d-adc5-40ba-ad15-0dfc8eb7c7e4"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";ControllerScheme"",
+                    ""action"": ""FlipPage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""1e1f5e59-176e-41fc-be17-37072e3722e6"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FlipPage"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""cbc4ae5d-e224-4236-9bcf-a72e8c2fe76f"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FlipPage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""5fa5e14b-b176-43c1-8dc6-ee05af0e8d15"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FlipPage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""2e3f1cd8-903f-4b9a-aad1-f4f54837688d"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FlipPage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""0ac1c262-ed62-454b-98c2-4b39b440bb29"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FlipPage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Gamepad"",
+                    ""id"": ""b7175c34-ae5e-4b80-ad32-f3e83eb2fc66"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FlipChapter"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""7db779d7-977a-473f-b9a5-6549a6055846"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";ControllerScheme"",
+                    ""action"": ""FlipChapter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""8ab79e05-1943-484c-8356-dfc7a2f71ec9"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";ControllerScheme"",
+                    ""action"": ""FlipChapter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""255449ba-aceb-48c1-83f7-b62cacc426c7"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Debug_AddPages"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""25f5c5c2-6620-47ff-b214-419142f8bcba"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Debug_AddPages"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""4780305f-c16a-4059-9eaa-d22a37dff896"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Debug_AddPages"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -1815,10 +1890,11 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Gameplay_MaxMeter = m_Gameplay.FindAction("MaxMeter", throwIfNotFound: true);
         // Notebook
         m_Notebook = asset.FindActionMap("Notebook", throwIfNotFound: true);
-        m_Notebook_PreviousPage = m_Notebook.FindAction("Previous Page", throwIfNotFound: true);
-        m_Notebook_NextPage = m_Notebook.FindAction("Next Page", throwIfNotFound: true);
         m_Notebook_Back = m_Notebook.FindAction("Back", throwIfNotFound: true);
         m_Notebook_Pause = m_Notebook.FindAction("Pause", throwIfNotFound: true);
+        m_Notebook_FlipPage = m_Notebook.FindAction("FlipPage", throwIfNotFound: true);
+        m_Notebook_FlipChapter = m_Notebook.FindAction("FlipChapter", throwIfNotFound: true);
+        m_Notebook_Debug_AddPages = m_Notebook.FindAction("Debug_AddPages", throwIfNotFound: true);
         // Notes
         m_Notes = asset.FindActionMap("Notes", throwIfNotFound: true);
         m_Notes_Note1 = m_Notes.FindAction("Note1", throwIfNotFound: true);
@@ -2512,10 +2588,11 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     // Notebook
     private readonly InputActionMap m_Notebook;
     private List<INotebookActions> m_NotebookActionsCallbackInterfaces = new List<INotebookActions>();
-    private readonly InputAction m_Notebook_PreviousPage;
-    private readonly InputAction m_Notebook_NextPage;
     private readonly InputAction m_Notebook_Back;
     private readonly InputAction m_Notebook_Pause;
+    private readonly InputAction m_Notebook_FlipPage;
+    private readonly InputAction m_Notebook_FlipChapter;
+    private readonly InputAction m_Notebook_Debug_AddPages;
     /// <summary>
     /// Provides access to input actions defined in input action map "Notebook".
     /// </summary>
@@ -2528,14 +2605,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// </summary>
         public NotebookActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
         /// <summary>
-        /// Provides access to the underlying input action "Notebook/PreviousPage".
-        /// </summary>
-        public InputAction @PreviousPage => m_Wrapper.m_Notebook_PreviousPage;
-        /// <summary>
-        /// Provides access to the underlying input action "Notebook/NextPage".
-        /// </summary>
-        public InputAction @NextPage => m_Wrapper.m_Notebook_NextPage;
-        /// <summary>
         /// Provides access to the underlying input action "Notebook/Back".
         /// </summary>
         public InputAction @Back => m_Wrapper.m_Notebook_Back;
@@ -2543,6 +2612,18 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Notebook/Pause".
         /// </summary>
         public InputAction @Pause => m_Wrapper.m_Notebook_Pause;
+        /// <summary>
+        /// Provides access to the underlying input action "Notebook/FlipPage".
+        /// </summary>
+        public InputAction @FlipPage => m_Wrapper.m_Notebook_FlipPage;
+        /// <summary>
+        /// Provides access to the underlying input action "Notebook/FlipChapter".
+        /// </summary>
+        public InputAction @FlipChapter => m_Wrapper.m_Notebook_FlipChapter;
+        /// <summary>
+        /// Provides access to the underlying input action "Notebook/Debug_AddPages".
+        /// </summary>
+        public InputAction @Debug_AddPages => m_Wrapper.m_Notebook_Debug_AddPages;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -2569,18 +2650,21 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_NotebookActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_NotebookActionsCallbackInterfaces.Add(instance);
-            @PreviousPage.started += instance.OnPreviousPage;
-            @PreviousPage.performed += instance.OnPreviousPage;
-            @PreviousPage.canceled += instance.OnPreviousPage;
-            @NextPage.started += instance.OnNextPage;
-            @NextPage.performed += instance.OnNextPage;
-            @NextPage.canceled += instance.OnNextPage;
             @Back.started += instance.OnBack;
             @Back.performed += instance.OnBack;
             @Back.canceled += instance.OnBack;
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @FlipPage.started += instance.OnFlipPage;
+            @FlipPage.performed += instance.OnFlipPage;
+            @FlipPage.canceled += instance.OnFlipPage;
+            @FlipChapter.started += instance.OnFlipChapter;
+            @FlipChapter.performed += instance.OnFlipChapter;
+            @FlipChapter.canceled += instance.OnFlipChapter;
+            @Debug_AddPages.started += instance.OnDebug_AddPages;
+            @Debug_AddPages.performed += instance.OnDebug_AddPages;
+            @Debug_AddPages.canceled += instance.OnDebug_AddPages;
         }
 
         /// <summary>
@@ -2592,18 +2676,21 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="NotebookActions" />
         private void UnregisterCallbacks(INotebookActions instance)
         {
-            @PreviousPage.started -= instance.OnPreviousPage;
-            @PreviousPage.performed -= instance.OnPreviousPage;
-            @PreviousPage.canceled -= instance.OnPreviousPage;
-            @NextPage.started -= instance.OnNextPage;
-            @NextPage.performed -= instance.OnNextPage;
-            @NextPage.canceled -= instance.OnNextPage;
             @Back.started -= instance.OnBack;
             @Back.performed -= instance.OnBack;
             @Back.canceled -= instance.OnBack;
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @FlipPage.started -= instance.OnFlipPage;
+            @FlipPage.performed -= instance.OnFlipPage;
+            @FlipPage.canceled -= instance.OnFlipPage;
+            @FlipChapter.started -= instance.OnFlipChapter;
+            @FlipChapter.performed -= instance.OnFlipChapter;
+            @FlipChapter.canceled -= instance.OnFlipChapter;
+            @Debug_AddPages.started -= instance.OnDebug_AddPages;
+            @Debug_AddPages.performed -= instance.OnDebug_AddPages;
+            @Debug_AddPages.canceled -= instance.OnDebug_AddPages;
         }
 
         /// <summary>
@@ -3388,20 +3475,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     public interface INotebookActions
     {
         /// <summary>
-        /// Method invoked when associated input action "Previous Page" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnPreviousPage(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Next Page" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnNextPage(InputAction.CallbackContext context);
-        /// <summary>
         /// Method invoked when associated input action "Back" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -3415,6 +3488,27 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPause(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "FlipPage" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnFlipPage(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "FlipChapter" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnFlipChapter(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Debug_AddPages" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDebug_AddPages(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Notes" which allows adding and removing callbacks.

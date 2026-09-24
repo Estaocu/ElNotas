@@ -15,7 +15,7 @@ public class WordUIBehaviour : MonoBehaviour
     public Image bgMelody;
     public TextMeshProUGUI wordText;
     public int currentSlot;
-    public Word word;
+    public NotebookEntry entry;
     private RectTransform rectTransform;
 
     public int minSlot = 0;
@@ -79,10 +79,10 @@ public class WordUIBehaviour : MonoBehaviour
         }   
     }
 
-    public void DisplayNewWord(Word targetWord)
+    public void DisplayNewWord(NotebookEntry targetEntry)
     {
-        word = targetWord;
-        SetWordText(word.displayName);
+        entry = targetEntry;
+        SetWordText(entry.id);
     }
 
     public void ToggleVisibility(bool isVisible)

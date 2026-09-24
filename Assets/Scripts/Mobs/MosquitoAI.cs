@@ -207,7 +207,7 @@ public class MosquitoAI : MonoBehaviour
 
         PlayerHP hp = currentTarget.GetComponent<PlayerHP>();
 
-        if (hp != null) hp.OnHit(1);
+        if (hp != null) hp.OnHit();
 
         peaceful = true;
 

@@ -154,7 +154,7 @@ public class HostileEntityAI : MonoBehaviour
     if (lifeMeter != null)
     {
         // Si el objetivo tiene PlayerHP (es el player), infligir daño
-        lifeMeter.OnHit(1); // 1 de daño, ajusta según necesites
+        lifeMeter.OnHit(); // 1 de daño, ajusta según necesites
     }
 }
 

@@ -5,13 +5,37 @@ using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
 {
-    public Transform coord;
+    private Transform coord;
+    public Transform Coord => coord;
+    private CheckpointZone zone;
+    public CheckpointZone Zone => zone;
 
-    // void OnCollisionEnter(Collision collision)
-    // {
-    //     if (collision.gameObject.CompareTag("Player"))
-    //     {   
-    //         return;
-    //     }
-    // }
+    private CheckpointManager manager;
+
+    public bool isFirstCheckpoint = false;
+
+
+    void Awake()
+    {
+        zone = GetComponentInParent<CheckpointZone>();
+        coord = GetComponentInChildren<Transform>();
+        
+        if (coord == null)
+        {
+            Transform foundCoord = transform.Find("Coord");
+            coord = foundCoord != null ? foundCoord : transform;
+        }
+    }
+
+    void Start()
+    {
+        manager = FindFirstObjectByType<CheckpointManager>();
+    }
+
+    public void OnPlayerEnter()
+    {
+        zone.SetLatestPoint(this);
+        Debug.Log("Player entered Checkpoint");
+        return;
+    }
 }

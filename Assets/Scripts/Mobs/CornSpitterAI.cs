@@ -185,8 +185,7 @@ public class CornSpitterAI : MonoBehaviour
         isCurrentlyTrackingPlayer = false;
     }
 
-    private IEnumerator TrackAndConfirmPlayerRoutine(
-        Collider playerCol)
+    private IEnumerator TrackAndConfirmPlayerRoutine(Collider playerCol)
     {
         isCurrentlyTrackingPlayer = true;
 
@@ -477,7 +476,7 @@ public class CornSpitterAI : MonoBehaviour
         HomingProjectile script =
             myCorn.GetComponent<HomingProjectile>();
 
-            script.speed = projectileSpeed;
+        script.speed = projectileSpeed;
 
         if (script == null)
         {

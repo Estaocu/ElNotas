@@ -1920,14 +1920,14 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
 
     ~@PlayerInputs()
     {
-        // UnityEngine.Debug.Assert(!m_Conversation.enabled, "This will cause a leak and performance issues, PlayerInputs.Conversation.Disable() has not been called.");
-        // UnityEngine.Debug.Assert(!m_DebugAndTesting.enabled, "This will cause a leak and performance issues, PlayerInputs.DebugAndTesting.Disable() has not been called.");
-        // UnityEngine.Debug.Assert(!m_Gameplay.enabled, "This will cause a leak and performance issues, PlayerInputs.Gameplay.Disable() has not been called.");
-        // UnityEngine.Debug.Assert(!m_Notebook.enabled, "This will cause a leak and performance issues, PlayerInputs.Notebook.Disable() has not been called.");
-        // UnityEngine.Debug.Assert(!m_Notes.enabled, "This will cause a leak and performance issues, PlayerInputs.Notes.Disable() has not been called.");
-        // UnityEngine.Debug.Assert(!m_PauseMenu.enabled, "This will cause a leak and performance issues, PlayerInputs.PauseMenu.Disable() has not been called.");
-        // UnityEngine.Debug.Assert(!m_RestrictedInput.enabled, "This will cause a leak and performance issues, PlayerInputs.RestrictedInput.Disable() has not been called.");
-        // UnityEngine.Debug.Assert(!m_Text.enabled, "This will cause a leak and performance issues, PlayerInputs.Text.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Conversation.enabled, "This will cause a leak and performance issues, PlayerInputs.Conversation.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_DebugAndTesting.enabled, "This will cause a leak and performance issues, PlayerInputs.DebugAndTesting.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Gameplay.enabled, "This will cause a leak and performance issues, PlayerInputs.Gameplay.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Notebook.enabled, "This will cause a leak and performance issues, PlayerInputs.Notebook.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Notes.enabled, "This will cause a leak and performance issues, PlayerInputs.Notes.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_PauseMenu.enabled, "This will cause a leak and performance issues, PlayerInputs.PauseMenu.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_RestrictedInput.enabled, "This will cause a leak and performance issues, PlayerInputs.RestrictedInput.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Text.enabled, "This will cause a leak and performance issues, PlayerInputs.Text.Disable() has not been called.");
     }
 
     /// <summary>

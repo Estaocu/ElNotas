@@ -77,7 +77,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -409,6 +409,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   singer: {fileID: 5183498619773180898}
   patternMode: 0
+  MelodyEnded:
+    m_PersistentCalls:
+      m_Calls: []
   pattern: 00000000ffffffff03000000ffffffffffffffffffffffffffffffffffffffff
   humanizationPercent: 0.05
 --- !u!114 &5183498619773180898
@@ -475,6 +478,7 @@ MonoBehaviour:
   cornSpawnpoint: {fileID: 6241696902868849724}
   cornTrigger: {fileID: 8358866438339391095}
   playerTrigger: {fileID: 8264966049224216375}
+  projectileSpeed: 5
   noteResolution: 2
   silenceBetweenNotes: 0
   raycastStartPoint: {fileID: 8013018246867252038}
@@ -560,7 +564,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0

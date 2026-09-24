@@ -9,13 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4460048312922731874}
+  - component: {fileID: 2725611551508977993}
+  - component: {fileID: 108109710666919391}
   - component: {fileID: 2989854860647649785}
   - component: {fileID: 121701559407622123}
   - component: {fileID: 3343888976148886420}
   - component: {fileID: 5042880092936730101}
   - component: {fileID: 4830153490639154673}
-  - component: {fileID: 108109710666919391}
-  - component: {fileID: 2725611551508977993}
   - component: {fileID: 8377302604967112286}
   - component: {fileID: 7258774073744655851}
   - component: {fileID: 2861421524396096808}
@@ -45,6 +45,55 @@ Transform:
   - {fileID: 8504629714432327808}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
+--- !u!114 &2725611551508977993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4609813583533158504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce05f7fcdfd140b4e90fce25dc019140, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 0
+  isStatic: 1
+  patrolSpeed: 5
+  chaseSpeed: 7
+  stoppingDistance: 4.5
+  stunDuration: 16
+  timeTilBite: 16
+  peaceTime: 24
+  targetTags:
+  - Player
+  - NPC
+  listener: {fileID: 7258774073744655851}
+  relaxMelody: 0200000000000000
+  wantsAnswer: 0
+  raycastStartPoint: {fileID: 266827643156851572}
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 9
+--- !u!114 &108109710666919391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4609813583533158504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13539aee481f221428f9c4ed2d74738d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 3343888976148886420}
+  splineContainer: {fileID: 0}
+  arrivalDistance: 0.5
+  isLoop: 1
+  decelerationRate: 2
+  stopDuration: 6
+  originalSpeed: 0
 --- !u!54 &2989854860647649785
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -87,7 +136,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 512
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -127,7 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3668034910bdd343b0b20ad8e8adc90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundwaveSpawnpoint: {fileID: 0}
+  soundwaveSpawnpoint: {fileID: 266827643156851572}
   cooldown: 0.5
 --- !u!114 &4830153490639154673
 MonoBehaviour:
@@ -146,51 +195,6 @@ MonoBehaviour:
   note2: {fileID: 8300000, guid: e812e883ea3c3b8479df851d379b49ca, type: 3}
   note3: {fileID: 8300000, guid: d9367fad0da398049b5b7d0b7b8a96d0, type: 3}
   note4: {fileID: 8300000, guid: f42e09aa1b095bc4aaa8c511ee4517f8, type: 3}
---- !u!114 &108109710666919391
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4609813583533158504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13539aee481f221428f9c4ed2d74738d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agent: {fileID: 3343888976148886420}
-  splineContainer: {fileID: 0}
-  arrivalDistance: 0.5
-  isLoop: 1
-  decelerationRate: 2
-  stopDuration: 6
-  originalSpeed: 0
---- !u!114 &2725611551508977993
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4609813583533158504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce05f7fcdfd140b4e90fce25dc019140, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentState: 0
-  isStatic: 1
-  patrolSpeed: 5
-  chaseSpeed: 7
-  stoppingDistance: 4.5
-  stunDuration: 16
-  timeTilBite: 16
-  peaceTime: 24
-  targetTags:
-  - Player
-  - NPC
-  listener: {fileID: 7258774073744655851}
-  relaxMelody: 0200000000000000
-  wantsAnswer: 0
 --- !u!114 &8377302604967112286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -429,9 +433,9 @@ Transform:
   m_GameObject: {fileID: 7914360112382350202}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 1.16545, z: 2}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0.99, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4460048312922731874}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

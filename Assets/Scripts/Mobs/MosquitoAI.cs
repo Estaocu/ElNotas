@@ -1,38 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class MosquitoAI : MonoBehaviour, IReactToMelody
+public class MosquitoAI : MonoBehaviour
 {
-    public enum State {Idle, Patrol, Chase, Return, Stunned}
-    private State currentState;
+    public enum State { Idle, Patrol, Chase, Return, Stunned }
+    public State currentState;
+
     public bool isStatic = false;
+
     [Header("Settings")]
     public float patrolSpeed = 3f;
     public float chaseSpeed = 5f;
     public float stoppingDistance = 2f;
     public int stunDuration = 32;
+    [SerializeField] private int timeTilBite = 4;
+
     private bool hasAskedForMelody = false;
 
     private Vector3 spawnPosition;
     private Quaternion spawnRotation;
 
-    private int peaceTime = 64;
+    [SerializeField] private int peaceTime = 64;
     private bool peaceful = false;
 
-
-    
     public string[] targetTags = { "Player", "NPC" };
+
     private NavMeshSplineTraveler traveler;
     private Singer singer;
     private AddNotesOnBeat beatSinger;
+    private RhythmClock rhythmClock;
+
     private GameObject currentTarget;
-    private BeatWaitHandle relaxHandle;
-    private BeatWaitHandle stunHandle;
 
+    private Coroutine relaxCoroutine;
+    private Coroutine stunCoroutine;
+    private Coroutine peaceCoroutine;
 
-    
+    [SerializeField] private SingleNotesListener listener;
+    [SerializeField] private notesEnum[] relaxMelody;
+
+    public bool wantsAnswer;
+
+    [Header("Raycast Confirmation Settings")]
+    [SerializeField] private Transform raycastStartPoint;
+    [SerializeField] private LayerMask obstacleLayerMask;
+
+    private bool getTargetNow = false;
 
     void Awake()
     {
@@ -40,6 +54,9 @@ public class MosquitoAI : MonoBehaviour, IReactToMelody
         currentState = isStatic ? State.Idle : State.Patrol;
         singer = GetComponent<Singer>();
         beatSinger = GetComponent<AddNotesOnBeat>();
+
+        // There is only one RhythmClock in the scene.
+        rhythmClock = FindFirstObjectByType<RhythmClock>();
     }
 
     void Start()
@@ -47,97 +64,170 @@ public class MosquitoAI : MonoBehaviour, IReactToMelody
         spawnPosition = transform.position;
         spawnRotation = transform.rotation;
 
-        if (!isStatic && currentState == State.Patrol && traveler != null)
+        if (!isStatic &&
+            currentState == State.Patrol &&
+            traveler != null)
         {
             traveler.ResumePatrol(patrolSpeed);
         }
+
+        List<notesEnum[]> melodies = new List<notesEnum[]>
+        {
+            relaxMelody
+        };
+
+        listener.SetDesiredMelodies(melodies);
     }
+
     void Update()
     {
         switch (currentState)
         {
             case State.Chase:
-            HandleChase();
-            break;
+                HandleChase();
+                break;
 
             case State.Return:
-            HandleReturn();
-            break;
+                HandleReturn();
+                break;
         }
     }
+
     private void OnTriggerStay(Collider other)
     {
-        if (currentState == State.Chase || currentState == State.Return || currentState == State.Stunned || peaceful) return;
+        if (currentState == State.Chase ||
+            currentState == State.Return ||
+            currentState == State.Stunned ||
+            peaceful)
+        {
+            return;
+        }
+
         foreach (string tag in targetTags)
         {
             if (other.CompareTag(tag))
             {
-                Debug.Log($"Chasing {other.name}");
                 currentTarget = other.gameObject;
+                RayToTarget(other);
+                if(!getTargetNow) return;
                 currentState = State.Chase;
+                Debug.Log($"Chasing {other.name}");
+
                 break;
             }
         }
+
+        
+
+        
     }
 
     private void HandleChase()
     {
-        if (currentTarget == null) return;
+        if (currentTarget == null)
+            return;
 
-        Vector3 offset = currentTarget.transform.position - transform.position;
-    
+        Vector3 offset =
+            currentTarget.transform.position -
+            transform.position;
+
         if (offset.sqrMagnitude <= stoppingDistance * stoppingDistance || !hasAskedForMelody)
-        { AskForMelody(); return; }
+        {
+            AskForMelody();
+            //Debug.Log("Started asking for melody");
+            hasAskedForMelody = true;
+            return;
+        }
 
-        Vector3 directionToTarget = (currentTarget.transform.position - transform.position).normalized;
-        Vector3 stoppingPoint = currentTarget.transform.position - directionToTarget * stoppingDistance;
-        traveler.MoveToDestination(stoppingPoint, chaseSpeed);    
+        Vector3 directionToTarget =
+            (currentTarget.transform.position -
+             transform.position).normalized;
+
+        Vector3 stoppingPoint =
+            currentTarget.transform.position -
+            directionToTarget * stoppingDistance;
+
+        traveler.MoveToDestination(
+            stoppingPoint,
+            chaseSpeed
+        );
     }
+
     private void AskForMelody()
     {
         if (hasAskedForMelody) return;
-        singer.onSoundwaveSpawned += OnMelodyEmitted; //Avisame cuando la soundwave se spawnee 
-        if (beatSinger != null) beatSinger.Sing(); //Empieza a meter notas en la cola y ve cantando
-        hasAskedForMelody = true;
 
+        if (beatSinger != null)
+            beatSinger.Sing();
     }
 
-    private void OnMelodyEmitted(Melody melody)
-{
-    singer.onSoundwaveSpawned -= OnMelodyEmitted;
-    
-    if (currentState == State.Stunned) return;
-    
-    relaxHandle = RhythmBeatWaiter.WaitForSubBeats(32, BeatWaitMode.Immediate, NoRelaxReceived);
-}
+    public void OnQuestionDone()
+    {
+        if (currentState == State.Stunned) return;
+
+        wantsAnswer = true;
+
+        Debug.Log("Mosquito started angry timer. Looking for melody");
+
+        CancelRelaxWait();
+
+        relaxCoroutine = StartCoroutine(RelaxWaitRoutine());
+    }
+
+    private IEnumerator RelaxWaitRoutine()
+    {
+        yield return rhythmClock.WaitForSubBeats(timeTilBite);
+
+        relaxCoroutine = null;
+
+        NoRelaxReceived();
+    }
 
     private void NoRelaxReceived()
     {
-        relaxHandle?.Cancel();
         if (currentState == State.Stunned || peaceful) return;
-        if (currentTarget == null) 
+
+        if (currentTarget == null)
         {
-        StartReturn();
-        return;
-        } 
-        
+            StartReturn();
+            wantsAnswer = false;
+            return;
+        }
+
         Attack();
         StartReturn();
+        wantsAnswer = false;
     }
+
     private void Attack()
     {
-        if (peaceful || currentState == State.Stunned) return;
-        //Animación de atacar
-        LifeAndMeter playerHp = currentTarget.GetComponent<LifeAndMeter>();
-        if (playerHp != null) playerHp.OnHit(1);
+        if (peaceful ||currentState == State.Stunned) return;
+
+        // Attack animation.
+
+        PlayerHP hp = currentTarget.GetComponent<PlayerHP>();
+
+        if (hp != null) hp.OnHit(1);
 
         peaceful = true;
-        RhythmBeatWaiter.WaitForSubBeats(peaceTime, BeatWaitMode.Immediate, () => peaceful = false);
- 
-        
+
+        CancelPeaceWait();
+
+        peaceCoroutine = StartCoroutine(PeaceWaitRoutine());
     }
+
+    private IEnumerator PeaceWaitRoutine()
+    {
+        yield return rhythmClock.WaitForSubBeats(peaceTime);
+
+        peaceCoroutine = null;
+
+        peaceful = false;
+    }
+
     private void StartReturn()
     {
+        wantsAnswer = false;
         if (traveler == null) return;
 
         currentTarget = null;
@@ -145,15 +235,17 @@ public class MosquitoAI : MonoBehaviour, IReactToMelody
 
         if (isStatic)
         {
-            traveler.MoveToDestination(spawnPosition, patrolSpeed);
+            traveler.MoveToDestination(spawnPosition,patrolSpeed);
         }
         else
         {
             if (traveler.splineContainer == null) return;
 
             float t = traveler.FindClosestPointOnSpline(transform.position);
-            Vector3 returnPos = (Vector3)traveler.splineContainer.EvaluatePosition(t);
-            traveler.MoveToDestination(returnPos, patrolSpeed);
+
+            Vector3 returnPos =(Vector3)traveler.splineContainer.EvaluatePosition(t);
+
+            traveler.MoveToDestination(returnPos,patrolSpeed);
         }
     }
 
@@ -171,25 +263,119 @@ public class MosquitoAI : MonoBehaviour, IReactToMelody
                 currentState = State.Patrol;
                 traveler.ResumePatrol(patrolSpeed);
             }
+
             hasAskedForMelody = false;
         }
     }
 
-    public void React(Melody receivedMelody)
+    public void BeRelaxed()
     {
-        if (currentState != State.Chase) return;
+        if (currentState != State.Chase || !hasAskedForMelody) return;
 
-        relaxHandle?.Cancel();
+        if (!wantsAnswer) return;
+        
+        CancelRelaxWait();
+
         if (beatSinger != null) beatSinger.StopSinging();
 
         currentState = State.Stunned;
-        traveler.MoveToDestination(transform.position, patrolSpeed);
+
+        traveler.MoveToDestination(transform.position,patrolSpeed);
 
         Debug.Log("MOSQUITO RELAXED");
+
         peaceful = true;
-        RhythmBeatWaiter.WaitForSubBeats(stunDuration, BeatWaitMode.Immediate, StartReturn);
-        RhythmBeatWaiter.WaitForSubBeats(peaceTime, BeatWaitMode.Immediate, () => peaceful = false);
+
+        CancelStunWait();
+
+        stunCoroutine = StartCoroutine(StunWaitRoutine());
+
+        CancelPeaceWait();
+
+        peaceCoroutine =StartCoroutine(PeaceWaitRoutine());
         
     }
+
+    private IEnumerator StunWaitRoutine()
+    {
+        yield return rhythmClock.WaitForSubBeats(stunDuration);
+
+        stunCoroutine = null;
+
+        StartReturn();
     }
 
+    private void CancelRelaxWait()
+    {
+        if (relaxCoroutine != null)
+        {
+            StopCoroutine(relaxCoroutine);
+            relaxCoroutine = null;
+        }
+    }
+
+    private void CancelStunWait()
+    {
+        if (stunCoroutine != null)
+        {
+            StopCoroutine(stunCoroutine);
+            stunCoroutine = null;
+        }
+    }
+
+    private void CancelPeaceWait()
+    {
+        if (peaceCoroutine != null)
+        {
+            StopCoroutine(peaceCoroutine);
+            peaceCoroutine = null;
+        }
+    }
+
+    private void RayToTarget(Collider playerCol)
+    {
+            Vector3 startPos =
+                raycastStartPoint != null
+                    ? raycastStartPoint.position
+                    : transform.position;
+
+            Vector3 targetPos = playerCol.bounds.center;
+
+            Vector3 direction = targetPos - startPos;
+
+            float distance = direction.magnitude;
+
+            if (Physics.Raycast(
+                    startPos,
+                    direction.normalized,
+                    out RaycastHit hit,
+                    distance,
+                    obstacleLayerMask))
+            {
+                if (hit.collider.transform.root != playerCol.transform.root)
+                {
+
+                    Debug.DrawLine(
+                        startPos,
+                        playerCol.bounds.center,
+                        Color.red
+                    );
+
+                    getTargetNow = false;
+                    return;
+                }
+            }
+            else
+            {
+                Debug.DrawLine(
+                    startPos,
+                    playerCol.bounds.center,
+                    Color.green
+                );
+
+                getTargetNow = true;
+            }
+        }
+
+        
+    }

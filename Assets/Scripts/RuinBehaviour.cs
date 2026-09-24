@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class RuinBehaviour : MonoBehaviour, IReactToMelody
@@ -19,10 +20,14 @@ public class RuinBehaviour : MonoBehaviour, IReactToMelody
     private RuinState initialRuinState;
     private BeatWaitHandle currentWaitHandle;
 
+    private RhythmClock rhythmClock;
+    private Coroutine timerCoroutine;
+
     private void Awake()
     {
         // Guardamos el estado original configurado en el Editor al iniciar la escena
         initialRuinState = myRuinState;
+        rhythmClock = FindFirstObjectByType<RhythmClock>();
     }
 
     private void OnValidate()
@@ -60,11 +65,7 @@ public class RuinBehaviour : MonoBehaviour, IReactToMelody
         // 4. Si el estado actual es distinto al original del Editor, programamos la vuelta
         if (myRuinState != initialRuinState)
         {
-            currentWaitHandle = RhythmBeatWaiter.WaitForSubBeats(
-                resetAfterBeats, 
-                BeatWaitMode.Immediate, 
-                ResetToInitialState
-            );
+            timerCoroutine = StartCoroutine(TimerRoutine());
         }
     }
 
@@ -115,5 +116,14 @@ public class RuinBehaviour : MonoBehaviour, IReactToMelody
     {
         if(initialRuinState == RuinState.Risen) ApplyTemporaryState(RuinState.Fallen);
         if(initialRuinState == RuinState.Fallen) ChangeRuinState(RuinState.Fallen);
+    }
+
+    private IEnumerator TimerRoutine()
+    {
+        yield return rhythmClock.WaitForSubBeats(resetAfterBeats);
+
+        timerCoroutine = null;
+
+        ResetToInitialState();
     }
 }

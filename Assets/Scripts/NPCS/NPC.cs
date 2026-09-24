@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 public enum DialogueMode { Intro, Monologue, Answer, Question, Goodbye };
 
-public class NPC : MonoBehaviour
+public class NPC : MonoBehaviour, IEntryTeacher
 {
     public string npcName;
     
@@ -167,4 +167,26 @@ public class NPC : MonoBehaviour
     {
         currentMode = ogMode;
     }
+
+    // public void TrySaveEntry(string entryID)
+    // {
+    //     if (string.IsNullOrEmpty(entryID)) return;
+
+
+    //     if (SaveManager.TryGetGlobalSaveObject<NotebookSaveObject>(out var saveObj))
+    //     {
+    //         if (saveObj.LearnedEntriesIds.Value.Contains(entryID))
+    //         {
+    //             Debug.Log($"[SaveSystem] La entrada '{entryID}' ya está guardada. Cancelando operación.");
+    //             return;
+    //         }
+    //         saveObj.LearnedEntriesIds.Value.Add(entryID);
+    //         SaveManager.SaveGame();
+    //         Debug.Log($"[SaveSystem] Entrada '{entryID}' añadida y guardada exitosamente.");
+    //     }
+    //     else
+    //     {
+    //         Debug.LogError("[SaveSystem] No se encontró el NotebookSaveObject en el Save Manager.");
+    //     }
+    // }
 }

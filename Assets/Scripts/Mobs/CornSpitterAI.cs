@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,7 +38,8 @@ public class CornSpitterAI : MonoBehaviour
     [SerializeField] private Transform cornSpawnpoint;
     [SerializeField] private TriggerDetector cornTrigger;
     [SerializeField] private TriggerDetector playerTrigger;
-    [SerializeField] private RhythmClock rhythmClock;
+    private RhythmClock rhythmClock;
+    [SerializeField] private float projectileSpeed = 5;
 
     [Header("Singing Rhythm")]
     [SerializeField]
@@ -51,6 +53,7 @@ public class CornSpitterAI : MonoBehaviour
     [SerializeField] private Transform raycastStartPoint;
     [SerializeField] private LayerMask obstacleLayerMask;
     [SerializeField] private float confirmationDuration = 1.5f;
+
     private bool isPlayerInsideTrigger;
 
     public notesEnum[] melodyToCopy =
@@ -80,7 +83,7 @@ public class CornSpitterAI : MonoBehaviour
     private bool isCurrentlyTrackingPlayer;
 
     // The melody chosen for the currently active corn.
-    private notesEnum[] currentCombatMelody =
+    private readonly notesEnum[] currentCombatMelody =
         new notesEnum[2];
 
     // True while the current corn combat owns a melody.
@@ -127,7 +130,6 @@ public class CornSpitterAI : MonoBehaviour
 
     public void OnPlayerDetected()
     {
-
         incomingCorns.RemoveWhere(
             item => item == null
         );
@@ -164,7 +166,10 @@ public class CornSpitterAI : MonoBehaviour
             StopCoroutine(detectionRoutine);
         }
 
-        detectionRoutine = StartCoroutine(TrackAndConfirmPlayerRoutine(col));
+        detectionRoutine =
+            StartCoroutine(
+                TrackAndConfirmPlayerRoutine(col)
+            );
     }
 
     public void OnPlayerLost()
@@ -183,28 +188,46 @@ public class CornSpitterAI : MonoBehaviour
     private IEnumerator TrackAndConfirmPlayerRoutine(Collider playerCol)
     {
         isCurrentlyTrackingPlayer = true;
+
         float elapsed = 0f;
 
-        // Evaluamos si el jugador sigue en el trigger y si el collider es válido
-        while (isPlayerInsideTrigger && playerCol != null)
+        while (
+            isPlayerInsideTrigger &&
+            playerCol != null)
         {
-            Vector3 startPos = raycastStartPoint != null
-                ? raycastStartPoint.position
-                : transform.position;
+            Vector3 startPos =
+                raycastStartPoint != null
+                    ? raycastStartPoint.position
+                    : transform.position;
 
-            Vector3 targetPos = playerCol.bounds.center;
-            Vector3 direction = targetPos - startPos;
-            float distance = direction.magnitude;
+            Vector3 targetPos =
+                playerCol.bounds.center;
+
+            Vector3 direction =
+                targetPos - startPos;
+
+            float distance =
+                direction.magnitude;
 
             bool isLineOfSightBlocked = false;
 
-            if (Physics.Raycast(startPos, direction.normalized, out RaycastHit hit, distance, obstacleLayerMask))
+            if (Physics.Raycast(
+                    startPos,
+                    direction.normalized,
+                    out RaycastHit hit,
+                    distance,
+                    obstacleLayerMask))
             {
-                if (hit.collider.transform.root != playerCol.transform.root)
+                if (hit.collider.transform.root !=
+                    playerCol.transform.root)
                 {
                     isLineOfSightBlocked = true;
 
-                    Debug.DrawLine(startPos, playerCol.bounds.center, Color.red);
+                    Debug.DrawLine(
+                        startPos,
+                        playerCol.bounds.center,
+                        Color.red
+                    );
                 }
             }
 
@@ -216,11 +239,14 @@ public class CornSpitterAI : MonoBehaviour
             {
                 elapsed += Time.deltaTime;
 
-                Debug.DrawLine(startPos, playerCol.bounds.center, Color.green);
+                Debug.DrawLine(
+                    startPos,
+                    playerCol.bounds.center,
+                    Color.green
+                );
 
                 if (elapsed >= confirmationDuration)
                 {
-                    Debug.Log("DONE!");
                     break;
                 }
             }
@@ -228,8 +254,10 @@ public class CornSpitterAI : MonoBehaviour
             yield return null;
         }
 
-        // Si ha salido del bucle porque la línea de visión falló o el jugador salió del trigger
-        if (isPlayerInsideTrigger && state == SpitterState.Idle && !cornSpawned && incomingCorns.Count == 0)
+        if (isPlayerInsideTrigger &&
+            state == SpitterState.Idle &&
+            !cornSpawned &&
+            incomingCorns.Count == 0)
         {
             state = SpitterState.Iniciativa;
             LaunchCorn(playerCol);
@@ -448,6 +476,8 @@ public class CornSpitterAI : MonoBehaviour
         HomingProjectile script =
             myCorn.GetComponent<HomingProjectile>();
 
+        script.speed = projectileSpeed;
+
         if (script == null)
         {
             cornSpawned = false;
@@ -460,11 +490,7 @@ public class CornSpitterAI : MonoBehaviour
         script.mobIsOgSender = true;
         script.enemy = gameObject;
 
-        // A new melody is generated only when a new corn is created.
         GenerateNewCombatMelody();
-
-        // The corn is initially quiet.
-        // These two notes are scheduled independently.
         ScheduleCombatMelody();
     }
 
@@ -518,8 +544,11 @@ public class CornSpitterAI : MonoBehaviour
 
     private long GetNextValidStartSubBeat()
     {
-        if (rhythmClock == null)
+        if (rhythmClock == null ||
+            !rhythmClock.IsRunning)
+        {
             return 0;
+        }
 
         double elapsed =
             AudioSettings.dspTime -
@@ -535,7 +564,7 @@ public class CornSpitterAI : MonoBehaviour
             return 0;
 
         long candidate =
-            (long)System.Math.Ceiling(
+            (long)Math.Ceiling(
                 elapsed /
                 subBeatDuration
             );
@@ -577,7 +606,7 @@ public class CornSpitterAI : MonoBehaviour
     private notesEnum GetRandomNote()
     {
         return
-            (notesEnum)Random.Range(
+            (notesEnum)UnityEngine.Random.Range(
                 0,
                 4
             );
@@ -591,14 +620,12 @@ public class CornSpitterAI : MonoBehaviour
         do
         {
             secondNote =
-                (notesEnum)Random.Range(
+                (notesEnum)UnityEngine.Random.Range(
                     0,
                     4
                 );
-
-        } while (
-            secondNote == firstNote
-        );
+        }
+        while (secondNote == firstNote);
 
         return secondNote;
     }
@@ -652,7 +679,7 @@ public class CornSpitterAI : MonoBehaviour
                 beatSinger.pattern.Length
             );
 
-        System.Array.Copy(
+        Array.Copy(
             originalPattern,
             beatSinger.pattern,
             count

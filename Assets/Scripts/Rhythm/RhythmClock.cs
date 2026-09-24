@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class RhythmClock : MonoBehaviour
@@ -39,6 +40,23 @@ public class RhythmClock : MonoBehaviour
     public bool IsPaused => isPaused;
 
     public double StartDspTime => startDspTime;
+
+    // Absolute musical subbeat currently occupied by the clock.
+    public long CurrentAbsoluteSubBeat
+    {
+        get
+        {
+            if (!isRunning)
+                return -1;
+
+            double elapsed = ElapsedDspTime;
+
+            if (elapsed < 0.0)
+                return -1;
+
+            return (long)(elapsed / SubBeatDuration);
+        }
+    }
 
     // DSP time elapsed since the musical clock started.
     public double ElapsedDspTime
@@ -117,6 +135,31 @@ public class RhythmClock : MonoBehaviour
         isPaused = false;
 
         OnResumed?.Invoke();
+    }
+
+    // Waits for the specified number of future musical subbeats.
+    // The wait follows the RhythmClock position and therefore pauses with the clock.
+    public IEnumerator WaitForSubBeats(int subBeats)
+    {
+        if (subBeats <= 0)
+            yield break;
+
+        if (!isRunning)
+            yield break;
+
+        long startSubBeat = CurrentAbsoluteSubBeat;
+
+        if (startSubBeat < 0)
+            yield break;
+
+        long targetSubBeat =
+            startSubBeat + subBeats;
+
+        while (isRunning &&
+               CurrentAbsoluteSubBeat < targetSubBeat)
+        {
+            yield return null;
+        }
     }
 
     // Converts a DSP timestamp into a musical position.

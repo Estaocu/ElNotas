@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: M_VineBridge
+  m_Shader: {fileID: -6465566751694194690, guid: 08acf88c24ab524429f61701831e1a2b,
+    type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 2
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Base_Map:
+        m_Texture: {fileID: 2800000, guid: 4fd350fa0412ba240a95e8f55ad3c64f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal_Map:
+        m_Texture: {fileID: 2800000, guid: 93addc7db27287c4cbecb7370d2eea99, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_a81704b06a2044d9bb754b58b79f82b3_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 4fd350fa0412ba240a95e8f55ad3c64f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_b25ca249d07146fbb9f681f0a8b3c453_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 93addc7db27287c4cbecb7370d2eea99, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _CreatePosition: 1
+    - _Create_Position: 1
+    - _DestroyPosition: 0
+    - _Destroy_Position: 0
+    - _Edge_Width: 0.18
+    - _EmissionStrength: 2
+    - _Emission_Intensity: 0
+    - _Emission_Width: 0.5
+    - _Noise_Scale: 77.05
+    - _Noise_Strength: 47
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    m_Colors:
+    - _EmissionColor: {r: 34.29675, g: 34.29675, b: 34.29675, a: 1}
+    - _Emission_Color: {r: 9.4949585e+29, g: 9.4949585e+29, b: 9.4949585e+29, a: 1}
+  m_BuildTextureStacks: []
+--- !u!114 &4735127892141447417
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7

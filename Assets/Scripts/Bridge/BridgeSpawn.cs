@@ -12,19 +12,17 @@ public class BridgeSpawn : MonoBehaviour, IReactToMelody, IBridgeListen
     [Header("Bridge Spawn Settings")]
     [SerializeField] private bool isMother;
     [SerializeField] private bool unlocked;
-    [SerializeField] private SingleNotesListener listener;
     [SerializeField] private BridgeTile closestTile;
+    [SerializeField] private BridgeVine closestVine;
     public Transform jumpTarget;
     [SerializeField] private Bridge bridge;
 
     public bool currentSpawner = false;
     private bool bridgeStarted = false;
 
-    // Cambiado de Awake a Start para garantizar que SaveManager esté inicializado [1]
+
     void Start()
     {
-        // 1. Intentamos obtener el objeto de guardado usando el tipo explícito [2]
-        // 2. ¡Hemos quitado el punto y coma al final de la línea del 'if'!
         if (SaveManager.TryGetGlobalSaveObject<BridgesSaveObject>(out saveObject))
         {
             Debug.Log("SaveObject global encontrado con éxito.");
@@ -50,7 +48,7 @@ public class BridgeSpawn : MonoBehaviour, IReactToMelody, IBridgeListen
         if (!unlocked || bridgeStarted) return;
 
         Debug.Log($"Melody {receivedMelody} received");
-        bridge.InitializeBridgeFromSpawn(closestTile, jumpTarget);
+        bridge.InitializeBridgeFromSpawn(closestTile, jumpTarget, closestVine);
         Debug.Log($"Initial tile [{closestTile.xCoord}, {closestTile.yCoord}] activated.");
 
         bridgeStarted = true;

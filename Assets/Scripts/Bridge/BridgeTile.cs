@@ -2,13 +2,15 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using ElNotas.Input.Glyphs;
 using NaughtyAttributes;
-using Unity.VisualScripting;
+using System.Collections;
 
 [RequireComponent(typeof(Collider))]
 public class BridgeTile : MonoBehaviour
 {
     public int xCoord;
     public int yCoord;
+
+    private int subbeatsAlive = 12;
     
     public notesEnum note; 
     public bool beingStepped = false;
@@ -25,10 +27,27 @@ public class BridgeTile : MonoBehaviour
 
     public Transform JumpTarget => jumpTarget;
 
-    private BeatWaitHandle currentWaitHandle;
+    private RhythmClock rhythmClock;
+
+    private Coroutine dieRoutine;
+
+    [SerializeField] private float growthTime = 0.2f;
+
+    [SerializeField] private GameObject visuals;
+    [SerializeField] private GameObject trigger;
+    [SerializeField] private AnimationCurve growCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+    [SerializeField] private AnimationCurve deathCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+
+    private Collider col;
+
+    private GameObject glyph => glyphView.transform.parent.gameObject;
 
     private void Awake()
     {
+        rhythmClock = FindFirstObjectByType<RhythmClock>();
+
+        col = GetComponent<Collider>();
+
         if (glyphView == null)
         {
             glyphView = GetComponentInChildren<BindingGlyphView>(true);
@@ -38,11 +57,12 @@ public class BridgeTile : MonoBehaviour
     private void OnEnable()
     {
         UpdateGlyphDisplay();
+        
     }
 
-    private void OnDisable()
+    void OnDisable()
     {
-
+        
     }
 
     private void Start()
@@ -53,34 +73,78 @@ public class BridgeTile : MonoBehaviour
     public void Appear()
     {
         gameObject.SetActive(true);
+        trigger.SetActive(false);
+        col.enabled = true;
+        glyph.SetActive(true);
+
+        StartCoroutine(PreventEarlyNoteRoutine());
+        if (dieRoutine != null)
+        {
+            StopCoroutine(dieRoutine);
+        }
+
+        StartCoroutine(ScaleMeshRoutine(Vector3.zero, Vector3.one, growthTime, growCurve));
         UpdateGlyphDisplay();
 
-        currentWaitHandle = RhythmBeatWaiter.WaitForSubBeats(16, BeatWaitMode.Immediate, Disappear);
+        dieRoutine = StartCoroutine(DissapearRoutine(subbeatsAlive));
+    
     }
 
     public void Disappear()
     {
-        gameObject.SetActive(false);
+        StartCoroutine(ScaleMeshRoutine(Vector3.one, Vector3.zero, growthTime, deathCurve));
+
+        if (beingStepped)
+        {
+            Debug.Log("Player was stepping flower when died. Now changing to gameplay map.");
+            bridge.actionMap.SetPlayerInput();
+            bridge.EndBridge();
+        }
+        
     }
 
     public void SetAsCurrentTile()
-{
-    beingStepped = true;
-
-    bridge.OnTileReached(this);
-
-    currentWaitHandle = RhythmBeatWaiter.WaitForSubBeats(8, BeatWaitMode.Immediate, Disappear);
-
-    if (isEnd)
     {
-        if (assignedSpawner != bridge.currentSpawner)
+        beingStepped = true;
+
+        bridge.OnTileReached(this);
+        
+        glyph.SetActive(false);
+
+        if (isEnd)
         {
-            bridge.JumpToEnd(assignedSpawner.jumpTarget);
-            bridge.EndBridge();
-            assignedSpawner.Bloom();
+            if (assignedSpawner != bridge.currentSpawner)
+            {
+                bridge.JumpToEnd(assignedSpawner.jumpTarget);
+                assignedSpawner.Bloom();
+            }
         }
     }
-}
+
+    private IEnumerator ScaleMeshRoutine(Vector3 initialScale, Vector3 endScale, float growthTime, AnimationCurve curve)
+        {
+        float elapsedTime = 0f;
+
+            while (elapsedTime < growthTime)
+        {
+            float progress = elapsedTime / growthTime;
+
+            float curveProgress = curve.Evaluate(progress);
+
+            visuals.transform.localScale = Vector3.Lerp(initialScale, endScale, curveProgress);
+
+            elapsedTime += Time.deltaTime;
+
+            yield return null;
+        }
+
+        visuals.transform.localScale = endScale;
+
+        if (endScale == Vector3.zero)
+        {
+            gameObject.SetActive(false);
+        }
+        }
 
     public void OnEntityExited()
     {
@@ -118,21 +182,35 @@ public class BridgeTile : MonoBehaviour
             if (!beingStepped) return;
 
             if (detectedObj.TryGetComponent<SingleNoteSoundwave>(out var noteWave))
-        {
+            {
             ProcessNote(noteWave.myNote);
             Debug.Log($"Nota {noteWave.myNote}");
-        }
-        else
-        {
-            Debug.LogWarning($"[BridgeSpawn] El objeto '{detectedObj.name}' no tiene el componente SingleNoteSoundwave.", this);
-        }
-
-        
+            }
+            else
+            {
+                Debug.LogWarning($"[BridgeSpawn] El objeto '{detectedObj.name}' no tiene el componente SingleNoteSoundwave.", this);
+            }
         }
     }
 
     public void ProcessNote(notesEnum incomingNote)
     {
         bridge.CompareNotes(incomingNote);
+    }
+
+    private IEnumerator DissapearRoutine(int subbeats)
+    {
+        yield return rhythmClock.WaitForSubBeats(subbeats);
+
+        dieRoutine = null;
+
+        Disappear();
+    }
+
+    private IEnumerator PreventEarlyNoteRoutine()
+    {
+        yield return rhythmClock.WaitForSubBeats(2);
+        trigger.SetActive(true);
+
     }
 }

@@ -23,7 +23,7 @@ public class DiscordManager : MonoBehaviour
 
         var activity = new Discord.Activity
         {
-            Details = "In-Engine",
+            Details = "chat yipití ayuda porfa 😭",
             //State = "Tocando la gaita",
 
             Assets =

@@ -5,9 +5,6 @@ using UnityEngine.InputSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Profiling.Memory.Experimental;
-using Unity.VisualScripting;
-using NaughtyAttributes;
 using CMF;
 
 public class NotebookLearner: MonoBehaviour {
@@ -119,28 +116,30 @@ public class NotebookLearner: MonoBehaviour {
       }
 
    public void RefreshCategories()
-      {
+   {
       LearnedCategories.Clear();
-      var actualCategories = learnedEntryList.Where
-      (entry => entry != null && entry.type == EntryType.Word && entry.category.HasValue)
-      .Select(entry => entry.category.Value)
+
+      var actualCategories = learnedEntryList
+      .Where(entry => entry != null && entry.type == EntryType.Word && entry.hasCategory)
+      .Select(entry => entry.category)
       .Distinct()
       .OrderBy(category => category)
       .ToList();
 
-      foreach(WordCategory cat in actualCategories) {
-         CategoryGroup group = new CategoryGroup(cat) {
-               entries = learnedEntryList.Where
-               (entry => entry != null && entry.type == EntryType.Word && entry.category.HasValue && entry.category.Value == cat)
-               .OrderBy(entry => entry.key ?? string.Empty, StringComparer.CurrentCultureIgnoreCase)
-               .ToList()
+      foreach (WordCategory cat in actualCategories)
+      {
+         CategoryGroup group = new CategoryGroup(cat)
+         {
+            entries = learnedEntryList
+                  .Where(entry => entry != null && entry.type == EntryType.Word && entry.hasCategory && entry.category == cat)
+                  .OrderBy(entry => entry.key ?? string.Empty, StringComparer.CurrentCultureIgnoreCase)
+                  .ToList()
          };
-
          LearnedCategories.Add(group);
       }
       
       Debug.Log($"Categories: {LearnedCategories.Count}");
-      }
+   }
 
    public void OpenNotebook(InputAction.CallbackContext context)
    {

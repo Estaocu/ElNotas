@@ -11,11 +11,13 @@ public class NotesUIManager : MonoBehaviour
 
     [SerializeField] private PlayerRhythmController instrument;
 
-    void Start()
+    void Awake()
     {
         notes = new List<UIPlayerNote>(GetComponentsInChildren<UIPlayerNote>(true));
-        //instrument = FindFirstObjectByType<PlayerRhythmController>();
+    }
 
+    void Start()
+    {
         foreach(GameObject line in lines)
         {
             line.SetActive(false);

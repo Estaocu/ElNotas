@@ -1,8 +1,10 @@
 using UnityEditor.Localization;
 using UnityEditor.Localization.Plugins.Google.Columns;
 using UnityEngine.Localization.Tables;
+using UnityEngine.Scripting.APIUpdating;
 
-public class WordCategoryColumn : KeyMetadataColumn<WordCategoryMetadata>
+[MovedFrom(true, sourceAssembly: "Assembly-CSharp")]
+public class MelodyColumn : KeyMetadataColumn<MelodyMetadata>
 {
     public override PushFields PushFields =>
         PushFields.Value;
@@ -12,17 +14,17 @@ public class WordCategoryColumn : KeyMetadataColumn<WordCategoryMetadata>
         out string header,
         out string headerNote)
     {
-        header = "WordCategory";
+        header = "Melody";
         headerNote = null;
     }
 
     public override void PullMetadata(
         SharedTableData.SharedTableEntry keyEntry,
-        WordCategoryMetadata metadata,
+        MelodyMetadata metadata,
         string cellValue,
         string cellNote)
     {
-        if (string.IsNullOrWhiteSpace(cellValue))
+        if (string.IsNullOrEmpty(cellValue))
         {
             if (metadata != null)
                 keyEntry.Metadata.RemoveMetadata(metadata);
@@ -32,27 +34,22 @@ public class WordCategoryColumn : KeyMetadataColumn<WordCategoryMetadata>
 
         if (metadata == null)
         {
-            metadata = new WordCategoryMetadata();
+            metadata = new MelodyMetadata();
             keyEntry.Metadata.AddMetadata(metadata);
         }
 
-        if (System.Enum.TryParse(
-            cellValue.Trim(),
-            true,
-            out WordCategory category))
-        {
-            metadata.category = category;
-        }
+        metadata.notes =
+            MelodyMetadata.ParseNotes(cellValue);
     }
 
     public override void PushMetadata(
-        WordCategoryMetadata metadata,
+        MelodyMetadata metadata,
         out string value,
         out string note)
     {
         value =
             metadata != null
-                ? metadata.category.ToString()
+                ? metadata.ToDigitString()
                 : string.Empty;
 
         note = null;

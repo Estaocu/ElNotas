@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +9,10 @@ public class PlayerRhythmController : MonoBehaviour
     [SerializeField] private RhythmClock rhythmClock;
     [SerializeField] private RhythmQuantizer rhythmQuantizer;
     [SerializeField] private Meter meter;
+    [SerializeField] private AudioSource audioSource;
+
+    [Header("audioSource Clips")]
+    [SerializeField] private AudioClip missSfx;
 
     [Header("Input Protection")]
     [Tooltip("Minimum physical time between two accepted note inputs.")]
@@ -229,6 +232,7 @@ public class PlayerRhythmController : MonoBehaviour
 
     private void HandleRhythmMiss()
     {
+        audioSource.PlayOneShot(missSfx);
         OnNoteRejected?.Invoke();
     }
 

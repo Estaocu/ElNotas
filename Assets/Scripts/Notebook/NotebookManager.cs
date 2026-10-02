@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using CarterGames.Assets.SaveManager;
-using Save;
-using UnityEngine.Localization.SmartFormat.Utilities;
 
 public class NotebookManager : MonoBehaviour
 {
@@ -135,9 +133,9 @@ public class NotebookManager : MonoBehaviour
         if (!alreadyLearned)
         {
             if (entry.type == EntryType.Word &&
-                entry.category.HasValue)
+                entry.hasCategory)
             {
-                WordCategory category = entry.category.Value;
+                WordCategory category = entry.category;
 
                 if (!HasCategory(category))
                 {
@@ -237,9 +235,9 @@ public class NotebookManager : MonoBehaviour
             .Where(entry =>
                 entry != null &&
                 entry.type == EntryType.Word &&
-                entry.category.HasValue
+                entry.hasCategory
             )
-            .Select(entry => entry.category.Value)
+            .Select(entry => entry.category)
             .Distinct()
             .OrderBy(category => category)
             .ToList();
@@ -253,8 +251,8 @@ public class NotebookManager : MonoBehaviour
                         .Where(entry =>
                             entry != null &&
                             entry.type == EntryType.Word &&
-                            entry.category.HasValue &&
-                            entry.category.Value == category
+                            entry.hasCategory &&
+                            entry.category == category
                         )
                         .OrderBy(
                             entry =>

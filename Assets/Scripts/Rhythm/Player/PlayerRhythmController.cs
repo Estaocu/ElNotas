@@ -141,9 +141,11 @@ public class PlayerRhythmController : MonoBehaviour
             return false;
         }
         
+        ClearMelodyIfNewBar(result.position);
+
         meter.IncreaseByOne();
         AcceptNote(note, result);
-        
+                
 
         return true;
     }

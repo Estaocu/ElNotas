@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerRhythmController : MonoBehaviour
 {
+    public bool canPlay = true;
+
     [Header("References")]
     [SerializeField] private RhythmClock rhythmClock;
     [SerializeField] private RhythmQuantizer rhythmQuantizer;
@@ -115,6 +117,8 @@ public class PlayerRhythmController : MonoBehaviour
 
     public bool ProcessNote(notesEnum note)
     {
+        if(!canPlay) return false;
+        
         if (rhythmClock == null || rhythmQuantizer == null)
         {
             Debug.LogError("PlayerRhythmController requires a RhythmClock and RhythmQuantizer.");

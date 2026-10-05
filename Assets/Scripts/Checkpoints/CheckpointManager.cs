@@ -8,6 +8,8 @@ public class CheckpointManager : MonoBehaviour
     public CheckpointZone currentZone;
     private CheckpointZone[] zones;
 
+    [SerializeField] private RhythmAudioPrototype audioSystem;
+
     [SerializeField] private Transform playerOverride;
 
     private Transform _playerTransform;
@@ -99,5 +101,19 @@ public class CheckpointManager : MonoBehaviour
         _playerMover = source.GetComponentInChildren<Mover>();
         
         Debug.Log($"[CHECKPOINTS] Player resuelto: {source.name}");
+    }
+
+    public void ChangeZone(CheckpointZone newZone)
+    {
+        if (newZone != currentZone)
+        {
+            currentZone = newZone;
+            ChangeSong(newZone.song);
+        }
+    }
+
+    private void ChangeSong(AudioClip clip)
+    {
+        audioSystem.ChangeTrack(clip);
     }
 }

@@ -1,8 +1,11 @@
 using UnityEditor.Localization;
 using UnityEditor.Localization.Plugins.Google.Columns;
 using UnityEngine.Localization.Tables;
+using UnityEngine.Scripting.APIUpdating;
 
-public class MelodyColumn : KeyMetadataColumn<MelodyMetadata>
+[MovedFrom(true, sourceAssembly: "Assembly-CSharp")]
+
+public class WordCategoryColumn : KeyMetadataColumn<WordCategoryMetadata>
 {
     public override PushFields PushFields =>
         PushFields.Value;
@@ -12,17 +15,17 @@ public class MelodyColumn : KeyMetadataColumn<MelodyMetadata>
         out string header,
         out string headerNote)
     {
-        header = "Melody";
+        header = "WordCategory";
         headerNote = null;
     }
 
     public override void PullMetadata(
         SharedTableData.SharedTableEntry keyEntry,
-        MelodyMetadata metadata,
+        WordCategoryMetadata metadata,
         string cellValue,
         string cellNote)
     {
-        if (string.IsNullOrEmpty(cellValue))
+        if (string.IsNullOrWhiteSpace(cellValue))
         {
             if (metadata != null)
                 keyEntry.Metadata.RemoveMetadata(metadata);
@@ -32,22 +35,27 @@ public class MelodyColumn : KeyMetadataColumn<MelodyMetadata>
 
         if (metadata == null)
         {
-            metadata = new MelodyMetadata();
+            metadata = new WordCategoryMetadata();
             keyEntry.Metadata.AddMetadata(metadata);
         }
 
-        metadata.notes =
-            MelodyMetadata.ParseNotes(cellValue);
+        if (System.Enum.TryParse(
+            cellValue.Trim(),
+            true,
+            out WordCategory category))
+        {
+            metadata.category = category;
+        }
     }
 
     public override void PushMetadata(
-        MelodyMetadata metadata,
+        WordCategoryMetadata metadata,
         out string value,
         out string note)
     {
         value =
             metadata != null
-                ? metadata.ToDigitString()
+                ? metadata.category.ToString()
                 : string.Empty;
 
         note = null;

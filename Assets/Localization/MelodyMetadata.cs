@@ -2,6 +2,7 @@ using System;
 using UnityEngine.Localization.Metadata;
 
 [Serializable]
+[Metadata(AllowedTypes = MetadataType.SharedStringTableEntry)]
 public class MelodyMetadata : IMetadata
 {
     public notesEnum[] notes;

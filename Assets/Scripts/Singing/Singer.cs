@@ -163,7 +163,7 @@ public class Singer : MonoBehaviour
 
         onSoundwaveSpawned?.Invoke(melody);
 
-        instrument.ClearMelody();
+        //instrument.ClearMelody();
     }
 
     // Used by NPCs and other non-instrument singers.

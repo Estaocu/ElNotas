@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,21 +10,40 @@ public class DiscordManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        discord = new Discord.Discord(1540003265406570586, (ulong)Discord.CreateFlags.NoRequireDiscord);
-        ChangeActivity();
+        try
+        {
+            discord = new Discord.Discord(1540003265406570586, (ulong)Discord.CreateFlags.NoRequireDiscord);
+            ChangeActivity();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"Discord Rich Presence disabled or failed to initialize: {e.Message}");
+            discord = null;
+        }
     }
     
-    void OnDisable() {
-        discord.Dispose();
+    void OnDisable()
+    {
+        if (discord != null)
+        {
+            discord.Dispose();
+            discord = null;
+        }
     }
     
     public void ChangeActivity()
     {
+
+        if (discord == null)
+        {
+            return;
+        }
+        
         var activityManager = discord.GetActivityManager();
 
         var activity = new Discord.Activity
         {
-            Details = "chat yipití ayuda porfa 😭",
+            //Details = "chat yipití ayuda porfa 😭",
             //State = "Tocando la gaita",
 
             Assets =
@@ -47,9 +67,13 @@ public class DiscordManager : MonoBehaviour
         });
     }
     
-    // Update is called once per frame
     void Update()
     {
+        if (discord == null)
+        {
+            return;
+        }
+
         discord.RunCallbacks();
     }
 }

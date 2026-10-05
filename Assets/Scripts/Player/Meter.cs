@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Meter : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI meterText;
+    //[SerializeField] private TextMeshProUGUI meterText;
+    private MeterUIManager man;
 
     
     public int currentMeter;
@@ -16,16 +14,20 @@ public class Meter : MonoBehaviour
 
     void Start()
     {
-        if (meterText != null)
-            meterText.SetText(currentMeter.ToString());
+        man = FindFirstObjectByType<MeterUIManager>();
+
+        // if (meterText != null)
+        //     meterText.SetText(currentMeter.ToString());
     }
 
     private void SetMeter(int wantedMeter)
     {
         currentMeter = wantedMeter;
 
-        if (meterText != null)
-            meterText.SetText(currentMeter.ToString());
+        // if (meterText != null)
+        //     meterText.SetText(currentMeter.ToString());
+
+        man.RefreshColors(currentMeter);
     }
 
     public void ConsumeFullMeter()
@@ -36,7 +38,7 @@ public class Meter : MonoBehaviour
     public void DebugMaxMeter(InputAction.CallbackContext context)
     {
         if (context.performed) SetMeter(maxMeter);
-        if (meterText != null) meterText.SetText(currentMeter.ToString());
+        //if (meterText != null) meterText.SetText(currentMeter.ToString());
         Debug.Log("Meter Maxed");
     }
 

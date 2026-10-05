@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using ElNotas.Input.Glyphs;
 using NaughtyAttributes;
 using System.Collections;
+using System;
 
 [RequireComponent(typeof(Collider))]
 public class BridgeTile : MonoBehaviour
@@ -42,6 +43,8 @@ public class BridgeTile : MonoBehaviour
 
     private GameObject glyph => glyphView.transform.parent.gameObject;
 
+    public event Action OnFlowerDeath;
+
     private void Awake()
     {
         rhythmClock = FindFirstObjectByType<RhythmClock>();
@@ -57,16 +60,16 @@ public class BridgeTile : MonoBehaviour
     private void OnEnable()
     {
         UpdateGlyphDisplay();
-        
     }
 
     void OnDisable()
     {
-        
+        beingStepped = false;
     }
 
     private void Start()
     {
+        beingStepped = false;
         gameObject.SetActive(false);
     }
 
@@ -93,14 +96,6 @@ public class BridgeTile : MonoBehaviour
     public void Disappear()
     {
         StartCoroutine(ScaleMeshRoutine(Vector3.one, Vector3.zero, growthTime, deathCurve));
-
-        if (beingStepped)
-        {
-            Debug.Log("Player was stepping flower when died. Now changing to gameplay map.");
-            bridge.actionMap.SetPlayerInput();
-            bridge.EndBridge();
-        }
-        
     }
 
     public void SetAsCurrentTile()
@@ -117,6 +112,7 @@ public class BridgeTile : MonoBehaviour
             {
                 bridge.JumpToEnd(assignedSpawner.jumpTarget);
                 assignedSpawner.Bloom();
+                bridge.actionMap.SetPlayerInput();  
             }
         }
     }
@@ -136,13 +132,23 @@ public class BridgeTile : MonoBehaviour
             elapsedTime += Time.deltaTime;
 
             yield return null;
-        }
 
-        visuals.transform.localScale = endScale;
+            visuals.transform.localScale = endScale;
 
-        if (endScale == Vector3.zero)
-        {
-            gameObject.SetActive(false);
+            if (endScale == Vector3.zero)
+            {
+                OnFlowerDeath?.Invoke();
+
+                    if (beingStepped)
+                    {
+                        Debug.Log("Player was stepping flower when died. Now changing to gameplay map.");
+                        bridge.EndBridge();  
+                        bridge.actionMap.SetPlayerInput();  
+                    }
+
+                gameObject.SetActive(false);
+                beingStepped = false;
+            }
         }
         }
 

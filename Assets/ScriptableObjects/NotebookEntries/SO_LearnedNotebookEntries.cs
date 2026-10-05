@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CarterGames.Assets.SaveManager;
-using Save;
 using UnityEngine;
 
 [CreateAssetMenu(
@@ -31,6 +30,15 @@ public class LearnedEntriesIds : ScriptableObject
     private List<CategoryGroup>
         learnedCategoriesRuntime =
         new List<CategoryGroup>();
+
+    #if UNITY_EDITOR
+    public void bakeDerivedData()
+    {
+        CleanTotalEntries();
+        SyncCategories();
+        UnityEditor.EditorUtility.SetDirty(this);
+    }
+    #endif
 
     private bool isLoading;
 
@@ -111,10 +119,10 @@ public class LearnedEntriesIds : ScriptableObject
                 .Where(entry =>
                     entry != null &&
                     entry.type == EntryType.Word &&
-                    entry.category.HasValue
+                    entry.hasCategory
                 )
                 .Select(entry =>
-                    entry.category.Value
+                    entry.category
                 )
                 .Distinct()
                 .OrderBy(category => category)
@@ -150,8 +158,8 @@ public class LearnedEntriesIds : ScriptableObject
                     .Where(entry =>
                         entry != null &&
                         entry.type == EntryType.Word &&
-                        entry.category.HasValue &&
-                        entry.category.Value == category
+                        entry.hasCategory &&
+                        entry.category == category
                     )
                     .OrderBy(GetEntryId)
                     .ToList();
@@ -175,10 +183,10 @@ public class LearnedEntriesIds : ScriptableObject
         bool isNewCategory = false;
 
         if (entry.type == EntryType.Word &&
-            entry.category.HasValue)
+            entry.hasCategory)
         {
             WordCategory category =
-                entry.category.Value;
+                entry.category;
 
             isNewCategory =
                 !HasCategory(category);
@@ -229,8 +237,8 @@ public class LearnedEntriesIds : ScriptableObject
                 .Where(entry =>
                     entry != null &&
                     entry.type == EntryType.Word &&
-                    entry.category.HasValue &&
-                    entry.category.Value == category
+                    entry.hasCategory &&
+                    entry.category == category
                 )
                 .ToList();
 
@@ -455,10 +463,10 @@ public class LearnedEntriesIds : ScriptableObject
                 .Where(entry =>
                     entry != null &&
                     entry.type == EntryType.Word &&
-                    entry.category.HasValue
+                    entry.hasCategory
                 )
                 .Select(entry =>
-                    entry.category.Value
+                    entry.category
                 )
                 .Distinct()
                 .OrderBy(category => category)
@@ -474,8 +482,8 @@ public class LearnedEntriesIds : ScriptableObject
                     .Where(entry =>
                         entry != null &&
                         entry.type == EntryType.Word &&
-                        entry.category.HasValue &&
-                        entry.category.Value == category
+                        entry.hasCategory &&
+                        entry.category == category
                     )
                     .OrderBy(
                         GetLocalizedEntryName,

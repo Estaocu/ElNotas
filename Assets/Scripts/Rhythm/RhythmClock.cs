@@ -5,14 +5,13 @@ using UnityEngine;
 public class RhythmClock : MonoBehaviour
 {
     [Header("Rhythm")]
-    [SerializeField] private double bpm = 96.0;
+    [SerializeField] private double bpm = 72.0;
 
     public const int BeatsPerBar = 4;
     public const int SubBeatsPerBeat = 2;
     public const int SubBeatsPerBar = 8;
 
     private double startDspTime;
-    private double nextBeatTime;
     private double pauseStartDspTime;
 
     private bool isRunning;
@@ -20,12 +19,26 @@ public class RhythmClock : MonoBehaviour
 
     private long lastProcessedSubBeat = -1;
 
+    // Current tempo segment.
+    // This allows the BPM to change without resetting absolute musical time.
+    private double tempoSegmentStartDspTime;
+    private long tempoSegmentStartSubBeat;
+
+    // Pending BPM change.
+    private bool hasPendingBpmChange;
+    private double pendingBpm;
+    private double pendingBpmDspTime;
+    private long pendingBpmSubBeat;
+
     public static event Action<RhythmTick> OnSubBeat;
     public static event Action<RhythmTick> OnBeat;
     public static event Action<RhythmTick> OnBar;
 
     public static event Action OnPaused;
     public static event Action OnResumed;
+
+    // Current BPM.
+    public double CurrentBpm => bpm;
 
     // Duration of one quarter note in seconds.
     public double BeatDuration => 60.0 / bpm;
@@ -49,12 +62,20 @@ public class RhythmClock : MonoBehaviour
             if (!isRunning)
                 return -1;
 
-            double elapsed = ElapsedDspTime;
+            double currentDspTime = isPaused
+                ? pauseStartDspTime
+                : AudioSettings.dspTime;
 
-            if (elapsed < 0.0)
-                return -1;
+            if (currentDspTime < tempoSegmentStartDspTime)
+                return tempoSegmentStartSubBeat;
 
-            return (long)(elapsed / SubBeatDuration);
+            double elapsed =
+                currentDspTime - tempoSegmentStartDspTime;
+
+            long subBeats =
+                (long)(elapsed / SubBeatDuration);
+
+            return tempoSegmentStartSubBeat + subBeats;
         }
     }
 
@@ -96,8 +117,13 @@ public class RhythmClock : MonoBehaviour
     public void StartAt(double dspStartTime)
     {
         startDspTime = dspStartTime;
-        nextBeatTime = dspStartTime;
+
+        tempoSegmentStartDspTime = dspStartTime;
+        tempoSegmentStartSubBeat = 0;
+
         lastProcessedSubBeat = -1;
+
+        hasPendingBpmChange = false;
 
         isPaused = false;
         isRunning = true;
@@ -107,7 +133,10 @@ public class RhythmClock : MonoBehaviour
     {
         isRunning = false;
         isPaused = false;
+
         lastProcessedSubBeat = -1;
+
+        hasPendingBpmChange = false;
     }
 
     public void Pause()
@@ -130,11 +159,83 @@ public class RhythmClock : MonoBehaviour
             AudioSettings.dspTime - pauseStartDspTime;
 
         startDspTime += pausedDuration;
-        nextBeatTime += pausedDuration;
+        tempoSegmentStartDspTime += pausedDuration;
+
+        if (hasPendingBpmChange)
+            pendingBpmDspTime += pausedDuration;
 
         isPaused = false;
 
         OnResumed?.Invoke();
+    }
+
+    // Schedules a BPM change at an exact DSP timestamp.
+    // The timestamp should correspond to a bar boundary.
+    public void ScheduleBpmChange(
+        double newBpm,
+        double dspTime)
+    {
+        if (newBpm <= 0.0)
+        {
+            Debug.LogError(
+                "RhythmClock requires a BPM greater than zero.");
+
+            return;
+        }
+
+        if (!isRunning)
+        {
+            bpm = newBpm;
+            return;
+        }
+
+        long currentSubBeat = CurrentAbsoluteSubBeat;
+
+        if (currentSubBeat < 0)
+            return;
+
+        // Find the musical subbeat represented by the requested DSP time.
+        long targetSubBeat =
+            GetAbsoluteSubBeatAtDspTime(dspTime);
+
+        // BPM changes are only allowed at bar boundaries.
+        long targetBarStart =
+            (targetSubBeat / SubBeatsPerBar) * SubBeatsPerBar;
+
+        if (targetSubBeat != targetBarStart)
+        {
+            targetBarStart += SubBeatsPerBar;
+
+            dspTime =
+                GetDspTimeForAbsoluteSubBeat(targetBarStart);
+        }
+
+        pendingBpm = newBpm;
+        pendingBpmDspTime = dspTime;
+        pendingBpmSubBeat = targetBarStart;
+        hasPendingBpmChange = true;
+    }
+
+    // Schedules a BPM change at the beginning of the next bar.
+    public void ScheduleBpmChangeAtNextBar(double newBpm)
+    {
+        if (!isRunning)
+        {
+            bpm = newBpm;
+            return;
+        }
+
+        double nextBarDspTime = NextBarDspTime;
+
+        ScheduleBpmChange(
+            newBpm,
+            nextBarDspTime);
+    }
+
+    // Cancels a pending BPM change.
+    public void CancelPendingBpmChange()
+    {
+        hasPendingBpmChange = false;
     }
 
     // Waits for the specified number of future musical subbeats.
@@ -168,23 +269,22 @@ public class RhythmClock : MonoBehaviour
         if (!isRunning)
             return new RhythmPosition(0, 0, 0);
 
-        double referenceDspTime = isPaused
-            ? pauseStartDspTime
-            : dspTime;
+        double referenceDspTime =
+            isPaused
+                ? pauseStartDspTime
+                : dspTime;
 
-        double elapsed = referenceDspTime - startDspTime;
+        long absoluteSubBeat =
+            GetAbsoluteSubBeatAtDspTime(referenceDspTime);
 
-        if (elapsed < 0.0)
-            return new RhythmPosition(0, 0, 0);
-
-        long totalSubBeats =
-            (long)(elapsed / SubBeatDuration);
+        if (absoluteSubBeat < 0)
+            absoluteSubBeat = 0;
 
         int bar =
-            (int)(totalSubBeats / SubBeatsPerBar);
+            (int)(absoluteSubBeat / SubBeatsPerBar);
 
         int subBeat =
-            (int)(totalSubBeats % SubBeatsPerBar);
+            (int)(absoluteSubBeat % SubBeatsPerBar);
 
         int beat =
             subBeat / SubBeatsPerBeat;
@@ -192,11 +292,10 @@ public class RhythmClock : MonoBehaviour
         return new RhythmPosition(
             bar,
             beat,
-            subBeat
-        );
+            subBeat);
     }
 
-    // Converts a musical position into its exact DSP timestamp.
+    // Converts a musical position into its DSP timestamp.
     public double GetDspTimeForPosition(
         RhythmPosition position)
     {
@@ -204,25 +303,21 @@ public class RhythmClock : MonoBehaviour
             (long)position.bar * SubBeatsPerBar +
             position.subBeat;
 
-        return startDspTime +
-               totalSubBeats * SubBeatDuration;
+        return GetDspTimeForAbsoluteSubBeat(totalSubBeats);
     }
 
     public double NextSubBeatDspTime
     {
         get
         {
-            double elapsed =
-                ElapsedDspTime;
+            long currentSubBeat =
+                CurrentAbsoluteSubBeat;
 
-            if (elapsed < 0.0)
+            if (currentSubBeat < 0)
                 return startDspTime;
 
-            long currentSubBeat =
-                (long)(elapsed / SubBeatDuration);
-
-            return startDspTime +
-                   (currentSubBeat + 1) * SubBeatDuration;
+            return GetDspTimeForAbsoluteSubBeat(
+                currentSubBeat + 1);
         }
     }
 
@@ -230,17 +325,20 @@ public class RhythmClock : MonoBehaviour
     {
         get
         {
-            double elapsed =
-                ElapsedDspTime;
+            long currentSubBeat =
+                CurrentAbsoluteSubBeat;
 
-            if (elapsed < 0.0)
+            if (currentSubBeat < 0)
                 return startDspTime;
 
             long currentBeat =
-                (long)(elapsed / BeatDuration);
+                currentSubBeat / SubBeatsPerBeat;
 
-            return startDspTime +
-                   (currentBeat + 1) * BeatDuration;
+            long nextBeatSubBeat =
+                (currentBeat + 1) * SubBeatsPerBeat;
+
+            return GetDspTimeForAbsoluteSubBeat(
+                nextBeatSubBeat);
         }
     }
 
@@ -248,33 +346,47 @@ public class RhythmClock : MonoBehaviour
     {
         get
         {
-            double elapsed =
-                ElapsedDspTime;
+            long currentSubBeat =
+                CurrentAbsoluteSubBeat;
 
-            if (elapsed < 0.0)
+            if (currentSubBeat < 0)
                 return startDspTime;
 
             long currentBar =
-                (long)(elapsed / BarDuration);
+                currentSubBeat / SubBeatsPerBar;
 
-            return startDspTime +
-                   (currentBar + 1) * BarDuration;
+            long nextBarSubBeat =
+                (currentBar + 1) * SubBeatsPerBar;
+
+            return GetDspTimeForAbsoluteSubBeat(
+                nextBarSubBeat);
         }
     }
 
     private void ProcessPendingTicks()
     {
-        double elapsed =
-            AudioSettings.dspTime - startDspTime;
-
-        if (elapsed < 0.0)
-            return;
+        double currentDspTime =
+            AudioSettings.dspTime;
 
         long currentSubBeat =
-            (long)(elapsed / SubBeatDuration);
+            CurrentAbsoluteSubBeat;
+
+        if (currentSubBeat < 0)
+            return;
 
         while (lastProcessedSubBeat < currentSubBeat)
         {
+            long nextSubBeat =
+                lastProcessedSubBeat + 1;
+
+            // Apply a pending tempo change exactly at the
+            // musical boundary before creating that tick.
+            if (hasPendingBpmChange &&
+                nextSubBeat >= pendingBpmSubBeat)
+            {
+                ApplyPendingBpmChange();
+            }
+
             lastProcessedSubBeat++;
 
             RhythmTick tick =
@@ -287,7 +399,26 @@ public class RhythmClock : MonoBehaviour
 
             if (tick.position.subBeat == 0)
                 OnBar?.Invoke(tick);
+
+            currentSubBeat =
+                CurrentAbsoluteSubBeat;
+
+            if (currentDspTime < tick.dspTime)
+                break;
         }
+    }
+
+    private void ApplyPendingBpmChange()
+    {
+        bpm = pendingBpm;
+
+        tempoSegmentStartDspTime =
+            pendingBpmDspTime;
+
+        tempoSegmentStartSubBeat =
+            pendingBpmSubBeat;
+
+        hasPendingBpmChange = false;
     }
 
     private RhythmTick CreateTick(long totalSubBeat)
@@ -305,16 +436,47 @@ public class RhythmClock : MonoBehaviour
             new RhythmPosition(
                 bar,
                 beat,
-                subBeat
-            );
+                subBeat);
 
         double dspTime =
-            startDspTime +
-            totalSubBeat * SubBeatDuration;
+            GetDspTimeForAbsoluteSubBeat(
+                totalSubBeat);
 
         return new RhythmTick(
             position,
-            dspTime
-        );
+            dspTime);
+    }
+
+    private long GetAbsoluteSubBeatAtDspTime(
+        double dspTime)
+    {
+        if (!isRunning)
+            return -1;
+
+        if (dspTime < tempoSegmentStartDspTime)
+            return tempoSegmentStartSubBeat;
+
+        double elapsed =
+            dspTime - tempoSegmentStartDspTime;
+
+        long subBeats =
+            (long)(elapsed / SubBeatDuration);
+
+        return tempoSegmentStartSubBeat + subBeats;
+    }
+
+    private double GetDspTimeForAbsoluteSubBeat(
+        long absoluteSubBeat)
+    {
+        if (absoluteSubBeat <= tempoSegmentStartSubBeat)
+        {
+            return tempoSegmentStartDspTime;
+        }
+
+        long relativeSubBeat =
+            absoluteSubBeat - tempoSegmentStartSubBeat;
+
+        return tempoSegmentStartDspTime +
+               relativeSubBeat * SubBeatDuration;
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class CheckpointZone : MonoBehaviour
 {
     public int zoneID;
+    public AudioClip song;
     public Checkpoint[] points;
     public Checkpoint latestPoint;
     private CheckpointManager manager;
@@ -35,9 +36,12 @@ public class CheckpointZone : MonoBehaviour
         if (point.Zone == this)
         {
             latestPoint = point;
-            manager.currentZone = this;
+            manager.ChangeZone(this);
+            
         }
         
     }
+
+    
 
 }

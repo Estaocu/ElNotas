@@ -7,6 +7,7 @@ namespace CMF
 
     public class ActionMapsManager : MonoBehaviour
     {
+        private bool canPlay = true;
         public static ActionMapsManager Instance { get; private set; }
 
         [SerializeField] private DefaultActionMap defaultActionMap = DefaultActionMap.Gameplay;
@@ -75,9 +76,25 @@ namespace CMF
 
         public void SetRestrictedInput() => SwapActionMap(DefaultActionMap.RestrictedInput);
         public void SetPlayerInput()     => SwapActionMap(DefaultActionMap.Gameplay);
-        public void SetConversationInput()     => SwapActionMap(DefaultActionMap.Conversation);
-        public void SetNotesInput()     => SwapActionMap(DefaultActionMap.Notes);
-        public void SetTextInput()     => SwapActionMap(DefaultActionMap.Conversation);
+
+        public void SetConversationInput()
+        { 
+        SwapActionMap(DefaultActionMap.Conversation);
+        canPlay = false;
+        }
+
+        public void SetNotesInput()
+        {
+         SwapActionMap(DefaultActionMap.Notes);
+         canPlay = true;   
+        }
+        public void SetTextInput()
+        { 
+        SwapActionMap(DefaultActionMap.Text);
+        canPlay = false;
+        }
+
+
         public void SetNotebookInput()     => SwapActionMap(DefaultActionMap.Notebook);
 
         public void StoreCurrentMap()    => mapBeforePause = playerInput?.currentActionMap?.name;

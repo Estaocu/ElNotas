@@ -93,7 +93,7 @@ public class HUDHeartbeat : MonoBehaviour
     {
         float time = ToSingle(clock.SubBeatDuration);
 
-        yield return new WaitForSeconds(time*1.8f);
+        yield return new WaitForSeconds(2*time*0.95f);
 
         if (pulseCoroutine != null) StopCoroutine(pulseCoroutine);
         pulseCoroutine = StartCoroutine(pulseRoutine());

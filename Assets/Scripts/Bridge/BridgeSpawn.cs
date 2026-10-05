@@ -1,6 +1,7 @@
 using UnityEngine;
 using CarterGames.Assets.SaveManager;
 using Save;
+using System.Collections;
 
 public class BridgeSpawn : MonoBehaviour, IReactToMelody, IBridgeListen
 {
@@ -11,19 +12,35 @@ public class BridgeSpawn : MonoBehaviour, IReactToMelody, IBridgeListen
 
     [Header("Bridge Spawn Settings")]
     [SerializeField] private bool isMother;
-    [SerializeField] private bool unlocked;
+    private bool unlocked;
     [SerializeField] private BridgeTile closestTile;
     [SerializeField] private BridgeVine closestVine;
-    public Transform jumpTarget;
-    [SerializeField] private Bridge bridge;
+    [HideInInspector] public Transform jumpTarget;
+    private Bridge bridge;
 
     public bool currentSpawner = false;
     private bool bridgeStarted = false;
 
-
-    void Start()
+    void OnEnable()
     {
-        if (SaveManager.TryGetGlobalSaveObject<BridgesSaveObject>(out saveObject))
+        if(closestTile != null)
+        closestTile.OnFlowerDeath += CancelBridge;
+    }
+
+    void OnDisable()
+    {
+        if(closestTile != null)
+        closestTile.OnFlowerDeath -= CancelBridge;
+    }
+
+    void Awake()
+    {
+        bridge = GetComponentInParent<Bridge>();
+        jumpTarget = GetComponentInChildren<Transform>();
+
+        if (isMother) unlocked = true;
+
+        if (SaveManager.TryGetGlobalSaveObject(out saveObject))
         {
             Debug.Log("SaveObject global encontrado con éxito.");
             
@@ -78,6 +95,9 @@ public class BridgeSpawn : MonoBehaviour, IReactToMelody, IBridgeListen
         if (noteMatched)
         {
             bridgeStarted = true;
+            
+            if(closestTile != null)
+            closestTile.OnFlowerDeath -= CancelBridge;
         }
     }
 
@@ -94,7 +114,7 @@ public class BridgeSpawn : MonoBehaviour, IReactToMelody, IBridgeListen
             {
                 saveObject.unlockedBridges.Value.Add(id);
 
-                SaveManager.SaveGame(); // Guarda los datos inmediatamente [3]
+                SaveManager.SaveGame();
                 Debug.Log("Bridge unlocked and saved");
             }
         }
@@ -104,5 +124,11 @@ public class BridgeSpawn : MonoBehaviour, IReactToMelody, IBridgeListen
     {
         bridgeStarted = false;
         //y luego cosmeticos
+    }
+
+    public void CancelBridge()
+    {
+        EndBridge();
+        bridge.actionMap.SetPlayerInput();
     }
 }

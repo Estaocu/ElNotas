@@ -27,7 +27,7 @@ public class Bridge : MonoBehaviour
     [SerializeField] private AdvancedWalkerController walker;
     [SerializeField] private Mover mover;
     public ActionMapsManager actionMap;
-    [SerializeField] private AbyssRaycast playerJump;
+    [HideInInspector] public AbyssRaycast playerJump;
 
     [Header("Trajectory Settings")]
     [SerializeField] private float apexHeight = 3f;
@@ -497,8 +497,6 @@ public class Bridge : MonoBehaviour
 
     public void EndBridge()
     {
-        actionMap.SetPlayerInput();
-        playerJump.EnableJump();
         currentSpawner = null;
 
         foreach (BridgeSpawn spawner in spawners)

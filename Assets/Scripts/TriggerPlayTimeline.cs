@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using CMF;
 using UnityEngine;
 using UnityEngine.Playables; //Epa, esto es custom de aqui!!!!
 
@@ -17,7 +16,7 @@ public class TriggerPlayTimeline : MonoBehaviour
             if (onlyOnce && alreadyPlayed) return;
             if (tlDirector != null)
             {
-                CMF.ActionMapsManager.Instance.SetRestrictedInput();
+                ActionMapsManager.SetRestrictedInput();
                 tlDirector.Play();
                 alreadyPlayed = true;
                 gameObject.SetActive(false);

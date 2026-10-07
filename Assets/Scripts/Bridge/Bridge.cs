@@ -26,7 +26,6 @@ public class Bridge : MonoBehaviour
     [Header("Player References")]
     [SerializeField] private AdvancedWalkerController walker;
     [SerializeField] private Mover mover;
-    public ActionMapsManager actionMap;
     [HideInInspector] public AbyssRaycast playerJump;
 
     [Header("Trajectory Settings")]
@@ -102,7 +101,7 @@ public class Bridge : MonoBehaviour
 
     public void InitializeBridgeFromSpawn(BridgeTile firstTile, Transform spawnJumpTarget, BridgeVine firstVine)
     {
-        actionMap.SetNotesInput();
+        ActionMapsManager.SetNotesInput();
         playerJump.PreventJump();
 
         spawnPoint = spawnJumpTarget;

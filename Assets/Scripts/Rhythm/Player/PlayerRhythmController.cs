@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using CMF;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerRhythmController : MonoBehaviour
 {
-    public bool canPlay = true;
+    public bool canPlay => ActionMapsManager.Instance != null && ActionMapsManager.Instance.CanPlay;
 
     [Header("References")]
     [SerializeField] private RhythmClock rhythmClock;

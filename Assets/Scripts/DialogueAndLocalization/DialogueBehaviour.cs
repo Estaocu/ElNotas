@@ -8,9 +8,12 @@ using UnityEngine.InputSystem;
 using UnityEngine.Events;
 using Febucci.TextAnimatorForUnity.TextMeshPro;
 using TMPro;
+using UnityEngine.UI;
 
 public class DialogueBehaviour : MonoBehaviour
 {
+
+    [SerializeField] private Image sprNext;
     [HideInInspector]
     [SerializeField] private LocalizedString localizedString;
     private TypewriterComponent typewriter;
@@ -57,6 +60,8 @@ public class DialogueBehaviour : MonoBehaviour
             typewriter.onTextShowed.AddListener(OnPageFinished);
             typewriter.onMessage.AddListener(OnMessageReceived);
         }
+        if(sprNext != null)
+        sprNext.enabled = false;
     }
 
     private void OnDisable()
@@ -103,6 +108,8 @@ public class DialogueBehaviour : MonoBehaviour
         else
         {
             AdvancePage();
+            if(sprNext != null)
+            sprNext.enabled = false;
         }
     }
 
@@ -123,7 +130,7 @@ public class DialogueBehaviour : MonoBehaviour
         }
 
         currentPage = 0;
-        ShowCurrentPage();    
+        ShowCurrentPage();
     }
 
     private void ShowCurrentPage()
@@ -141,6 +148,8 @@ public class DialogueBehaviour : MonoBehaviour
     private void OnPageFinished()
     {
         waitingForInput = true;
+        if(sprNext != null)
+        sprNext.enabled = true;
         // If we reached the last page and it finished naturally, flush any pending end events
         if (pages != null && currentPage == pages.Length - 1)
         {
@@ -214,7 +223,12 @@ public class DialogueBehaviour : MonoBehaviour
 
         waitingForInput = true;
         if (!inConv)
-        finishDialogue?.Invoke();
+        {
+            finishDialogue?.Invoke();
+            
+        }
+        
+        
         
 
         if (inConv)

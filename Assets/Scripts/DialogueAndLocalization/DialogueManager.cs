@@ -9,7 +9,7 @@ public class DialogueManager : MonoBehaviour
     public NPC currentNPC;
     
     [SerializeField] private ConversationManager conversation;
-    [SerializeField] private GameObject textCanvas;
+    public GameObject textCanvas;
     [SerializeField] private DialogueBehaviour trigger; 
 
     private bool flagConv;
@@ -43,8 +43,8 @@ public class DialogueManager : MonoBehaviour
     {
         if (!canInteract) return;
         
-        ToggleTextCanvas(true);
-        ActionMapsManager.SetActiveMaps(DefaultActionMap.Text);
+        ToggleTextCanvas(true, 1);
+        ActionMapsManager.SetTextInput();
         currentNPC.FindDialogue();
     }
 
@@ -82,18 +82,40 @@ public class DialogueManager : MonoBehaviour
 
         currentNPC.ChangeDialogueMode(DialogueMode.Goodbye);
         EnterDialogue();
-        ActionMapsManager.SetActiveMaps(DefaultActionMap.Text);
+        ActionMapsManager.SetTextInput();
     }
 
-    public void ToggleTextCanvas(bool desiredState)
+    public void ToggleTextCanvas(bool desiredState, int position = 1)
     {
-        //if (textCanvas == null) return;
+        if (textCanvas == null) return;
         
-        textCanvas.SetActive(desiredState);
+        switch (position)
+        {
+            case 1:
+            textCanvas.GetComponentInChildren<BubblePosition>(true).ApplyPositionA();
+            break;
 
+            case 2:
+            textCanvas.GetComponentInChildren<BubblePosition>(true).ApplyPositionB();
+            break;
+        }
+
+        if (desiredState)
+        {
+            ScaleInOut scaleInOut = textCanvas.GetComponentInChildren<ScaleInOut>(true); // true = include inactive
+            if (scaleInOut != null) scaleInOut.scaleIn();
+            return;
+        }
+        else
+        {
+            ScaleInOut scaleInOut = textCanvas.GetComponentInChildren<ScaleInOut>(true); // true = include inactive
+            if (scaleInOut != null) scaleInOut.scaleOut();
+            return;
+        }
 
         
-        
+
+       
     }
 
     public void OnNpcDialogueEnd()
@@ -102,6 +124,8 @@ public class DialogueManager : MonoBehaviour
         switch (currentNPC.currentMode)
             {
                 case DialogueMode.Intro:
+                
+
                 currentNPC.ChangeDialogueMode(currentNPC.afterIntro);
 
                 if(currentNPC.afterIntro == DialogueMode.Answer && !flagConv)
@@ -127,10 +151,12 @@ public class DialogueManager : MonoBehaviour
 
                 case DialogueMode.Monologue:
                 case DialogueMode.Goodbye:
-                ActionMapsManager.SetActiveMaps(DefaultActionMap.Gameplay);
+                ActionMapsManager.SetPlayerInput();
                 RemoveCurrentNPC(currentNPC);
                 trigger.inConv = false;
                 flagConv = false;
+
+                ToggleTextCanvas(false, 2);
 
                 break;  
             }
@@ -143,10 +169,8 @@ public class DialogueManager : MonoBehaviour
         {
             Debug.LogError("Conversation reference is missing in DialogueManager!");
         }
+        
         conversation.SetUIActive(true);
-        ActionMapsManager.Instance.SetConversationInput();
+        ActionMapsManager.SetConversationInput();
     }
-
-    
-
 }

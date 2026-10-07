@@ -49,7 +49,7 @@ public class NPC : MonoBehaviour, IEntryTeacher
 
         listener.SetDesiredMelodies(melodies);
 
-        if (SaveManager.TryGetGlobalSaveObject<NpcsSaveObject>(out npcSaveObject))
+        if (SaveManager.TryGetGlobalSaveObject(out npcSaveObject))
         {
             if (npcSaveObject.ContainsKey(npcName))
             {
@@ -86,6 +86,8 @@ public class NPC : MonoBehaviour, IEntryTeacher
 
     public void FindDialogue()
     {
+        manager.ToggleTextCanvas(true, 1);
+
         switch (currentMode)
         {
             case DialogueMode.Intro:
@@ -109,6 +111,7 @@ public class NPC : MonoBehaviour, IEntryTeacher
                 string goodbye =  $"npc_{npcName.ToLower()}_goodbye";
                 Debug.Log($"<color=#C5FF10>Assigned dialogue {goodbye}</color>");
                 master.AssignNewDialogue(goodbye);
+                manager.textCanvas.GetComponentInChildren<BubblePosition>(true).ApplyPositionA();
 
                 break;
 
@@ -166,26 +169,4 @@ public class NPC : MonoBehaviour, IEntryTeacher
     {
         currentMode = ogMode;
     }
-
-    // public void TrySaveEntry(string entryID)
-    // {
-    //     if (string.IsNullOrEmpty(entryID)) return;
-
-
-    //     if (SaveManager.TryGetGlobalSaveObject<NotebookSaveObject>(out var saveObj))
-    //     {
-    //         if (saveObj.LearnedEntriesIds.Value.Contains(entryID))
-    //         {
-    //             Debug.Log($"[SaveSystem] La entrada '{entryID}' ya está guardada. Cancelando operación.");
-    //             return;
-    //         }
-    //         saveObj.LearnedEntriesIds.Value.Add(entryID);
-    //         SaveManager.SaveGame();
-    //         Debug.Log($"[SaveSystem] Entrada '{entryID}' añadida y guardada exitosamente.");
-    //     }
-    //     else
-    //     {
-    //         Debug.LogError("[SaveSystem] No se encontró el NotebookSaveObject en el Save Manager.");
-    //     }
-    // }
 }

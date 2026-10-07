@@ -2,6 +2,7 @@ using UnityEngine;
 using CarterGames.Assets.SaveManager;
 using Save;
 using System.Collections;
+using CMF;
 
 public class BridgeSpawn : MonoBehaviour, IReactToMelody, IBridgeListen
 {
@@ -129,6 +130,6 @@ public class BridgeSpawn : MonoBehaviour, IReactToMelody, IBridgeListen
     public void CancelBridge()
     {
         EndBridge();
-        bridge.actionMap.SetPlayerInput();
+        ActionMapsManager.SetPlayerInput();
     }
 }

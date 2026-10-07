@@ -1,34 +1,64 @@
 using System.Collections;
-using System.Collections.Generic;
-using Febucci.TextAnimatorCore.BuiltIn;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MetronomeBar : MonoBehaviour
 {
     private Vector2 startPos;
     private Vector2 endPos;
+    private Vector2 deployedStartPos;
+    private Vector2 deployedEndPos;
+
     [SerializeField] private float upDur;
     [SerializeField] private float downDur;
     [SerializeField] private AnimationCurve upCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     [SerializeField] private AnimationCurve downCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
-    private RectTransform rt;
-    [SerializeField] float bouncePixels = 70f;
-    [SerializeField] float upPixels;
+    [SerializeField] private float bouncePixels = 70f;
+    [SerializeField] private float upPixels;
 
+    private RectTransform rt;
+    private Image sprite;
     private RhythmClock clock;
 
-    void Start()
+    private Coroutine bounceCoroutine;
+    private Coroutine returnCoroutine;
+
+    private bool isDeployed;
+
+    private void Awake()
     {
+        sprite = GetComponent<Image>();
         rt = GetComponent<RectTransform>();
+        clock = FindFirstObjectByType<RhythmClock>();
+
+        // Store the original position before OnEnable can run.
         startPos = rt.anchoredPosition;
         endPos = new Vector2(startPos.x, startPos.y + bouncePixels);
-        clock = FindFirstObjectByType<RhythmClock>();
+
+        UpdateDeployedPositions();
     }
+
+    private void OnEnable()
+    {
+        StopAnimations();
+        UpdateDeployedPositions();
+
+        rt.anchoredPosition = deployedStartPos;
+    }
+
+    private void OnDisable()
+    {
+        StopAnimations();
+    }
+
     public void Bounce(int i)
     {
-        StartCoroutine(BounceRoutine());
-        //Debug.Log($"Bounced {i}");
+        if (!isActiveAndEnabled)
+            return;
 
+        StopAnimations();
+
+        bounceCoroutine = StartCoroutine(BounceRoutine());
     }
 
     private IEnumerator BounceRoutine()
@@ -38,54 +68,105 @@ public class MetronomeBar : MonoBehaviour
         while (elapsedTime < upDur)
         {
             elapsedTime += Time.deltaTime;
+
             float normalizedTime = Mathf.Clamp01(elapsedTime / upDur);
             float curveValue = upCurve.Evaluate(normalizedTime);
 
-            rt.anchoredPosition = Vector2.LerpUnclamped(startPos, endPos, curveValue);
+            rt.anchoredPosition = Vector2.LerpUnclamped(
+                deployedStartPos,
+                deployedEndPos,
+                curveValue
+            );
+
             yield return null;
-            StartCoroutine(WaitForReturn());
-            
         }
-    }
-    public static float ToSingle(double value)
-    {
-        return (float)value;
+
+        yield return StartCoroutine(WaitForReturn());
+
+        bounceCoroutine = null;
     }
 
     private IEnumerator WaitForReturn()
     {
-        float time = ToSingle(clock.SubBeatDuration);
+        if (clock == null)
+            yield break;
+
+        float time = (float)clock.SubBeatDuration;
+
         yield return new WaitForSeconds(time);
 
-        StartCoroutine(ReturnRoutine());
+        returnCoroutine = StartCoroutine(ReturnRoutine());
+
+        yield return returnCoroutine;
+
+        returnCoroutine = null;
     }
 
     private IEnumerator ReturnRoutine()
     {
         float elapsedTime = 0f;
+
         while (elapsedTime < downDur)
         {
             elapsedTime += Time.deltaTime;
+
             float normalizedTime = Mathf.Clamp01(elapsedTime / downDur);
             float curveValue = downCurve.Evaluate(normalizedTime);
 
-            rt.anchoredPosition = Vector2.LerpUnclamped(endPos, startPos, curveValue);
+            rt.anchoredPosition = Vector2.LerpUnclamped(
+                deployedEndPos,
+                deployedStartPos,
+                curveValue
+            );
+
             yield return null;
         }
+
+        rt.anchoredPosition = deployedStartPos;
     }
 
     public void Deploy(bool desiredState)
     {
-        if (desiredState)
-        {
-        startPos.y += upPixels;
-        endPos.y += upPixels;
-        rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, startPos.y);
-        return;
-        }
-        startPos.y -= upPixels;
-        endPos.y -= upPixels;
-        rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, startPos.y);
+        isDeployed = desiredState;
+
+        StopAnimations();
+        UpdateDeployedPositions();
+
+        rt.anchoredPosition = deployedStartPos;
     }
 
+    private void UpdateDeployedPositions()
+    {
+        float offset = isDeployed ? upPixels : 0f;
+
+        deployedStartPos = new Vector2(
+            startPos.x,
+            startPos.y + offset
+        );
+
+        deployedEndPos = new Vector2(
+            endPos.x,
+            endPos.y + offset
+        );
+    }
+
+    private void StopAnimations()
+    {
+        if (bounceCoroutine != null)
+        {
+            StopCoroutine(bounceCoroutine);
+            bounceCoroutine = null;
+        }
+
+        if (returnCoroutine != null)
+        {
+            StopCoroutine(returnCoroutine);
+            returnCoroutine = null;
+        }
+    }
+
+    public void ToggleVisibility(bool desiredState)
+    {
+        sprite.enabled = desiredState;
+    }
 }

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7426793865086093439}
   - component: {fileID: 3586093706733001293}
   - component: {fileID: 2072964084066440206}
+  - component: {fileID: 86213115161341763}
   m_Layer: 0
   m_Name: FootstepsAudio
   m_TagString: Untagged
@@ -44,7 +45,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -141,24 +142,66 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 111ef61b7be484140b90e03e68c60461, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoDetectFootSteps: 0
-  <animator>k__BackingField: {fileID: 0}
-  <minTimeBetweenFootsteps>k__BackingField: 0.33
-  <heightToMarkOffGround>k__BackingField: 0.02
-  <heightToMarkOnGround>k__BackingField: 0.02
-  <surfaceTypes>k__BackingField:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  OnLeftFootStep:
+  autoDetectFootSteps: 1
+  <Animator>k__BackingField: {fileID: 5647538186116383163}
+  _leftFootTransform: {fileID: 1854427564921178109}
+  _rightFootTransform: {fileID: 9042379984796347404}
+  <MinTimeBetweenFootsteps>k__BackingField: 0.33
+  <HeightToMarkOffGround>k__BackingField: 0.02
+  <HeightToMarkOnGround>k__BackingField: 0.02
+  <SurfaceTypes>k__BackingField:
+  - {fileID: 11400000, guid: 2104ea6ec83acd54cbf0cbc34f0cf18b, type: 2}
+  - {fileID: 11400000, guid: c344b102e2c65ec4a8f58892d43a026f, type: 2}
+  - {fileID: 11400000, guid: 7c1f04d9f40618944aea5a60aedf799b, type: 2}
+  - {fileID: 11400000, guid: a0a52eb452de88b4bb67c0d244fc914b, type: 2}
+  - {fileID: 11400000, guid: 9a4f8b7aa4dd26f498131551b5f8f03f, type: 2}
+  onLeftFootStep:
     m_PersistentCalls:
       m_Calls: []
-  OnRightFootStep:
+  onRightFootStep:
     m_PersistentCalls:
       m_Calls: []
-  OnFootStep:
+  onFootStep:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 86213115161341763}
+        m_TargetAssemblyTypeName: Dropecho.FootStepAudio, Dropecho.Footstep
+        m_MethodName: OnFootStep
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &86213115161341763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151681270270730252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80a9200dd942c354e82dfb8ed1f8057d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  source: {fileID: 3586093706733001293}
+  defaultClip: {fileID: 8300000, guid: 3b152ea1dd219c1499967e372b3d8116, type: 3}
+  surfaces:
+  - {fileID: 11400000, guid: 2104ea6ec83acd54cbf0cbc34f0cf18b, type: 2}
+  - {fileID: 11400000, guid: c344b102e2c65ec4a8f58892d43a026f, type: 2}
+  - {fileID: 11400000, guid: 7c1f04d9f40618944aea5a60aedf799b, type: 2}
+  - {fileID: 11400000, guid: a0a52eb452de88b4bb67c0d244fc914b, type: 2}
+  - {fileID: 11400000, guid: 9a4f8b7aa4dd26f498131551b5f8f03f, type: 2}
+  clips:
+  - {fileID: 8300000, guid: 3b152ea1dd219c1499967e372b3d8116, type: 3}
+  - {fileID: 8300000, guid: 6b5dbf5d6c213984dae2879ccc87125b, type: 3}
+  - {fileID: 8300000, guid: 6125a9e19432ef84296aa94031653fa2, type: 3}
+  - {fileID: 8300000, guid: b628aae076414754b9f8a59aa79ceb09, type: 3}
+  - {fileID: 8300000, guid: f7aa37bb68fbf9540addda4eef5b98cf, type: 3}
 --- !u!1 &420549684630514180
 GameObject:
   m_ObjectHideFlags: 0
@@ -1284,6 +1327,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f5e44db14072ea4c964da3b192181c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 5647538186116383163}
   movementSpeed: 7
   airControlRate: 2
   jumpSpeed: 15
@@ -1961,6 +2005,24 @@ PrefabInstance:
 --- !u!4 &1765475763711515585 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 729f47b8a90d3bb4484944942e624bb1,
+    type: 3}
+  m_PrefabInstance: {fileID: 2236744918580821034}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1854427564921178109 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8739582880780731433, guid: 729f47b8a90d3bb4484944942e624bb1,
+    type: 3}
+  m_PrefabInstance: {fileID: 2236744918580821034}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &5647538186116383163 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 729f47b8a90d3bb4484944942e624bb1,
+    type: 3}
+  m_PrefabInstance: {fileID: 2236744918580821034}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &9042379984796347404 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -2128374036843458522, guid: 729f47b8a90d3bb4484944942e624bb1,
     type: 3}
   m_PrefabInstance: {fileID: 2236744918580821034}
   m_PrefabAsset: {fileID: 0}

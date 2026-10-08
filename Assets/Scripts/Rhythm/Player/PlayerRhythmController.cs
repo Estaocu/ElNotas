@@ -9,6 +9,7 @@ public class PlayerRhythmController : MonoBehaviour
     public bool canPlay => ActionMapsManager.Instance != null && ActionMapsManager.Instance.CanPlay;
 
     [Header("References")]
+    [SerializeField] private Animator animator;
     [SerializeField] private RhythmClock rhythmClock;
     [SerializeField] private RhythmQuantizer rhythmQuantizer;
     [SerializeField] private Meter meter;
@@ -130,6 +131,8 @@ public class PlayerRhythmController : MonoBehaviour
         double inputDspTime = AudioSettings.dspTime;
 
         RhythmQuantizationResult result = rhythmQuantizer.Quantize(inputDspTime);
+
+        animator.SetTrigger("IsPlayingKoto");
 
         if (!result.isValid)
         {

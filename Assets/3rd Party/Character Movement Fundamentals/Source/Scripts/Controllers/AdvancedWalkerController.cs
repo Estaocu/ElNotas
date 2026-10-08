@@ -250,7 +250,9 @@ namespace CMF
 				}
 				if(!mover.IsGrounded()){
 					OnGroundContactLost();
+					animator.SetBool("IsJumping", true);
 					return ControllerState.Falling;
+					
 				}
 				if(_isSliding){
 					OnGroundContactLost();
@@ -267,6 +269,7 @@ namespace CMF
 				}
 				if(mover.IsGrounded() && !_isSliding){
 					OnGroundContactRegained();
+					animator.SetBool("IsJumping", false);
 					return ControllerState.Grounded;
 				}
 				if(_isSliding){

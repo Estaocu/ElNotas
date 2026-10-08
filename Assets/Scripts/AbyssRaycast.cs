@@ -8,6 +8,7 @@ public class AbyssRaycast : MonoBehaviour
     public float rayLength;
 
     private bool canJump = true;
+    [SerializeField] private Animator animator;
 
     [Header("Jump Requirements")]
     [SerializeField] private float minJumpSpeed;
@@ -64,6 +65,7 @@ public class AbyssRaycast : MonoBehaviour
         canJump = true;
         movementHoldTimer = 0f;
         heldMovementDirection = Vector3.zero;
+        animator.SetBool("IsJumping", false);
     }
 
     void OnDrawGizmos()
@@ -328,6 +330,7 @@ public class AbyssRaycast : MonoBehaviour
             launchDirection * vForward;
 
         walker.SetMomentum(launch);
+        animator.SetBool("IsJumping", true);
     }
 
     public void PreventJump()

@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 [ExecuteInEditMode]
 public class ClimbingRaycast : MonoBehaviour
 {
+    [SerializeField] private Animator animator;
+
     [Header("Eye ray (forward)")]
     public Vector3 eyeRayStart;
     public float eyeRayLength = 1f;
@@ -360,6 +362,8 @@ public class ClimbingRaycast : MonoBehaviour
             Vector3 destination = targetClimbPoint;
 
             CancelInputCheck();
+
+            animator.SetBool("IsClimbing", true);
 
             TeleportPlayer(destination);
 

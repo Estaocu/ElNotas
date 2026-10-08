@@ -9,6 +9,8 @@ namespace CMF
 	//Custom movement input can be implemented by creating a new script that inherits 'AdvancedWalkerController' and overriding the 'CalculateMovementDirection' function;
 	public class AdvancedWalkerController : Controller {
 
+		[SerializeField] private Animator animator;
+
 		//References to attached components;
 		protected Transform tr;
 		protected Mover mover;
@@ -118,6 +120,8 @@ namespace CMF
         void FixedUpdate()
 		{
 			ControllerUpdate();
+			
+
 		}
 
 		//Update controller;
@@ -169,6 +173,10 @@ namespace CMF
 			//Reset ceiling detector, if one is attached to this gameobject;
 			if(ceilingDetector != null)
 				ceilingDetector.ResetFlags();
+
+			animator.SetFloat("Speed", savedMovementVelocity.magnitude);
+
+			
 		}
 
 		//Calculate and return movement direction based on player input;

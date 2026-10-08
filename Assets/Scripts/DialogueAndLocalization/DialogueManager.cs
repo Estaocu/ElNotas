@@ -142,6 +142,8 @@ public class DialogueManager : MonoBehaviour
         switch (currentNPC.currentMode)
             {
                 case DialogueMode.Intro:
+                
+
                 currentNPC.ChangeDialogueMode(currentNPC.afterIntro);
 
                 if(currentNPC.afterIntro == DialogueMode.Answer && !flagConv)

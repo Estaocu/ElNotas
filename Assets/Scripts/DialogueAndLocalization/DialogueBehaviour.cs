@@ -8,12 +8,16 @@ using UnityEngine.InputSystem;
 using UnityEngine.Events;
 using Febucci.TextAnimatorForUnity.TextMeshPro;
 using TMPro;
+using UnityEngine.UI;
 
 public class DialogueBehaviour : MonoBehaviour
 {
+
+    [SerializeField] private Image sprNext;
     [HideInInspector]
     [SerializeField] private LocalizedString localizedString;
-    private TypewriterComponent typewriter;
+    [SerializeField] private TypewriterComponent typewriter;
+    [SerializeField] private DialogueManager dialogueManager;
 
     private string[] pages;
     private int currentPage;
@@ -39,13 +43,7 @@ public class DialogueBehaviour : MonoBehaviour
     // Queue of callbacks to be executed precisely when the player closes the last dialogue page
     private readonly List<Action> pendingCloseCallbacks = new List<Action>();
 
-    private void Awake()
-    {
-        typewriter = GetComponent<TypewriterComponent>();
 
-        if (typewriter == null)
-            Debug.LogError($"DialogueTrigger: TypewriterComponent not found on {gameObject.name}");
-    }
 
     private void OnEnable()
     {
@@ -57,6 +55,8 @@ public class DialogueBehaviour : MonoBehaviour
             typewriter.onTextShowed.AddListener(OnPageFinished);
             typewriter.onMessage.AddListener(OnMessageReceived);
         }
+        if(sprNext != null)
+        sprNext.enabled = false;
     }
 
     private void OnDisable()
@@ -103,6 +103,8 @@ public class DialogueBehaviour : MonoBehaviour
         else
         {
             AdvancePage();
+            if(sprNext != null)
+            sprNext.enabled = false;
         }
     }
 
@@ -123,24 +125,54 @@ public class DialogueBehaviour : MonoBehaviour
         }
 
         currentPage = 0;
-        ShowCurrentPage();    
+        ShowCurrentPage();
+    }
+
+    private void Awake()
+    {
+        if (typewriter == null)
+        {
+            typewriter = GetComponent<TypewriterComponent>();
+        }
+
+        if (tAnimator == null)
+        {
+            tAnimator = GetComponent<TextAnimator_TMP>();
+        }
+
+        if (typewriter == null)
+            Debug.LogError($"DialogueBehaviour: TypewriterComponent missing on {gameObject.name}", this);
+
+        if (tAnimator == null)
+            Debug.LogError($"DialogueBehaviour: TextAnimator_TMP reference is missing on {gameObject.name}", this);
+
+        if (dialogueManager == null)
+            Debug.LogError($"DialogueBehaviour: DialogueManager reference is missing on {gameObject.name}", this);
     }
 
     private void ShowCurrentPage()
     {
         if (pages == null || currentPage >= pages.Length) return;
 
+        if (typewriter == null)
+        {
+            Debug.LogError("DialogueBehaviour: Cannot show page because TypewriterComponent is null.", this);
+            return;
+        }
+
         waitingForInput = false;
         string formattedText = pages[currentPage].Trim();
         
+        // Febucci Text Animator v2 standard pipeline
         typewriter.ShowText(formattedText);
-        tAnimator.SetText(formattedText);
         typewriter.StartShowingText(true);
     }
 
     private void OnPageFinished()
     {
         waitingForInput = true;
+        if(sprNext != null)
+        sprNext.enabled = true;
         // If we reached the last page and it finished naturally, flush any pending end events
         if (pages != null && currentPage == pages.Length - 1)
         {
@@ -191,8 +223,15 @@ public class DialogueBehaviour : MonoBehaviour
 
         if (currentPage < pages.Length)
             ShowCurrentPage();
+
         else
+        {
+
             EndDialogue();
+            
+        }
+            
+            
     }
 
     public void RestartText()
@@ -214,9 +253,11 @@ public class DialogueBehaviour : MonoBehaviour
 
         waitingForInput = true;
         if (!inConv)
-        finishDialogue?.Invoke();
+        {
+            finishDialogue?.Invoke();
+            return;
+        }
         
-
         if (inConv)
         returnToConv?.Invoke();
 

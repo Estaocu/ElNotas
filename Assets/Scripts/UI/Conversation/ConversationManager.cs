@@ -314,7 +314,7 @@ public class ConversationManager : MonoBehaviour
             npcText.AssignNewDialogue(primaryId,swappedId);
         }
 
-        ActionMapsManager.SetActiveMaps(DefaultActionMap.Text);
+        ActionMapsManager.SetTextInput();
     }
 
     private IReadOnlyList<NotebookEntry> GetThisCategoryEntries(WordCategory category)
@@ -370,7 +370,7 @@ public class ConversationManager : MonoBehaviour
             bubble.EraseWord();
         }
 
-        ActionMapsManager.SetActiveMaps(DefaultActionMap.Conversation);
+        ActionMapsManager.SetConversationInput();
 
         if (currentNpc != null && npcText != null)
         {

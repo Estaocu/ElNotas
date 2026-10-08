@@ -41,6 +41,10 @@ public class Elevator : MonoBehaviour
     private RhythmClock clock;
     private Coroutine moveCoroutine;
 
+    [SerializeField] private AudioSource rumble;
+    [SerializeField] private AudioSource nana;
+    [SerializeField] private AudioSource jingle;
+
 
     private void Awake()
     {
@@ -60,6 +64,7 @@ public class Elevator : MonoBehaviour
         notesListener.OnMelodyFailedEvent.AddListener(HandleMelodyFailed);
 
         clock = FindFirstObjectByType<RhythmClock>();
+
     }
 
     private void Start()
@@ -150,6 +155,7 @@ public class Elevator : MonoBehaviour
             PlaySuccessFeedback();
             nextFloor = matchedFloorIndex;
             StartMovementToFloor(nextFloor);
+            
         }
     }
 
@@ -173,6 +179,8 @@ public class Elevator : MonoBehaviour
 
         isMoving = true;
         notesListener.wantsToListen = false;
+        rumble.PlayOneShot(rumble.clip);
+        nana.PlayOneShot(nana.clip);
 
         int distanceInFloors = Mathf.Abs(targetFloor - currentFloorIndex);
         int totalSubBeats = distanceInFloors * subBeatsPerFloor;
@@ -215,6 +223,9 @@ public class Elevator : MonoBehaviour
         }
 
         Debug.Log($"<color=green>[ELEVATOR] Arrived at Floor {currentFloorIndex}.</color>");
+        rumble.Stop();
+        nana.Stop();
+        jingle.PlayOneShot(jingle.clip);
     }
 
     private Vector3 GetWorldPositionForFloor(int floorIndex)

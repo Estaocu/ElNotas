@@ -7,15 +7,18 @@ public class ElevatorButton : MonoBehaviour
 
     [SerializeField] private int floor;
     private Elevator elevator;
-    void Start()
+    private AudioSource audioSource;
+
+    void Awake()
     {
+        audioSource = GetComponentInChildren<AudioSource>();
         elevator = transform.parent.GetComponentInChildren<Elevator>();
-        if (elevator == null) Debug.LogError("No Elevator detected in siblings");
     }
 
     public void CallElevator()
     {
         elevator.StartMovementToFloor(floor);
-        Debug.Log($"Elevator called, coming to floor {floor}");
+        audioSource.PlayOneShot(audioSource.clip);
+        //Debug.Log($"Elevator called, coming to floor {floor}");
     }
 }

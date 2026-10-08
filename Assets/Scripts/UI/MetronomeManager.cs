@@ -81,4 +81,12 @@ public class MetronomeManager : MonoBehaviour
         }
         alreadyUp = false;
     }
+
+    public void ToggleVisibility(bool desiredState)
+    {
+        foreach (MetronomeBar bar in bars)
+        {
+            bar.ToggleVisibility(desiredState);
+        }
+    }
 }

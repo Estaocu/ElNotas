@@ -147,7 +147,7 @@ public class NotebookLearner: MonoBehaviour {
 
       n.gameObject.SetActive(true);
 
-      ActionMapsManager.SetActiveMaps(DefaultActionMap.Notebook);
+      ActionMapsManager.SetNotebookInput();
    }
 
    public void CloseNotebook(InputAction.CallbackContext context)
@@ -156,7 +156,7 @@ public class NotebookLearner: MonoBehaviour {
 
       n.gameObject.SetActive(false);
 
-      ActionMapsManager.SetActiveMaps(DefaultActionMap.Gameplay);
+      ActionMapsManager.SetPlayerInput();
    }
 
 }

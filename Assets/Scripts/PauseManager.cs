@@ -22,7 +22,7 @@ public class PauseManager : MonoBehaviour
         RhythmManager.Instance?.Pause();
 
         // Forzamos el mapa de pausa/restricción
-        ActionMapsManager.Instance.SetRestrictedInput();
+        ActionMapsManager.SetRestrictedInput();
 
         if (musicSource.isPlaying) musicSource.Pause(); 
 
@@ -49,7 +49,7 @@ public class PauseManager : MonoBehaviour
         if (pauseMenuUI != null) pauseMenuUI.SetActive(true);
 
         // 3. Cambiar controles usando el Singleton
-        ActionMapsManager.Instance.SetRestrictedInput();
+        ActionMapsManager.SetRestrictedInput();
 
         Debug.Log("Juego Pausado");
     }
@@ -63,7 +63,7 @@ public class PauseManager : MonoBehaviour
         if (pauseMenuUI != null) pauseMenuUI.SetActive(false);
 
         // 3. Devolver controles al jugador usando el Singleton
-        ActionMapsManager.Instance.SetPlayerInput();
+        ActionMapsManager.SetPlayerInput();
 
         Debug.Log("Juego Reanudado");
     }

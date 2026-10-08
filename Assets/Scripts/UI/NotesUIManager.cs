@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using CMF;
 using UnityEngine;
 
 public class NotesUIManager : MonoBehaviour
@@ -10,6 +11,9 @@ public class NotesUIManager : MonoBehaviour
     [SerializeField] private List<GameObject> lines = new List<GameObject>();
 
     [SerializeField] private PlayerRhythmController instrument;
+
+    private bool canShow => ActionMapsManager.Instance.IsMapActive(DefaultActionMap.Gameplay) || ActionMapsManager.Instance.IsMapActive(DefaultActionMap.Notes);
+
 
     void Awake()
     {
@@ -35,6 +39,8 @@ public class NotesUIManager : MonoBehaviour
 
     private void OnDisable()
     {
+        CleanAllNotes();
+
         if (instrument != null)
         {
             instrument.OnNoteAccepted -= ProcessNote;
@@ -44,6 +50,8 @@ public class NotesUIManager : MonoBehaviour
 
     private void ProcessNote(PlayerRhythmController.PlayedNote playedNote)
     {
+        if(!canShow) return;
+
         notes[playedNote.position.subBeat].
         MatchPlayedNote(
         colors[(int)playedNote.note],
@@ -57,7 +65,7 @@ public class NotesUIManager : MonoBehaviour
         }
     }
 
-    private void CleanAllNotes()
+    public void CleanAllNotes()
     {
         foreach (UIPlayerNote note in notes)
         {

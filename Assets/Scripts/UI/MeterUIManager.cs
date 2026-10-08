@@ -12,7 +12,7 @@ public class MeterUIManager : MonoBehaviour
 
     private List<MeterContainer> containers = new List<MeterContainer>();
 
-    void Start()
+    void Awake()
     {
         containers = new List<MeterContainer>(GetComponentsInChildren<MeterContainer>(true));
     }
@@ -23,11 +23,5 @@ public class MeterUIManager : MonoBehaviour
         {
             cont.RecalculateColor(currentMeter);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

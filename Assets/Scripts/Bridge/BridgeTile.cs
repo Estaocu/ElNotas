@@ -4,6 +4,7 @@ using ElNotas.Input.Glyphs;
 using NaughtyAttributes;
 using System.Collections;
 using System;
+using CMF;
 
 [RequireComponent(typeof(Collider))]
 public class BridgeTile : MonoBehaviour
@@ -112,7 +113,7 @@ public class BridgeTile : MonoBehaviour
             {
                 bridge.JumpToEnd(assignedSpawner.jumpTarget);
                 assignedSpawner.Bloom();
-                bridge.actionMap.SetPlayerInput();  
+                ActionMapsManager.SetPlayerInput();  
             }
         }
     }
@@ -143,7 +144,7 @@ public class BridgeTile : MonoBehaviour
                     {
                         Debug.Log("Player was stepping flower when died. Now changing to gameplay map.");
                         bridge.EndBridge();  
-                        bridge.actionMap.SetPlayerInput();  
+                        ActionMapsManager.SetPlayerInput();  
                     }
 
                 gameObject.SetActive(false);

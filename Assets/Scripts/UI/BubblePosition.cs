@@ -1,0 +1,78 @@
+using System;
+using UnityEngine;
+
+[RequireComponent(typeof(RectTransform))]
+public class BubblePosition : MonoBehaviour
+{
+    [Serializable]
+    private struct RectTransformState
+    {
+        public Vector2 anchorMin;
+        public Vector2 anchorMax;
+        public Vector2 pivot;
+        public Vector2 anchoredPosition;
+        public Vector2 sizeDelta;
+
+        public RectTransformState(RectTransform rectTransform)
+        {
+            anchorMin = rectTransform.anchorMin;
+            anchorMax = rectTransform.anchorMax;
+            pivot = rectTransform.pivot;
+            anchoredPosition = rectTransform.anchoredPosition;
+            sizeDelta = rectTransform.sizeDelta;
+        }
+
+        public void ApplyTo(RectTransform rectTransform)
+        {
+            rectTransform.anchorMin = anchorMin;
+            rectTransform.anchorMax = anchorMax;
+            rectTransform.pivot = pivot;
+            rectTransform.anchoredPosition = anchoredPosition;
+            rectTransform.sizeDelta = sizeDelta;
+        }
+    }
+
+    [SerializeField] private RectTransformState positionA;
+    [SerializeField] private RectTransformState positionB;
+
+    private RectTransform rectTransform;
+
+    private void Awake()
+    {
+        CacheRectTransform();
+    }
+
+    private void CacheRectTransform()
+    {
+        if (rectTransform == null)
+        {
+            rectTransform = GetComponent<RectTransform>();
+        }
+    }
+
+    public void ApplyPositionA()
+    {
+        ApplyState(positionA);
+    }
+
+    public void ApplyPositionB()
+    {
+        ApplyState(positionB);
+    }
+
+    private void ApplyState(RectTransformState state)
+    {
+        CacheRectTransform();
+
+        if (rectTransform == null)
+        {
+            Debug.LogError(
+                "BubblePosition requires a RectTransform on the same GameObject.",
+                this);
+
+            return;
+        }
+
+        state.ApplyTo(rectTransform);
+    }
+}

@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 8860696937756151961}
   - component: {fileID: 6936114455892757287}
   - component: {fileID: 9108108096256953155}
+  - component: {fileID: 992755844767905983}
   m_Layer: 0
   m_Name: Visuals
   m_TagString: Untagged
@@ -198,6 +199,51 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &992755844767905983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4214515464010635916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14c26e037eea28c478700ec4205bfc57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  visualTarget: {fileID: 8860696937756151961}
+  axisMode: 1
+  volumePreservation: 1
+  amplitude: 0.05
+  duration: 0.8
+  bounceCount: 1
+  startWithStretch: 1
+  decayCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  retriggerMode: 0
+  useUnscaledTime: 0
 --- !u!1 &5000018862248175793
 GameObject:
   m_ObjectHideFlags: 0

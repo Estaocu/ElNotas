@@ -56,7 +56,7 @@ public class NavMeshSplineTraveler : MonoBehaviour
             PerformDeceleration();
         }
 
-        if (isPatrolling && splineContainer != null)
+        if (isPatrolling && splineContainer != null && agent != null && agent.enabled && agent.isOnNavMesh)
             MoveAlongSpline();
     }
 

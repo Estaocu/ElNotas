@@ -444,7 +444,17 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1896723393550142877}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1fc1ac17c7198194b8b7b8f1ea511a4a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1176793602556080343}
   m_SourcePrefab: {fileID: 100100000, guid: 1fc1ac17c7198194b8b7b8f1ea511a4a, type: 3}
+--- !u!4 &5781568493192466883 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4826098134438971279, guid: 1fc1ac17c7198194b8b7b8f1ea511a4a,
+    type: 3}
+  m_PrefabInstance: {fileID: 7870604091687512498}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7060352742552245475 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 1fc1ac17c7198194b8b7b8f1ea511a4a,
@@ -474,6 +484,51 @@ CapsuleCollider:
   m_Height: 1.2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: -0.09}
+--- !u!114 &1176793602556080343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7060352742552245475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14c26e037eea28c478700ec4205bfc57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  visualTarget: {fileID: 5781568493192466883}
+  axisMode: 0
+  volumePreservation: 1
+  amplitude: 0.3
+  duration: 0.6
+  bounceCount: 3
+  startWithStretch: 1
+  decayCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  retriggerMode: 0
+  useUnscaledTime: 0
 --- !u!4 &7687848823480667737 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1fc1ac17c7198194b8b7b8f1ea511a4a,

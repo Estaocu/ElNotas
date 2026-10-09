@@ -45,6 +45,8 @@ public class Elevator : MonoBehaviour
     [SerializeField] private AudioSource nana;
     [SerializeField] private AudioSource jingle;
 
+    [SerializeField] private GameObject roller;
+
 
     private void Awake()
     {
@@ -63,7 +65,7 @@ public class Elevator : MonoBehaviour
         notesListener.OnMelodyMatchedEvent.AddListener(HandleMelodyMatched);
         notesListener.OnMelodyFailedEvent.AddListener(HandleMelodyFailed);
 
-        clock = FindFirstObjectByType<RhythmClock>();
+        clock = FindFirstObjectByType<RhythmClock>(); 
 
     }
 
@@ -193,6 +195,7 @@ public class Elevator : MonoBehaviour
         moveProgress = 0f;
 
         moveCoroutine = StartCoroutine(ElevateRoutine(totalSubBeats));
+        roller.SetActive(true);
     }
 
     private void FixedUpdate()
@@ -226,6 +229,7 @@ public class Elevator : MonoBehaviour
         rumble.Stop();
         nana.Stop();
         jingle.PlayOneShot(jingle.clip);
+        roller.SetActive(false);
     }
 
     private Vector3 GetWorldPositionForFloor(int floorIndex)

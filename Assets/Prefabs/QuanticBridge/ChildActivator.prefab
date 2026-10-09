@@ -31,6 +31,80 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8686471731907158316}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &8923979308699324838
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8686471731907158316}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 97381ce49f251ec47a9043662d9f966b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 97381ce49f251ec47a9043662d9f966b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.251
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 97381ce49f251ec47a9043662d9f966b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 97381ce49f251ec47a9043662d9f966b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 97381ce49f251ec47a9043662d9f966b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 97381ce49f251ec47a9043662d9f966b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 97381ce49f251ec47a9043662d9f966b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 97381ce49f251ec47a9043662d9f966b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 97381ce49f251ec47a9043662d9f966b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 97381ce49f251ec47a9043662d9f966b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 97381ce49f251ec47a9043662d9f966b,
+        type: 3}
+      propertyPath: m_Name
+      value: Obj_Arbolin
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 97381ce49f251ec47a9043662d9f966b, type: 3}
+--- !u!4 &8958484958738445901 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 97381ce49f251ec47a9043662d9f966b,
+    type: 3}
+  m_PrefabInstance: {fileID: 8923979308699324838}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9153062086844155591
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -91,6 +165,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 937b14fba244a8e459ef4b432ecfa488,
         type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 937b14fba244a8e459ef4b432ecfa488,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: d78d6cd3137a8824699cde034b4270c0, type: 2}
@@ -111,6 +190,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 4074191020762213956}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 937b14fba244a8e459ef4b432ecfa488,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8958484958738445901}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 937b14fba244a8e459ef4b432ecfa488,
         type: 3}
@@ -153,11 +236,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 
   isMother: 0
-  unlocked: 0
-  listener: {fileID: 0}
   closestTile: {fileID: 0}
+  closestVine: {fileID: 0}
   jumpTarget: {fileID: 4074191020762213956}
-  bridge: {fileID: 0}
   currentSpawner: 0
 --- !u!114 &6311406566160410762
 MonoBehaviour:

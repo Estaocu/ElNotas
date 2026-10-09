@@ -46,7 +46,7 @@ namespace CMF
 
 		//References to attached components;
 		Collider col;
-		Rigidbody rig;
+		public Rigidbody rig;
 		Transform tr;
 		Sensor sensor;
 

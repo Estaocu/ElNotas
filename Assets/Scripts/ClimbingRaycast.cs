@@ -1,6 +1,7 @@
 using UnityEngine;
 using CMF;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 [ExecuteInEditMode]
 public class ClimbingRaycast : MonoBehaviour
@@ -59,6 +60,7 @@ public class ClimbingRaycast : MonoBehaviour
     private Vector3 climbInputDirection = Vector3.zero;
 
     [SerializeField] private AbyssRaycast abyssCast;
+    [SerializeField] private CharacterUnityInput input;
 
     public enum ClimbTier
     {
@@ -69,9 +71,11 @@ public class ClimbingRaycast : MonoBehaviour
     }
 
     [SerializeField] private float climbHeight;
+    [SerializeField] private float climbSpeed = 10f;
 
     private const float upRayGizmoLength = 1000f;
     private bool canTeleport = true;
+    private bool isClimbing = false;
 
     void Update()
     {
@@ -147,6 +151,11 @@ public class ClimbingRaycast : MonoBehaviour
     void FixedUpdate()
     {
         if (transform.parent == null)
+        {
+            return;
+        }
+
+        if (isClimbing)
         {
             return;
         }
@@ -359,20 +368,77 @@ public class ClimbingRaycast : MonoBehaviour
 
         if (timer >= durationToCheck)
         {
-            Vector3 destination = targetClimbPoint;
-
+            Vector3 climbDestination = targetClimbPoint; // cache BEFORE cancelling
             CancelInputCheck();
 
-            animator.SetBool("IsClimbing", true);
+            isClimbing = true;
 
-            TeleportPlayer(destination);
-
-            if (abyssCast != null)
+            if (walker != null)
             {
-                abyssCast.NotifyClimbCompleted();
+                walker.PreventMoving();
+                walker.enabled = false;
             }
+
+            if (animator != null)
+            {
+                StartLinearMove(climbDestination);
+                animator.SetTrigger("StartClimb");
+            }
+            
         }
     }
+
+    public void StartLinearMove(Vector3 point) 
+    { 
+        animator.SetFloat("Speed", 0f);
+        StartCoroutine(MovePlayerToPointRoutine(point, climbSpeed)); 
+    }
+    private IEnumerator MovePlayerToPointRoutine(Vector3 point, float speed)
+    {
+        Transform body = GetBodyTransform();
+        Rigidbody rb = body.GetComponent<Rigidbody>();
+
+        Vector3 target = new Vector3(body.position.x, point.y + standOffset, body.position.z);
+        
+
+        if (rb != null)
+        {
+            // zero velocity BEFORE going kinematic (setting it on a kinematic body logs warnings)
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = true;
+        }
+
+        while (Vector3.Distance(body.position, target) > 0.01f)
+        {
+            Vector3 newPosition = Vector3.MoveTowards(body.position, target, speed * Time.fixedDeltaTime);
+            body.position = newPosition;
+
+            if (rb != null)
+            {
+                rb.position = newPosition;
+            }
+
+            yield return new WaitForFixedUpdate();
+        }
+        
+
+        body.position = target;
+
+        if (rb != null)
+        {
+            rb.position = target;
+            rb.isKinematic = false; // must go first
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+
+        EndClimb();
+
+        
+        
+    }
+
 
     private Transform GetBodyTransform()
     {
@@ -447,5 +513,38 @@ public class ClimbingRaycast : MonoBehaviour
             groundMask,
             QueryTriggerInteraction.Ignore
         );
+
+       
     }
+    public void EndClimb()
+    {
+        animator.SetTrigger("Cliff");
+        animator.ResetTrigger("StartClimb");
+        walker.CheatReground();
+        
+        Physics.SyncTransforms(); // sync BEFORE checking ground
+
+        if (walker != null)
+        {
+            walker.SetMomentum(Vector3.zero);
+            walker.enabled = true;
+        }
+
+        if (mover != null)
+        {
+            mover.enabled = true;
+            mover.CheckForGround();
+        }
+
+        isClimbing = false;
+
+        if (abyssCast != null)
+        {
+            abyssCast.NotifyClimbCompleted(); // moved here: it was firing at the START of the climb
+            animator.ResetTrigger("Cliff");
+
+        }
+
+    }
+    
 }

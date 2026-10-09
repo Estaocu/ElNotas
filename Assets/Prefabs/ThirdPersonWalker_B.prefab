@@ -599,6 +599,7 @@ MonoBehaviour:
   ray1Start: {x: 0, y: 0.17, z: 0.38}
   ray2Start: {x: 0, y: 0.17, z: 0.88}
   rayLength: 2
+  animator: {fileID: 5647538186116383163}
   minJumpSpeed: 4
   minMovementHoldTime: 0.25
   movementInputThreshold: 0.1
@@ -1165,6 +1166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d21be715ebede124b98eaa45e8f76e5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 5647538186116383163}
   eyeRayStart: {x: 0, y: -0.03, z: 0.31}
   eyeRayLength: 0.31
   upRayForwardOffset: 0.32
@@ -1173,7 +1175,7 @@ MonoBehaviour:
     m_Bits: 9
   maxGroundAngle: 5
   maxClimbDistance: 2
-  standOffset: 0
+  standOffset: -0.8
   walker: {fileID: 2028947995848929648}
   mover: {fileID: 7994079705188547349}
   lowClimbThreshold: 1.1
@@ -1184,7 +1186,9 @@ MonoBehaviour:
   durationToCheck: 0.5
   climbInputThreshold: 0.5
   abyssCast: {fileID: 3909866502027320316}
+  input: {fileID: 6000876431213664800}
   climbHeight: 0
+  climbSpeed: 10
 --- !u!1 &7146024218861173856
 GameObject:
   m_ObjectHideFlags: 0
@@ -1288,6 +1292,7 @@ MonoBehaviour:
   - {x: -0.80901706, y: 0, z: 0.5877852}
   - {x: -0.80901706, y: 0, z: -0.5877851}
   - {x: 0.30901712, y: 0, z: -0.9510565}
+  rig: {fileID: 3388275035819632398}
 --- !u!54 &3388275035819632398
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1846,6 +1851,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 647cc5ee9cf2631438eaf774a6d2a8d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 5647538186116383163}
   rhythmClock: {fileID: 0}
   rhythmQuantizer: {fileID: 0}
   meter: {fileID: 2457006998990194526}
@@ -2000,8 +2006,45 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 729f47b8a90d3bb4484944942e624bb1,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7646483370313177164}
   m_SourcePrefab: {fileID: 100100000, guid: 729f47b8a90d3bb4484944942e624bb1, type: 3}
+--- !u!1 &1426491503565750651 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 729f47b8a90d3bb4484944942e624bb1,
+    type: 3}
+  m_PrefabInstance: {fileID: 2236744918580821034}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7646483370313177164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1426491503565750651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3343cfe36c8ff144599b27c73bb515e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onAnimationFinishedEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7769595068345590230}
+        m_TargetAssemblyTypeName: ClimbingRaycast, Assembly-CSharp
+        m_MethodName: EndClimb
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &1765475763711515585 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 729f47b8a90d3bb4484944942e624bb1,

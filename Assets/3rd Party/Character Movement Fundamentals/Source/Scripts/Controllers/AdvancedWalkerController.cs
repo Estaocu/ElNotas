@@ -7,7 +7,9 @@ namespace CMF
 	//Advanced walker controller script;
 	//This controller is used as a basis for other controller types ('SidescrollerController');
 	//Custom movement input can be implemented by creating a new script that inherits 'AdvancedWalkerController' and overriding the 'CalculateMovementDirection' function;
-	public class AdvancedWalkerController : Controller {
+	public class AdvancedWalkerController : Controller 
+	
+	{
 
 		[SerializeField] private Animator animator;
 
@@ -637,5 +639,23 @@ namespace CMF
 			else
 				momentum = _newMomentum;
 		}
+
+		public void PreventMoving()
+		{
+			mover.SetVelocity(Vector3.zero);
+			SetMomentum(Vector3.zero);
+			mover.rig.velocity = Vector3.zero;
+			mover.rig.angularVelocity = Vector3.zero;
+			mover.enabled = false;
+		}
+
+		public void CheatReground()
+		{
+			OnGroundContactRegained();
+		}
+
+
 	}
+
+	
 }

@@ -47,6 +47,7 @@ public class Bridge : MonoBehaviour
         vines = new List<BridgeVine>(GetComponentsInChildren<BridgeVine>(true));
 
         clock = FindFirstObjectByType<RhythmClock>();
+        playerJump = FindFirstObjectByType<AbyssRaycast>();
     }
 
     private void OnTransformChildrenChanged()

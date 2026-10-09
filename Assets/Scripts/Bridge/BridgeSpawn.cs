@@ -36,7 +36,7 @@ public class BridgeSpawn : MonoBehaviour, IReactToMelody, IBridgeListen
 
     void Awake()
     {
-        bridge = GetComponentInParent<Bridge>();
+        bridge = GetComponentInParent<Bridge>(true);
         jumpTarget = GetComponentInChildren<Transform>();
 
         if (isMother) unlocked = true;

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c030866871ad7fb4f863f3f9d6be908a
+guid: 62d5520fcd1854b4ab867d55dd0170c7
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,38 +7,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: CESPED
-    second: {fileID: 2100000, guid: aaf80dbd46835214a96329e501247357, type: 2}
+      name: Material.001
+    second: {fileID: 2100000, guid: 3e7bc165b5a085e458c86a9a0cbba2a9, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: CESPEDBORDE
-    second: {fileID: 2100000, guid: b42e40d585924524fbbaf80b35c7df43, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: CESPEDBORDEOSCURO
-    second: {fileID: 2100000, guid: 39293ca9483799a4b9527ae420b7d85a, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: CESPEDOSCURO
-    second: {fileID: 2100000, guid: d364ae87adddb614fb476eee7bb4b096, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Madera
-    second: {fileID: 2100000, guid: 289dda1440d0ffc47af050f52304368c, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: PIEDRA
-    second: {fileID: 2100000, guid: adab2dfc81c717c488fd9327f56d7ad6, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: TIERRA
-    second: {fileID: 2100000, guid: 232b1c9a52177c641a1aa2be4e383a4f, type: 2}
+      name: flor
+    second: {fileID: 2100000, guid: 72f91f2727d784b40bf3078c115d220c, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

@@ -71,7 +71,7 @@ MonoBehaviour:
   listener: {fileID: 7258774073744655851}
   relaxMelody: 0200000000000000
   wantsAnswer: 0
-  raycastStartPoint: {fileID: 0}
+  raycastStartPoint: {fileID: 346275929140650934}
   obstacleLayerMask:
     serializedVersion: 2
     m_Bits: 9
@@ -90,11 +90,11 @@ MonoBehaviour:
   agent: {fileID: 3343888976148886420}
   splineContainer: {fileID: 0}
   arrivalDistance: 0.5
-  isLoop: 1
+  isLoop: 0
   decelerationRate: 2
   stopDuration: 6
   originalSpeed: 0
-  mosquito: {fileID: 0}
+  mosquito: {fileID: 2725611551508977993}
 --- !u!54 &2989854860647649785
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -319,7 +319,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8504629714432327808}
   - component: {fileID: 1391452396815809560}
-  - component: {fileID: 7551323965684305978}
   - component: {fileID: 2685527514022222787}
   m_Layer: 21
   m_Name: Sphere Volume
@@ -364,23 +363,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.63
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7551323965684305978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5721214730761204880}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IsGlobal: 0
-  priority: 0
-  blendDistance: 1
-  weight: 1
-  sharedProfile: {fileID: 0}
 --- !u!54 &2685527514022222787
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -546,7 +528,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6883181311741681954}
   - component: {fileID: 8549910538910360354}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: PlayerDetection
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7461975303236924032}
   - component: {fileID: 4859135981444616642}
-  - component: {fileID: 4382145011316526083}
+  - component: {fileID: 506423298165481766}
   m_Layer: 0
   m_Name: LoadingZone
   m_TagString: Untagged
@@ -86,7 +86,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4382145011316526083
+--- !u!114 &506423298165481766
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,9 +95,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3288979674949521872}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d41ed113874975d40904b97cc72e4656, type: 3}
+  m_Script: {fileID: 11500000, guid: 55ffda5d7c9127043b6e97bffc1d174d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   targetDestination: {fileID: 2407704683170875165}
+  abyssJumpScript: {fileID: 0}
+  climbScript: {fileID: 0}
   gizmoColor: {r: 0, g: 1, b: 0.4, a: 0.8}
-  gizmoRadius: 2.33
+  gizmoRadius: 0.5

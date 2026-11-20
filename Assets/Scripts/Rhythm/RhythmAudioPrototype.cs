@@ -51,10 +51,10 @@ public class RhythmAudioPrototype : MonoBehaviour
 
     private void Start()
     {
-        StartRhythm();
+        //StartRhythm();
     }
 
-    private void StartRhythm()
+    public void StartRhythm()
     {
         if (rhythmClock == null)
         {

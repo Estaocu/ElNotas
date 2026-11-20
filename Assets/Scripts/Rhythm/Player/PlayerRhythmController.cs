@@ -128,13 +128,14 @@ public class PlayerRhythmController : MonoBehaviour
             return false;
         }
 
+
         double inputDspTime = AudioSettings.dspTime;
 
         RhythmQuantizationResult result = rhythmQuantizer.Quantize(inputDspTime);
 
         animator.SetTrigger("IsPlayingKoto");
 
-        if (!result.isValid)
+        if (!result.isValid && rhythmClock.IsRunning)
         {
             HandleRhythmMiss();
             return false;

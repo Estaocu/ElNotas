@@ -14,7 +14,7 @@ public class RhythmClock : MonoBehaviour
     private double startDspTime;
     private double pauseStartDspTime;
 
-    private bool isRunning;
+    private bool isRunning = false;
     private bool isPaused;
 
     private long lastProcessedSubBeat = -1;

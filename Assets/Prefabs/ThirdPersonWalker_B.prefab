@@ -143,39 +143,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoDetectFootSteps: 1
-  <Animator>k__BackingField: {fileID: 5647538186116383163}
-  _leftFootTransform: {fileID: 1854427564921178109}
-  _rightFootTransform: {fileID: 9042379984796347404}
-  <MinTimeBetweenFootsteps>k__BackingField: 0.33
-  <HeightToMarkOffGround>k__BackingField: 0.02
-  <HeightToMarkOnGround>k__BackingField: 0.02
-  <SurfaceTypes>k__BackingField:
-  - {fileID: 11400000, guid: 2104ea6ec83acd54cbf0cbc34f0cf18b, type: 2}
-  - {fileID: 11400000, guid: c344b102e2c65ec4a8f58892d43a026f, type: 2}
-  - {fileID: 11400000, guid: 7c1f04d9f40618944aea5a60aedf799b, type: 2}
-  - {fileID: 11400000, guid: a0a52eb452de88b4bb67c0d244fc914b, type: 2}
-  - {fileID: 11400000, guid: 9a4f8b7aa4dd26f498131551b5f8f03f, type: 2}
-  onLeftFootStep:
+  <animator>k__BackingField: {fileID: 0}
+  <minTimeBetweenFootsteps>k__BackingField: 0.33
+  <heightToMarkOffGround>k__BackingField: 0.02
+  <heightToMarkOnGround>k__BackingField: 0.02
+  <surfaceTypes>k__BackingField: []
+  OnLeftFootStep:
     m_PersistentCalls:
       m_Calls: []
-  onRightFootStep:
+  OnRightFootStep:
     m_PersistentCalls:
       m_Calls: []
-  onFootStep:
+  OnFootStep:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 86213115161341763}
-        m_TargetAssemblyTypeName: Dropecho.FootStepAudio, Dropecho.Footstep
-        m_MethodName: OnFootStep
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &86213115161341763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,8 +406,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4884053802386245886}
   - component: {fileID: 70256750157617057}
-  - component: {fileID: 2496937014901128558}
   - component: {fileID: 1968113746894676754}
+  - component: {fileID: -5700894770737688813}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -500,14 +481,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &2496937014901128558
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3898065898298734405}
-  m_Enabled: 1
 --- !u!114 &1968113746894676754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -552,6 +525,20 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &-5700894770737688813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3898065898298734405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nonRigidbodyVelocity: 0
+  attenuationObject: {fileID: 0}
 --- !u!1 &4075333305062323964
 GameObject:
   m_ObjectHideFlags: 0
@@ -2051,21 +2038,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2236744918580821034}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1854427564921178109 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8739582880780731433, guid: 729f47b8a90d3bb4484944942e624bb1,
-    type: 3}
-  m_PrefabInstance: {fileID: 2236744918580821034}
-  m_PrefabAsset: {fileID: 0}
 --- !u!95 &5647538186116383163 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 729f47b8a90d3bb4484944942e624bb1,
-    type: 3}
-  m_PrefabInstance: {fileID: 2236744918580821034}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &9042379984796347404 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -2128374036843458522, guid: 729f47b8a90d3bb4484944942e624bb1,
     type: 3}
   m_PrefabInstance: {fileID: 2236744918580821034}
   m_PrefabAsset: {fileID: 0}

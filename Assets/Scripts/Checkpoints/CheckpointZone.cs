@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class CheckpointZone : MonoBehaviour
     public Checkpoint[] points;
     public Checkpoint latestPoint;
     private CheckpointManager manager;
+    public bool hasRhythm;
+    public Action RhythmToggled;
 
     void Start()
     {
@@ -40,6 +43,13 @@ public class CheckpointZone : MonoBehaviour
             
         }
         
+    }
+
+    public void ToggleZoneRhythm()
+    {
+        if (RhythmToggled != null) RhythmToggled();
+        Debug.Log($"Rhythm Activated in Zone {zoneID}!");
+        hasRhythm = true;
     }
 
     

@@ -36,6 +36,13 @@ public class Checkpoint : MonoBehaviour
     {
         zone.SetLatestPoint(this);
         Debug.Log("Player entered Checkpoint");
+        UpdateDebugText();
+    }
+
+    private void UpdateDebugText()
+    {
+        manager.TEXTDEBUG.SetText
+        ($"Zone: {zone.zoneID}\n Rhythm: {zone.hasRhythm}");
         return;
     }
 }

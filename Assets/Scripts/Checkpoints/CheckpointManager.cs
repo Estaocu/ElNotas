@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using CMF;
+using TMPro;
 using UnityEngine;
 
 public class CheckpointManager : MonoBehaviour
@@ -16,6 +17,7 @@ public class CheckpointManager : MonoBehaviour
     private Rigidbody _playerRigidbody;
     private Mover _playerMover;
     private AdvancedWalkerController _playerWalker;
+    public TextMeshProUGUI TEXTDEBUG;
 
 
 #if UNITY_EDITOR
